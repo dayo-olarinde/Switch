@@ -4,7 +4,7 @@ import { authenticate } from '../middleware/auth.middleware';
 
 import { env } from '../config/env';
 import passport from '../config/passport';
-import { isProd } from '../constants';
+import { COOKIE_OPTIONS } from '../constants';
 import {
   changePasswordLimiter,
   forgotPasswordHourlyLimiter,
@@ -38,9 +38,7 @@ router.get('/google', (req, res, next) => {
 
   if (state) {
     res.cookie('oauth_invite_state', state, {
-      httpOnly: true,
-      secure: isProd,
-      sameSite: isProd ? 'none' : 'lax',
+      ...COOKIE_OPTIONS,
       maxAge: 10 * 60 * 1000,
     });
   }
@@ -63,9 +61,7 @@ router.get('/github', (req, res, next) => {
 
   if (state) {
     res.cookie('oauth_invite_state', state, {
-      httpOnly: true,
-      secure: isProd,
-      sameSite: isProd ? 'none' : 'lax',
+      ...COOKIE_OPTIONS,
       maxAge: 10 * 60 * 1000,
     });
   }
