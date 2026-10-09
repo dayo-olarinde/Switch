@@ -7,9 +7,13 @@ export const COOKIE_OPTIONS: CookieOptions = {
   httpOnly: true,
   secure: isProd,
   sameSite: 'lax',
-  domain: isProd ? '.switchapp.space' : undefined,
   path: '/',
-  maxAge: 30 * 24 * 60 * 60 * 1000,
+  maxAge: +env.REFRESH_COOKIE_MAX_AGE,
+  // Must stay on the shared registrable domain: the OAuth callback runs on
+  // api.switchapp.space and sets the tokens there, while the app reads them
+  // from app.switchapp.space (XHRs are proxied through /api, and the socket
+  // reads __auth.access from document.cookie).
+  domain: isProd ? '.switchapp.space' : undefined,
 };
 
 export const RESEND_COOLDOWN_SECONDS = 60;

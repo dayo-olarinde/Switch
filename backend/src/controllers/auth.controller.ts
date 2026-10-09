@@ -18,7 +18,7 @@ export class AuthController {
     const stateParams = rawState ? new URLSearchParams(rawState) : null;
     const inviteToken = stateParams?.get('inviteToken');
 
-    res.clearCookie('oauth_invite_state');
+    res.clearCookie('oauth_invite_state', COOKIE_OPTIONS);
 
     const { accessToken, refreshToken } = await AuthService.OAuthSignIn(
       userProfile as OAuthProfileInput

@@ -22,6 +22,10 @@ const envSchema = z.object({
   RESET_TOKEN_SECRET: z.string(),
   RESET_TOKEN_EXPIRY: z.string().default('10m'),
 
+  // Refresh cookie lifetime in milliseconds. Defaults to 30 days, matching the
+  // refresh token lifetime in utils/tokens.util.ts.
+  REFRESH_COOKIE_MAX_AGE: z.string().default('2592000000'),
+
   EMAIL_FROM: z.string(),
 
   FRONTEND_URL: z.string().default('http://localhost:7001'),
