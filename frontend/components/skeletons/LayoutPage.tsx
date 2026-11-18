@@ -1,49 +1,45 @@
 export const LayoutSkeleton = () => {
   return (
-    <div className="flex h-screen bg-base overflow-hidden font-sans">
-      <aside className="w-65 shrink-0 bg-surface border-r border-border flex flex-col">
-        <div className="p-4">
-          <div className="flex items-center gap-3 mb-6 px-1">
-            <div className="w-8 h-8 rounded-lg bg-fill-3 animate-pulse" />
-            <div className="h-5 w-16 bg-fill-2 rounded animate-pulse" />
-          </div>
-          <div className="h-13 w-full bg-fill-1 rounded-xl border border-border animate-pulse" />
+    <div className="flex h-dvh overflow-hidden bg-base font-sans">
+      <aside className="flex w-64 shrink-0 flex-col border-r border-border bg-sidebar">
+        <div className="flex h-14 shrink-0 items-center gap-2.5 px-4">
+          <div className="size-6 animate-pulse rounded bg-fill-3" />
+          <div className="h-4 w-16 animate-pulse rounded bg-fill-2" />
         </div>
 
-        <div className="flex-1 px-4 py-2 space-y-1">
-          <div className="h-9 w-full bg-fill-1 rounded-lg animate-pulse" />
-          <div className="h-9 w-full bg-fill-1 rounded-lg animate-pulse" />
+        <div className="px-3 pb-2">
+          <div className="h-11 w-full animate-pulse rounded-lg border border-border bg-fill-1" />
+        </div>
 
-          <div className="pt-8 space-y-1">
-            <div className="h-3 w-16 bg-fill-2 rounded animate-pulse mb-3 mx-3" />
-            <div className="h-8 w-full bg-fill-1 rounded-lg animate-pulse" />
-            <div className="h-8 w-full bg-fill-1 rounded-lg animate-pulse" />
-            <div className="h-8 w-3/4 bg-fill-1 rounded-lg animate-pulse" />
-          </div>
+        <div className="flex-1 space-y-0.5 px-3 pt-1">
+          <div className="h-9 w-full animate-pulse rounded-lg bg-fill-1" />
+          <div className="h-9 w-full animate-pulse rounded-lg bg-fill-1" />
 
-          <div className="pt-8 space-y-1">
-            <div className="h-3 w-20 bg-fill-2 rounded animate-pulse mb-3 mx-3" />
-            <div className="h-8 w-full bg-fill-1 rounded-lg animate-pulse" />
-            <div className="h-8 w-full bg-fill-1 rounded-lg animate-pulse" />
+          <div className="mt-5 space-y-1">
+            <div className="mx-2.5 mb-2 h-2.5 w-14 animate-pulse rounded bg-fill-2" />
+            <div className="h-9 w-full animate-pulse rounded-lg bg-fill-1" />
+            <div className="h-9 w-4/5 animate-pulse rounded-lg bg-fill-1" />
+            <div className="h-9 w-3/5 animate-pulse rounded-lg bg-fill-1" />
           </div>
         </div>
 
-        <div className="p-4">
-          <div className="flex items-center gap-3 p-2">
-            <div className="w-8 h-8 rounded-full bg-fill-2 animate-pulse shrink-0" />
+        <div className="border-t border-border p-3">
+          <div className="flex items-center gap-2.5 p-1.5">
+            <div className="size-7 shrink-0 animate-pulse rounded-full bg-fill-2" />
             <div className="flex-1 space-y-1.5">
-              <div className="h-3 w-28 bg-fill-2 rounded animate-pulse" />
-              <div className="h-2.5 w-36 bg-fill-1 rounded animate-pulse" />
+              <div className="h-2.5 w-24 animate-pulse rounded bg-fill-2" />
+              <div className="h-2 w-32 animate-pulse rounded bg-fill-1" />
             </div>
           </div>
         </div>
       </aside>
 
-      <div className="flex flex-col flex-1 min-w-0">
-        <header className="h-14 shrink-0 bg-base/80 border-b border-border flex items-center px-8 gap-2">
-          <div className="h-3.5 w-24 bg-fill-2 rounded animate-pulse" />
-          <div className="h-3 w-3 bg-fill-1 rounded animate-pulse" />
-          <div className="h-3.5 w-20 bg-fill-2 rounded animate-pulse" />
+      <div className="flex min-w-0 flex-1 flex-col">
+        <header className="flex h-14 shrink-0 items-center gap-2 border-b border-border px-6">
+          <div className="h-3 w-20 animate-pulse rounded bg-fill-2" />
+          <div className="size-2.5 animate-pulse rounded bg-fill-1" />
+          <div className="h-3 w-16 animate-pulse rounded bg-fill-2" />
+          <div className="ml-auto size-8 animate-pulse rounded-lg bg-fill-1" />
         </header>
         <main className="flex-1 bg-base" />
       </div>
@@ -55,9 +51,9 @@ export const ProjectsListSkeleton = () => {
   return (
     <div className="space-y-0.5 animate-pulse">
       {[80, 100, 65].map((w, i) => (
-        <div key={i} className="flex items-center gap-3 px-3 py-2">
-          <div className="w-2 h-2 rounded-full bg-fill-2 shrink-0" />
-          <div className="h-3 bg-fill-2 rounded" style={{ width: `${w}%` }} />
+        <div key={i} className="flex items-center gap-2.5 px-2.5 py-2">
+          <div className="size-1.5 shrink-0 rounded-full bg-fill-2" />
+          <div className="h-2.5 bg-fill-2 rounded" style={{ width: `${w}%` }} />
         </div>
       ))}
     </div>

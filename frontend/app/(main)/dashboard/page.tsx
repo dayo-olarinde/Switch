@@ -1,24 +1,61 @@
 "use client";
 
 import CreateWorkspaceModal from "@/components/modals/CreateWorkspaceModal";
+import { Button } from "@/components/ui/button";
+import { Card, PageHeader, SectionHeader, Stat } from "@/components/ui/page";
 import EmptyWorkspaceState from "@/components/workspace/EmptyWorkspace";
 import { WorkspaceCard } from "@/components/workspace/WorkspaceCard";
 import { useMe, useTeammates } from "@/hooks/useAuth";
 import { useOpenCards } from "@/hooks/useCards";
 import { useActiveProjectsCount } from "@/hooks/useProjects";
 import { useGetWorkspaces, Workspace } from "@/hooks/useWorkspace";
-import { cn } from "@/lib/utils";
 import { useWorkspaceStore } from "@/store/workspace.store";
 import {
-  ArrowUp,
-  Layers,
+  ArrowRight,
+  FolderKanban,
   LayoutGrid,
   ListTodo,
   Plus,
   Users,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { ReactNode, useState } from "react";
+import { useState } from "react";
+
+function greetingFor(hour: number) {
+  if (hour < 12) return "Good morning";
+  if (hour < 18) return "Good afternoon";
+  return "Good evening";
+}
+
+function DashboardSkeleton() {
+  return (
+    <div className="w-full animate-pulse">
+      <div className="mb-7 space-y-2">
+        <div className="h-7 w-56 rounded-md bg-fill-2" />
+        <div className="h-3.5 w-72 rounded bg-fill-1" />
+      </div>
+
+      <div className="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <div
+            key={index}
+            className="h-25 rounded-xl border border-border bg-surface"
+          />
+        ))}
+      </div>
+
+      <div className="mb-3 h-4 w-32 rounded bg-fill-1" />
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        {Array.from({ length: 2 }).map((_, index) => (
+          <div
+            key={index}
+            className="h-38 rounded-xl border border-border bg-surface"
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -31,191 +68,128 @@ export default function DashboardPage() {
   const { data: projects, isLoading: countLoading } = useActiveProjectsCount();
   const { data: workspaces = [], isFetched } = useGetWorkspaces();
 
-  const hour = new Date().getHours();
-  const greeting =
-    hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good Evening";
-
   const handleRedirectWorkspace = (ws: Workspace) => {
     setActiveWorkspace(ws);
     router.push(`/${ws.slug}`);
   };
 
-  if (!isFetched || countLoading) {
+  if (!isFetched || countLoading) return <DashboardSkeleton />;
+
+  if (workspaces.length === 0) {
     return (
-      <div className="max-w-6xl mx-auto w-full animate-pulse">
-        <div className="mb-8 space-y-3">
-          <div className="h-8 w-64 bg-card rounded-md" />
-          <div className="h-4 w-96 bg-card rounded-md" />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-          {[...Array(4)].map((_, i) => (
-            <div
-              key={i}
-              className="bg-accent-dim border border-border rounded-xl p-5 h-29"
-            />
-          ))}
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <div className="flex items-center justify-between mb-4">
-              <div className="h-5 w-32 bg-card rounded-md" />
-              <div className="h-8 w-32 bg-card rounded-md" />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {[...Array(2)].map((_, i) => (
-                <div
-                  key={i}
-                  className="bg-surface border border-border rounded-xl h-44"
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
+      <>
+        <EmptyWorkspaceState
+          onCreateWorkspace={() => setIsAddWorkspaceOpen(true)}
+        />
+        <CreateWorkspaceModal
+          isOpen={isAddWorkspaceOpen}
+          onClose={() => setIsAddWorkspaceOpen(false)}
+        />
+      </>
     );
   }
 
   return (
     <>
-      <div className="max-w-6xl mx-auto w-full animate-in fade-in duration-500">
-        {workspaces.length === 0 ? (
-          <EmptyWorkspaceState
-            onCreateWorkspace={() => setIsAddWorkspaceOpen(true)}
+      <div className="w-full">
+        <PageHeader
+          title={`${greetingFor(new Date().getHours())}, ${user?.firstName || "there"}`}
+          description="Here's what's happening across your workspaces."
+        />
+
+        <div className="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <Stat
+            label="Workspaces"
+            value={workspaces.length}
+            icon={<LayoutGrid size={13} className="text-accent" />}
+            hint="You're a member of"
           />
-        ) : (
-          <>
-            <header className="mb-8">
-              <h1 className="text-3xl font-bold text-fg mb-2 tracking-tight">
-                {greeting}, {user?.firstName || "James"}
-              </h1>
-              <p className="text-fg-muted text-[13px]">
-                Here&apos;s what&apos;s happening across your workspaces.
-              </p>
-            </header>
+          <Stat
+            label="Active projects"
+            value={projects?.count}
+            icon={<FolderKanban size={13} className="text-success" />}
+            hint="Across all workspaces"
+          />
+          <Stat
+            label="Open cards"
+            value={cards?.count}
+            icon={<ListTodo size={13} className="text-warning" />}
+            hint="Not yet completed"
+          />
+          <Stat
+            label="Teammates"
+            value={teammates?.count}
+            icon={<Users size={13} className="text-info" />}
+            hint="Across workspaces"
+          />
+        </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-              <StatCard
-                icon={<LayoutGrid size={16} className="text-accent" />}
-                iconBg="bg-accent-solid/10"
-                title="Workspaces"
-                value={workspaces.length.toString()}
-              />
-              <StatCard
-                icon={<ListTodo size={16} className="text-success" />}
-                iconBg="bg-success-dim"
-                title="Active Projects"
-                value={projects?.count.toString()}
-              />
-              <StatCard
-                icon={<Layers size={16} className="text-warning" />}
-                iconBg="bg-warning-dim"
-                title="Open Cards"
-                value={cards?.count.toString()}
-                subtitle="across all boards"
-              />
-              <StatCard
-                icon={<Users size={16} className="text-danger" />}
-                iconBg="bg-danger-dim"
-                title="Team Members"
-                value={teammates?.count.toString()}
-                subtitle="across workspaces"
-              />
-            </div>
+        <section>
+          <SectionHeader
+            title="Your workspaces"
+            count={workspaces.length}
+            action={
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsAddWorkspaceOpen(true)}
+              >
+                <Plus size={14} />
+                New workspace
+              </Button>
+            }
+          />
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <div className="lg:col-span-2">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-[13px] font-bold text-fg uppercase tracking-wider">
-                    Your Workspaces
-                  </h2>
-                </div>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {workspaces.map((ws) => (
+              <WorkspaceCard
+                key={ws.id}
+                ws={ws}
+                handleRedirectWorkspace={() => handleRedirectWorkspace(ws)}
+              />
+            ))}
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {workspaces.map((ws) => (
-                    <WorkspaceCard
-                      key={ws.id}
-                      ws={ws}
-                      handleRedirectWorkspace={() =>
-                        handleRedirectWorkspace(ws)
-                      }
-                    />
-                  ))}
+            <button
+              type="button"
+              onClick={() => setIsAddWorkspaceOpen(true)}
+              className="group flex min-h-38 flex-col items-center justify-center rounded-xl border border-dashed border-border-md bg-fill-1 p-4 transition-colors hover:border-border-lg hover:bg-fill-2 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+            >
+              <span className="mb-2 flex size-8 items-center justify-center rounded-lg bg-fill-2 text-fg-muted transition-colors group-hover:text-accent">
+                <Plus size={16} />
+              </span>
+              <span className="text-body font-medium text-fg-muted transition-colors group-hover:text-fg">
+                Create workspace
+              </span>
+            </button>
+          </div>
+        </section>
 
-                  <button
-                    onClick={() => setIsAddWorkspaceOpen(true)}
-                    className="bg-fill-1 border border-dashed border-border-md rounded-xl p-5 hover:border-border-lg hover:bg-fill-1 transition-all flex flex-col items-center justify-center h-50 group"
-                  >
-                    <div className="w-10 h-10 rounded-full bg-fill-1 flex items-center justify-center mb-3 group-hover:bg-accent-solid/90/10 group-hover:scale-110 transition-all duration-300">
-                      <Plus
-                        size={20}
-                        className="text-fg-muted group-hover:text-accent transition-colors"
-                      />
-                    </div>
-                    <span className="text-[13px] font-semibold text-fg-muted group-hover:text-fg transition-colors">
-                      Create Workspace
-                    </span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </>
-        )}
+        <Card className="mt-8 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <p className="text-body font-semibold text-fg">
+              Jump into a project
+            </p>
+            <p className="mt-1 text-body text-fg-muted">
+              Open a workspace to pick a board, or search across everything.
+            </p>
+          </div>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() =>
+              window.dispatchEvent(new Event("open-search"))
+            }
+          >
+            Search everything
+            <ArrowRight size={14} />
+          </Button>
+        </Card>
       </div>
+
       <CreateWorkspaceModal
         isOpen={isAddWorkspaceOpen}
         onClose={() => setIsAddWorkspaceOpen(false)}
       />
     </>
-  );
-}
-
-interface StatCardProps {
-  icon: ReactNode;
-  iconBg: string;
-  title: string;
-  value: string | undefined;
-  subtitle?: string;
-  trend?: number;
-}
-
-function StatCard({
-  icon,
-  iconBg,
-  title,
-  value,
-  trend,
-  subtitle,
-}: StatCardProps) {
-  return (
-    <div className="bg-fill-1 border border-border rounded-xl p-5 flex flex-col hover:border-border-md transition-colors">
-      <div className="flex items-center gap-3 mb-3">
-        <div
-          className={cn(
-            "w-8 h-8 rounded-lg flex items-center justify-center",
-            iconBg,
-          )}
-        >
-          {icon}
-        </div>
-        <span className="text-xs font-semibold text-fg-muted">{title}</span>
-      </div>
-      <div className="mt-auto">
-        <div className="text-2xl font-black text-fg">{value || "0"}</div>
-        {trend ? (
-          <div className="flex items-center gap-1 mt-1 text-[11px] font-medium text-fg-muted">
-            <span className="flex items-center text-success bg-success-dim px-1 rounded-sm">
-              <ArrowUp size={10} className="mr-0.5" /> {trend}
-            </span>
-            <span>this month</span>
-          </div>
-        ) : (
-          <div className="mt-1 text-[11px] font-medium text-fg-muted">
-            {subtitle || "Total"}
-          </div>
-        )}
-      </div>
-    </div>
   );
 }

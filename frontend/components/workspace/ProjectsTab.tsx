@@ -1,20 +1,10 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { Project, useDeleteProject } from "@/hooks/useProjects";
 import { useWorkspaceRole, Workspace } from "@/hooks/useWorkspace";
 import { getConsistentColor } from "@/lib/utils";
-import {
-  ChevronDown,
-  Edit2,
-  Filter,
-  Layout,
-  LayoutGrid,
-  List,
-  Palette,
-  Plus,
-  Search,
-  Trash2,
-} from "lucide-react";
+import { Edit2, Layout, Palette, Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -41,42 +31,42 @@ export const ProjectsTab = ({
 }: ProjectsTab) => {
   const { canManageWorkspace, isOwner } = useWorkspaceRole();
 
-  return (
-    <div>
-      {projectsLoading ? (
-        <ProjectsSkeleton />
-      ) : projects && projects.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {projects.map((project) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              isOwner={isOwner}
-              canManageWorkspace={canManageWorkspace}
-              activeWorkspaceSlug={workspaceSlug}
-              colorHash={getConsistentColor(project.id)}
-            />
-          ))}
+  if (projectsLoading) return <ProjectsSkeleton />;
 
-          {canManageWorkspace && (
-            <button
-              onClick={onOpenProjectModal}
-              className="bg-transparent border border-dashed border-border-md rounded-xl p-6 hover:border-accent hover:bg-accent-solid/90/5 transition-all flex flex-col items-center justify-center min-h-55 group"
-            >
-              <Plus
-                size={24}
-                className="text-fg-secondary group-hover:text-accent mb-2 transition-colors"
-              />
-              <span className="text-sm font-semibold text-fg-secondary group-hover:text-fg transition-colors">
-                Create Project
-              </span>
-            </button>
-          )}
-        </div>
-      ) : (
-        <div className="pt-8">
-          <EmptyProjectState onCreateProject={onOpenProjectModal} />
-        </div>
+  if (projects.length === 0) {
+    return (
+      <div className="pt-4">
+        <EmptyProjectState onCreateProject={onOpenProjectModal} />
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+      {projects.map((project) => (
+        <ProjectCard
+          key={project.id}
+          project={project}
+          isOwner={isOwner}
+          canManageWorkspace={canManageWorkspace}
+          activeWorkspaceSlug={workspaceSlug}
+          colorHash={getConsistentColor(project.id)}
+        />
+      ))}
+
+      {canManageWorkspace && (
+        <button
+          type="button"
+          onClick={onOpenProjectModal}
+          className="group flex min-h-46 flex-col items-center justify-center rounded-xl border border-dashed border-border-md bg-fill-1 p-4 transition-colors hover:border-border-lg hover:bg-fill-2 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+        >
+          <span className="mb-2 flex size-8 items-center justify-center rounded-lg bg-fill-2 text-fg-muted transition-colors group-hover:text-accent">
+            <Plus size={16} />
+          </span>
+          <span className="text-body font-medium text-fg-muted transition-colors group-hover:text-fg">
+            Create project
+          </span>
+        </button>
       )}
     </div>
   );
@@ -108,49 +98,52 @@ export const ProjectCard = ({
       ? Math.round((project.finishedCards / project.cardsCount) * 100)
       : 0;
 
-  const handleDelete = async () => {
+  const handleDelete = () => {
     if (!project.id) return;
     deleteProject({
       workspaceSlug: activeWorkspaceSlug,
       projectSlug: project.slug,
     });
   };
+
   return (
     <div
       onClick={() => router.push(`/${activeWorkspaceSlug}/${project.slug}`)}
-      className="group/card bg-surface border border-border hover:border-border-md rounded-2xl p-5 transition-all duration-300 cursor-pointer flex flex-col min-h-55 relative overflow-hidden shadow-sm hover:shadow-md"
+      className="group/card flex min-h-46 cursor-pointer flex-col rounded-xl border border-border bg-surface p-4 transition-colors hover:border-border-md"
     >
-      <div className="flex items-start justify-between mb-4">
-        <div className="w-11 h-11 rounded-[14px] bg-accent-solid/10 flex items-center justify-center text-xl shrink-0">
-          <Icon className="text-accent" size={20} />
-        </div>
+      <div className="mb-3 flex items-start justify-between gap-2">
+        <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-accent-dim text-accent">
+          <Icon size={17} />
+        </span>
 
-        <div className="flex items-center gap-2.5 shrink-0">
-          <span className="px-2.5 py-1 rounded-md text-[11px] font-bold tracking-wide bg-success-dim text-success">
+        <div className="flex shrink-0 items-center gap-1">
+          <Badge tone={project.status === "Active" ? "success" : "neutral"}>
             {project.status || "Active"}
-          </span>
+          </Badge>
 
           {canManageWorkspace && (
-            <div className="flex items-center opacity-0 group-hover/card:opacity-100 transition-opacity duration-200">
+            <div className="flex items-center opacity-0 transition-opacity group-hover/card:opacity-100 focus-within:opacity-100">
               <button
-                onClick={(e) => {
-                  e.stopPropagation();
+                type="button"
+                onClick={(event) => {
+                  event.stopPropagation();
                   setIsEditModalOpen(true);
                 }}
-                className="p-1.5 rounded-md text-fg-muted hover:text-fg hover:bg-fill-2 transition-all"
-                title="Edit Project"
+                aria-label={`Edit ${project.name}`}
+                className="rounded-md p-1.5 text-fg-muted transition-colors hover:bg-fill-2 hover:text-fg"
               >
                 <Edit2 size={14} />
               </button>
 
               {isOwner && (
                 <button
-                  onClick={(e) => {
-                    e.stopPropagation();
+                  type="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
                     setIsDeleteModalOpen(true);
                   }}
-                  className="p-1.5 rounded-md text-fg-muted hover:text-danger hover:bg-danger-dim transition-all"
-                  title="Delete Project"
+                  aria-label={`Delete ${project.name}`}
+                  className="rounded-md p-1.5 text-fg-muted transition-colors hover:bg-danger-dim hover:text-danger"
                 >
                   <Trash2 size={14} />
                 </button>
@@ -160,75 +153,63 @@ export const ProjectCard = ({
         </div>
       </div>
 
-      <div className="flex-1 mt-1">
-        <h3 className="text-[17px] font-semibold text-fg tracking-tight mb-1.5 line-clamp-1">
-          {project.name}
-        </h3>
-        <p className="text-[13px] text-fg-muted leading-relaxed line-clamp-2 pr-4">
-          {project.description || "No description provided."}
-        </p>
-      </div>
+      <h3 className="truncate text-sm font-semibold text-fg">
+        {project.name}
+      </h3>
+      <p className="mt-1 line-clamp-2 text-body leading-relaxed text-fg-muted">
+        {project.description || "No description provided."}
+      </p>
 
-      <div className="mt-6">
-        <div className="h-1.5 w-full bg-fill-2 rounded-full overflow-hidden">
+      <div className="mt-auto pt-4">
+        <div className="h-1 w-full overflow-hidden rounded-full bg-fill-2">
           <div
-            className="h-full rounded-full transition-all duration-1000 ease-out"
+            className="h-full rounded-full"
             style={{
               width: `${progressPercent}%`,
-              backgroundColor: colorHash || "#7C6EF5",
+              backgroundColor: colorHash || undefined,
             }}
           />
         </div>
-        <div className="mt-2.5 text-[12px] font-medium text-fg-muted">
-          {progressPercent}% · {project.finishedCards} of {project.cardsCount}{" "}
-          cards done
-        </div>
-      </div>
 
-      <div className="h-px w-full bg-fill-2 my-4" />
+        <div className="mt-2 flex items-center justify-between gap-2">
+          <span className="text-2xs font-medium text-fg-muted">
+            {progressPercent}% · {project.finishedCards}/{project.cardsCount} done
+          </span>
 
-      <div className="flex items-center justify-between mt-auto">
-        <div className="flex items-center gap-4 text-[12px] font-medium text-fg-muted">
-          <div className="flex items-center gap-1.5">
-            <Layout size={14} className="text-fg-muted" />
-            <span>{project.cardsCount || 0}</span>
-          </div>
-        </div>
+          <div className="flex items-center gap-2">
+            <span className="flex items-center gap-1 text-2xs font-medium text-fg-muted">
+              <Layout size={12} />
+              {project.cardsCount}
+            </span>
 
-        <div className="flex items-center">
-          <div className="flex -space-x-1.5">
-            {project.assignees &&
-              project.assignees.slice(0, 3).map((a, i) =>
-                a.avatarUrl ? (
-                  <div
-                    key={i}
-                    className="w-6 h-6 rounded-full border-2 border-card bg-success-dim flex items-center justify-center text-[9px] font-bold text-fg z-10 overflow-hidden relative shrink-0"
-                  >
+            <div className="flex -space-x-1.5">
+              {project.assignees?.slice(0, 3).map((assignee, index) => (
+                <span
+                  key={index}
+                  className="flex size-5 items-center justify-center overflow-hidden rounded-full border border-surface bg-overlay text-2xs font-semibold text-fg"
+                >
+                  {assignee.avatarUrl ? (
                     <Image
-                      src={a.avatarUrl}
-                      alt={a.firstName || "User avatar"}
-                      width={24}
-                      height={24}
-                      className="object-cover w-full h-full"
+                      src={assignee.avatarUrl}
+                      alt={assignee.firstName || "Assignee"}
+                      width={20}
+                      height={20}
+                      className="size-full object-cover"
                       unoptimized
                       referrerPolicy="no-referrer"
                     />
-                  </div>
-                ) : (
-                  <div
-                    key={i}
-                    className="w-6 h-6 rounded-full border-2 border-card bg-success-dim flex items-center justify-center text-[9px] font-bold text-fg z-10 shrink-0"
-                  >
-                    {a.firstName ? a.firstName.charAt(0).toUpperCase() : "U"}
-                  </div>
-                ),
-              )}
+                  ) : (
+                    assignee.firstName?.charAt(0).toUpperCase() || "U"
+                  )}
+                </span>
+              ))}
 
-            {project.assignees && project.assignees.length > 3 && (
-              <div className="w-6 h-6 rounded-full border-2 border-card bg-overlay flex items-center justify-center text-[9px] font-bold text-fg z-0 shrink-0">
-                +{project.assignees.length - 3}
-              </div>
-            )}
+              {project.assignees?.length > 3 && (
+                <span className="flex size-5 items-center justify-center rounded-full border border-surface bg-overlay text-2xs font-semibold text-fg-muted">
+                  +{project.assignees.length - 3}
+                </span>
+              )}
+            </div>
           </div>
         </div>
       </div>

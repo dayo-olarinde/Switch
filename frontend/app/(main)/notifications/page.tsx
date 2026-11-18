@@ -1,6 +1,9 @@
 "use client";
 
 import { NotificationsSkeleton } from "@/components/skeletons/NotificationsPage";
+import { Button } from "@/components/ui/button";
+import { EmptyState, PageHeader } from "@/components/ui/page";
+import { Tabs } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { useNotificationStore } from "@/store/notification.store";
 import { formatDistanceToNow, isToday, isYesterday } from "date-fns";
@@ -9,7 +12,6 @@ import {
   BellOff,
   Check,
   Clock,
-  Mail,
   MessageSquare,
   UserPlus,
 } from "lucide-react";
@@ -18,48 +20,30 @@ import { useState } from "react";
 const getTypeConfig = (type: string) => {
   switch (type) {
     case "comment_added":
-      return {
-        icon: MessageSquare,
-        color: "text-info",
-        bg: "bg-info/10",
-      };
+      return { icon: MessageSquare, color: "text-info", bg: "bg-info-dim" };
     case "card_assigned":
-      return {
-        icon: UserPlus,
-        color: "text-success",
-        bg: "bg-success/10",
-      };
+      return { icon: UserPlus, color: "text-success", bg: "bg-success-dim" };
     case "card_due_soon":
-      return {
-        icon: Clock,
-        color: "text-warning",
-        bg: "bg-warning/10",
-      };
+      return { icon: Clock, color: "text-warning", bg: "bg-warning-dim" };
     case "mentioned":
-      return {
-        icon: AtSign,
-        color: "text-danger",
-        bg: "bg-danger/10",
-      };
-
-    case "invitation":
-      return {
-        icon: Mail,
-        color: "text-accent",
-        bg: "bg-accent-solid/10",
-      };
+      return { icon: AtSign, color: "text-danger", bg: "bg-danger-dim" };
     default:
-      return {
-        icon: Mail,
-        color: "text-fg-muted",
-        bg: "bg-fill-2",
-      };
+      return { icon: BellOff, color: "text-fg-muted", bg: "bg-fill-2" };
   }
 };
 
+type TabValue = "all" | "unread" | "mentions";
+type FilterValue = "all" | "comments" | "assignments";
+
+const FILTERS: Array<{ value: FilterValue; label: string }> = [
+  { value: "all", label: "All types" },
+  { value: "comments", label: "Comments" },
+  { value: "assignments", label: "Assignments" },
+];
+
 export default function NotificationsPage() {
-  const [activeTab, setActiveTab] = useState("All");
-  const [activeFilter, setActiveFilter] = useState("All types");
+  const [activeTab, setActiveTab] = useState<TabValue>("all");
+  const [activeFilter, setActiveFilter] = useState<FilterValue>("all");
 
   const notifications = useNotificationStore((s) => s.notifications);
   const isLoading = useNotificationStore((s) => s.isLoading);
@@ -67,246 +51,193 @@ export default function NotificationsPage() {
   const markRead = useNotificationStore((s) => s.markRead);
   const markAllRead = useNotificationStore((s) => s.markAllRead);
 
-  const filteredNotifications = notifications.filter((notif) => {
-    if (activeTab === "Unread" && notif.isRead) return false;
-    if (activeTab === "Mentions" && notif.type !== "mentioned") return false;
+  if (isLoading) return <NotificationsSkeleton />;
 
-    if (activeFilter === "Comments" && notif.type !== "comment_added")
+  const filtered = notifications.filter((notification) => {
+    if (activeTab === "unread" && notification.isRead) return false;
+    if (activeTab === "mentions" && notification.type !== "mentioned")
       return false;
-    if (activeFilter === "Assignments" && notif.type !== "card_assigned")
+
+    if (activeFilter === "comments" && notification.type !== "comment_added")
+      return false;
+    if (activeFilter === "assignments" && notification.type !== "card_assigned")
       return false;
 
     return true;
   });
 
-  const groupedNotifications = filteredNotifications.reduce(
-    (acc, notif) => {
-      const date = new Date(notif.createdAt);
-      const dateGroup = isToday(date)
+  const grouped = filtered.reduce<Record<string, typeof notifications>>(
+    (acc, notification) => {
+      const date = new Date(notification.createdAt);
+      const group = isToday(date)
         ? "Today"
         : isYesterday(date)
           ? "Yesterday"
           : "Older";
 
-      if (!acc[dateGroup]) acc[dateGroup] = [];
-      acc[dateGroup].push(notif);
+      (acc[group] ??= []).push(notification);
       return acc;
     },
-    {} as Record<string, typeof notifications>,
+    {},
   );
 
-  if (isLoading) return <NotificationsSkeleton />;
+  const hasFilters = activeTab !== "all" || activeFilter !== "all";
 
   return (
-    <div className="min-h-screen w-full text-fg font-sans pb-20">
-      <div className="max-w-3xl mx-auto space-y-8 animate-in fade-in duration-500">
-        <div className="flex items-start justify-between">
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold tracking-tight text-fg">
-                Inbox
-              </h1>
-              {unreadCount > 0 && (
-                <span className="px-2 py-0.5 rounded-md bg-accent-solid/10 text-accent text-[11px] font-bold tracking-wide">
-                  {unreadCount} new
-                </span>
-              )}
-            </div>
-            <p className="text-fg-muted text-[14px]">
-              Catch up on the latest activity across your projects.
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => markAllRead()}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-fill-2 hover:bg-fill-3 border border-border hover:border-border-md text-[12px] font-semibold text-fg-secondary hover:text-fg transition-all shadow-sm"
-            >
-              <Check size={14} className="text-fg-muted" />
-              Mark all as read
-            </button>
-          </div>
-        </div>
+    <div className="w-full pb-16">
+      <PageHeader
+        title="Inbox"
+        description="Catch up on the latest activity across your projects."
+        actions={
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => markAllRead()}
+            icon={<Check size={14} />}
+          >
+            Mark all as read
+          </Button>
+        }
+      />
 
-        <div className="flex items-center gap-8 border-b border-border-md relative">
-          {["All", "Unread", "Mentions"].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => {
-                setActiveTab(tab);
-                setActiveFilter("All types");
-              }}
-              className={cn(
-                "pb-3 text-[13px] font-semibold transition-colors relative flex items-center gap-2",
-                activeTab === tab
-                  ? "text-fg"
-                  : "text-fg-muted hover:text-fg-secondary",
-              )}
-            >
-              {tab}
-              {tab === "Unread" && unreadCount > 0 && (
-                <span className="text-[11px] text-accent font-bold">
-                  {unreadCount}
-                </span>
-              )}
+      <Tabs<TabValue>
+        items={[
+          {
+            value: "all",
+            label: "All",
+            count: notifications.length,
+          },
+          { value: "unread", label: "Unread", count: unreadCount },
+          { value: "mentions", label: "Mentions" },
+        ]}
+        value={activeTab}
+        onChange={(value) => {
+          setActiveTab(value);
+          setActiveFilter("all");
+        }}
+      />
 
-              {activeTab === tab && (
-                <span className="absolute -bottom-px left-0 right-0 h-0.5 bg-accent-solid rounded-t-full" />
-              )}
-            </button>
-          ))}
-        </div>
+      <div className="mt-4 flex flex-wrap items-center gap-1.5">
+        {FILTERS.map((filter) => (
+          <button
+            key={filter.value}
+            type="button"
+            onClick={() => setActiveFilter(filter.value)}
+            aria-pressed={activeFilter === filter.value}
+            className={cn(
+              "h-7 rounded-md px-2.5 text-2xs font-semibold transition-colors",
+              activeFilter === filter.value
+                ? "bg-fill-3 text-fg"
+                : "text-fg-muted hover:bg-fill-2 hover:text-fg",
+            )}
+          >
+            {filter.label}
+          </button>
+        ))}
 
-        <div className="flex flex-wrap items-center gap-2">
-          {["All types", "Comments", "Assignments"].map((filter) => (
-            <button
-              key={filter}
-              onClick={() => setActiveFilter(filter)}
-              className={cn(
-                "px-3.5 py-1.5 rounded-lg text-[12px] font-semibold transition-all flex items-center gap-2",
-                activeFilter === filter
-                  ? "bg-fill-3 text-fg shadow-sm"
-                  : "bg-transparent text-fg-muted hover:text-fg hover:bg-fill-2",
-              )}
-            >
-              {filter === "Comments" && (
-                <MessageSquare size={12} className="opacity-50" />
-              )}
-              {filter === "Assignments" && (
-                <UserPlus size={12} className="opacity-50" />
-              )}
+        {hasFilters && (
+          <button
+            type="button"
+            onClick={() => {
+              setActiveTab("all");
+              setActiveFilter("all");
+            }}
+            className="ml-1 h-7 rounded-md px-2.5 text-2xs font-semibold text-accent transition-opacity hover:opacity-80"
+          >
+            Clear filters
+          </button>
+        )}
+      </div>
 
-              {filter === "Invitations" && (
-                <Mail size={12} className="opacity-50" />
-              )}
-              {filter}
-            </button>
-          ))}
-        </div>
+      <div className="mt-6 space-y-8">
+        {filtered.length === 0 ? (
+          <EmptyState
+            icon={<BellOff size={18} />}
+            title="All caught up"
+            description="You have no notifications matching this view. Check back later for updates."
+          />
+        ) : (
+          Object.entries(grouped).map(([group, items]) => (
+            <section key={group}>
+              <h2 className="mb-2 px-1 text-2xs font-semibold tracking-wider text-fg-muted uppercase">
+                {group}
+              </h2>
 
-        <div className="space-y-10">
-          {filteredNotifications.length === 0 ? (
-            <div className="py-20 flex flex-col items-center justify-center text-center animate-in fade-in duration-300">
-              <div className="w-16 h-16 rounded-2xl bg-fill-2 border border-border-md flex items-center justify-center mb-5">
-                <BellOff size={28} className="text-fg-muted" />
-              </div>
-              <h3 className="text-[15px] font-bold text-fg mb-1.5">
-                All caught up
-              </h3>
-              <p className="text-[13px] text-fg-muted max-w-65">
-                You have no notifications matching this filter. Check back later
-                for updates.
-              </p>
-              {(activeTab !== "All" || activeFilter !== "All types") && (
-                <button
-                  onClick={() => {
-                    setActiveTab("All");
-                    setActiveFilter("All types");
-                  }}
-                  className="mt-6 text-[13px] font-semibold text-accent hover:text-accent transition-colors"
-                >
-                  Clear filters
-                </button>
-              )}
-            </div>
-          ) : (
-            Object.entries(groupedNotifications).map(
-              ([dateGroup, groupNotifications]) => (
-                <div
-                  key={dateGroup}
-                  className="space-y-4 animate-in fade-in duration-300"
-                >
-                  <div className="flex items-center gap-4">
-                    <h3 className="text-[10px] font-bold text-fg-muted tracking-widest uppercase">
-                      {dateGroup}
-                    </h3>
-                  </div>
+              <ul className="space-y-1">
+                {items.map((notification) => {
+                  const config = getTypeConfig(notification.type);
+                  const Icon = config.icon;
 
-                  <div className="space-y-1.5">
-                    {groupNotifications.map((notif) => {
-                      const config = getTypeConfig(notif.type);
-                      const Icon = config.icon;
+                  return (
+                    <li
+                      key={notification.id}
+                      className={cn(
+                        "group flex items-start gap-3 rounded-lg border p-3 transition-colors",
+                        notification.isRead
+                          ? "border-transparent hover:bg-fill-1"
+                          : "border-border bg-surface",
+                      )}
+                    >
+                      <span
+                        className={cn(
+                          "mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg",
+                          config.bg,
+                        )}
+                      >
+                        <Icon size={15} className={config.color} />
+                      </span>
 
-                      return (
-                        <div
-                          key={notif.id}
+                      <div className="min-w-0 flex-1">
+                        <p
                           className={cn(
-                            "group relative flex items-start gap-4 p-4 rounded-xl transition-all duration-200",
-                            notif.isRead
-                              ? "bg-transparent hover:bg-fill-1 opacity-70 hover:opacity-100"
-                              : "bg-surface border border-border shadow-xl shadow-black/20",
+                            "text-body text-fg",
+                            notification.isRead ? "font-medium" : "font-semibold",
                           )}
                         >
-                          <div className="relative shrink-0 mt-0.5">
-                            <div
-                              className={cn(
-                                "w-9 h-9 rounded-full flex items-center justify-center",
-                                config.bg,
-                              )}
+                          {notification.title}
+                        </p>
+
+                        {notification.body && (
+                          <p className="mt-1 line-clamp-2 border-l-2 border-border-md pl-2.5 text-body text-fg-muted">
+                            {notification.body}
+                          </p>
+                        )}
+
+                        <p className="mt-1.5 text-2xs font-medium text-fg-muted">
+                          {formatDistanceToNow(new Date(notification.createdAt))}{" "}
+                          ago
+                        </p>
+                      </div>
+
+                      <div className="flex items-center gap-1">
+                        {!notification.isRead && (
+                          <>
+                            <button
+                              type="button"
+                              onClick={() => markRead(notification.id)}
+                              aria-label="Mark as read"
+                              className="rounded-md p-1.5 text-fg-muted opacity-0 transition-all group-hover:opacity-100 hover:bg-fill-2 hover:text-fg focus-visible:opacity-100"
                             >
-                              <Icon size={16} className={config.color} />
-                            </div>
-
-                            <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-card border-2 border-surface flex items-center justify-center">
-                              <div className="w-1.5 h-1.5 rounded-full bg-fill-3" />
-                            </div>
-                          </div>
-
-                          <div className="flex-1 min-w-0 pr-12">
-                            <div className="text-[13px] leading-relaxed text-fg-secondary">
-                              <span
-                                className={cn(
-                                  "mr-1",
-                                  notif.isRead
-                                    ? "font-medium text-fg"
-                                    : "font-semibold text-fg",
-                                )}
-                              >
-                                {notif.title}
-                              </span>
-                            </div>
-
-                            {notif.body && (
-                              <div className="mt-2 text-[13px] text-fg-muted line-clamp-2 border-l-2 border-border-md pl-3 py-0.5">
-                                {notif.body}
-                              </div>
-                            )}
-
-                            <div className="flex items-center gap-2 text-[11px] font-medium text-fg-muted pt-2">
-                              {formatDistanceToNow(new Date(notif.createdAt))}{" "}
-                              ago
-                            </div>
-                          </div>
-
-                          <div className="absolute right-4 top-4 flex items-center gap-2">
-                            <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 bg-surface pl-2">
-                              {!notif.isRead && (
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    markRead(notif.id);
-                                  }}
-                                  className="p-1.5 text-fg-muted hover:text-fg hover:bg-fill-3 rounded-md transition-colors"
-                                  title="Mark as read"
-                                >
-                                  <Check size={14} />
-                                </button>
-                              )}
-                            </div>
-
-                            {!notif.isRead && (
-                              <div className="w-2 h-2 rounded-full bg-accent-solid group-hover:opacity-0 transition-opacity" />
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              ),
-            )
-          )}
-        </div>
+                              <Check size={14} />
+                            </button>
+                            <span className="size-1.5 rounded-full bg-accent-solid" />
+                          </>
+                        )}
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          ))
+        )}
       </div>
+
+      {unreadCount > 0 && (
+        <p className="mt-8 text-center text-2xs text-fg-muted">
+          {unreadCount} unread {unreadCount === 1 ? "notification" : "notifications"}
+        </p>
+      )}
     </div>
   );
 }

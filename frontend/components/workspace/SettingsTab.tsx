@@ -1,7 +1,9 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/page";
 import { useUpdateWorkspace, Workspace } from "@/hooks/useWorkspace";
-import { AlertTriangle, Building2, Link2, Loader2, Save } from "lucide-react";
+import { AlertTriangle, Building2, Link2, Save } from "lucide-react";
 import { useState } from "react";
 
 interface SettingsTabProps {
@@ -9,6 +11,9 @@ interface SettingsTabProps {
   onOpenDeleteModal: () => void;
   isOwner: boolean;
 }
+
+const fieldClass =
+  "h-10 w-full rounded-lg border border-border bg-fill-1 pl-9 pr-3 text-body text-fg transition-colors outline-none placeholder:text-fg-muted focus:border-accent";
 
 export const SettingsTab = ({
   activeWorkspace,
@@ -26,7 +31,7 @@ export const SettingsTab = ({
     activeWorkspace.slug,
   );
 
-  const handleUpdate = async () => {
+  const handleUpdate = () => {
     if (!name.trim() || !slug.trim() || !hasChanges) return;
 
     const payload: { name?: string; slug?: string } = {};
@@ -39,109 +44,95 @@ export const SettingsTab = ({
   if (!isOwner) return null;
 
   return (
-    <div className="max-w-3xl animate-in fade-in duration-300 pb-10">
-      <div className="bg-surface border border-border rounded-2xl p-8 mb-8 shadow-xl relative overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 h-1 " />
-
-        <div className="mb-8">
-          <h2 className="text-lg font-bold text-fg tracking-tight">
-            Workspace Settings
-          </h2>
-          <p className="text-[13px] text-fg-muted mt-1">
-            Manage your workspace identity and core configuration.
+    <div className="max-w-2xl space-y-4 pb-10">
+      <Card>
+        <div className="mb-6">
+          <h2 className="text-sm font-semibold text-fg">Workspace details</h2>
+          <p className="mt-1 text-body text-fg-muted">
+            Manage your workspace name and URL.
           </p>
         </div>
 
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <label className="block text-[13px] font-semibold text-fg">
-              Workspace Name
+        <div className="space-y-4">
+          <div className="space-y-1.5">
+            <label
+              htmlFor="workspace-name"
+              className="block text-body font-medium text-fg-secondary"
+            >
+              Name
             </label>
-            <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-fg-muted group-focus-within:text-accent transition-colors">
-                <Building2 size={16} />
-              </div>
+            <div className="relative">
+              <Building2
+                size={15}
+                className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-fg-muted"
+              />
               <input
+                id="workspace-name"
                 type="text"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full h-11 bg-scrim border border-border-md rounded-xl pl-10 pr-4 text-[14px] text-fg focus:outline-none focus:border-accent/50 focus:ring-4 focus:ring-accent/10 transition-all placeholder:text-fg-muted"
-                placeholder="e.g. Acme Corp"
+                onChange={(event) => setName(event.target.value)}
+                placeholder="Acme Corp"
+                className={fieldClass}
               />
             </div>
           </div>
 
-          <div className="space-y-2">
-            <label className="block text-[13px] font-semibold text-fg">
-              Workspace URL Slug
+          <div className="space-y-1.5">
+            <label
+              htmlFor="workspace-slug"
+              className="block text-body font-medium text-fg-secondary"
+            >
+              URL slug
             </label>
-            <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-fg-muted group-focus-within:text-accent transition-colors">
-                <Link2 size={16} />
-              </div>
+            <div className="relative">
+              <Link2
+                size={15}
+                className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-fg-muted"
+              />
               <input
+                id="workspace-slug"
                 type="text"
                 value={slug}
-                onChange={(e) => setSlug(e.target.value)}
-                className="w-full h-11 bg-scrim border border-border-md rounded-xl pl-10 pr-4 text-[14px] text-fg focus:outline-none focus:border-accent/50 focus:ring-4 focus:ring-accent/10 transition-all placeholder:text-fg-muted"
+                onChange={(event) => setSlug(event.target.value)}
+                className={fieldClass}
               />
-              <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none">
-                <span className="text-[11px] font-medium text-fg-muted bg-fill-2 px-2 py-1 rounded-md">
-                  app.yoursite.com/{slug || "slug"}
-                </span>
-              </div>
             </div>
-            <p className="text-[12px] text-fg-muted">
-              This is your workspace&apos;s unique identifier. Changing this
-              will break existing links.
+            <p className="text-2xs text-fg-muted">
+              Changing the slug breaks existing links to this workspace.
             </p>
           </div>
 
-          <div className="pt-4 flex justify-end border-t border-border">
-            <button
+          <div className="flex justify-end border-t border-border pt-4">
+            <Button
               onClick={handleUpdate}
-              disabled={
-                isPending || !name.trim() || !slug.trim() || !hasChanges
-              }
-              className="h-10 px-5 bg-accent-solid hover:bg-accent-solid/90 text-on-accent rounded-xl text-[13px] font-semibold transition-all shadow-lg shadow-accent disabled:shadow-none disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              loading={isPending}
+              disabled={!name.trim() || !slug.trim() || !hasChanges}
+              icon={<Save size={15} />}
             >
-              {isPending ? (
-                <Loader2 size={16} className="animate-spin" />
-              ) : (
-                <Save size={16} />
-              )}
-              {isPending ? "Saving..." : "Save Changes"}
-            </button>
+              {isPending ? "Saving" : "Save changes"}
+            </Button>
           </div>
         </div>
-      </div>
+      </Card>
 
-      <div className="bg-surface border border-danger rounded-2xl p-8 shadow-xl relative overflow-hidden group">
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
-        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6 relative z-10">
+      <Card className="border-danger/40">
+        <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h2 className="text-lg font-bold text-danger tracking-tight flex items-center gap-2 mb-2">
-              <AlertTriangle size={18} />
-              Danger Zone
+            <h2 className="flex items-center gap-2 text-sm font-semibold text-danger">
+              <AlertTriangle size={16} />
+              Danger zone
             </h2>
-            <p className="text-[13px] text-fg-muted leading-relaxed max-w-md">
-              Permanently delete this workspace, including all projects,
-              members, and data.
-              <span className="block mt-1 font-semibold text-danger">
-                This action cannot be undone.
-              </span>
+            <p className="mt-1 max-w-md text-body leading-relaxed text-fg-muted">
+              Permanently delete this workspace with all its projects, members
+              and data. This cannot be undone.
             </p>
           </div>
 
-          <button
-            onClick={onOpenDeleteModal}
-            className="shrink-0 h-10 px-5 bg-danger-dim hover:bg-danger-dim hover:text-fg text-danger border border-danger rounded-xl text-[13px] font-semibold transition-all duration-300"
-          >
-            Delete Workspace
-          </button>
+          <Button variant="danger" onClick={onOpenDeleteModal}>
+            Delete workspace
+          </Button>
         </div>
-      </div>
+      </Card>
     </div>
   );
 };

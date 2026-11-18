@@ -1,37 +1,30 @@
 export const ProjectsSkeleton = () => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+    <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
       {[1, 2, 3].map((i) => (
         <div
           key={i}
-          className="bg-surface border border-border rounded-2xl p-5 flex flex-col min-h-55 animate-pulse shadow-sm"
+          className="flex min-h-46 animate-pulse flex-col rounded-xl border border-border bg-surface p-4"
         >
-          <div className="flex items-start justify-between mb-4">
-            <div className="w-11 h-11 rounded-[14px] bg-fill-2 shrink-0" />
-            <div className="w-14 h-6 rounded-md bg-fill-2 shrink-0" />
+          <div className="mb-3 flex items-start justify-between">
+            <div className="size-9 rounded-lg bg-fill-2" />
+            <div className="h-5 w-14 rounded-md bg-fill-2" />
           </div>
 
-          <div className="flex-1 mt-1 space-y-2.5">
-            <div className="h-5 w-3/4 bg-fill-3 rounded-md" />
-            <div className="space-y-1.5">
-              <div className="h-3 w-full bg-fill-2 rounded" />
-              <div className="h-3 w-5/6 bg-fill-2 rounded" />
-            </div>
+          <div className="space-y-2">
+            <div className="h-4 w-3/4 rounded bg-fill-3" />
+            <div className="h-2.5 w-full rounded bg-fill-2" />
+            <div className="h-2.5 w-5/6 rounded bg-fill-2" />
           </div>
 
-          <div className="mt-6">
-            <div className="h-1.5 w-full bg-fill-2 rounded-full" />
-            <div className="h-3 w-32 bg-fill-2 rounded mt-2.5" />
-          </div>
-
-          <div className="h-px w-full bg-fill-2 my-4" />
-
-          <div className="flex items-center justify-between mt-auto">
-            <div className="h-4 w-12 bg-fill-2 rounded" />
-            <div className="flex -space-x-1.5">
-              <div className="w-6 h-6 rounded-full bg-fill-3 border-2 border-surface" />
-              <div className="w-6 h-6 rounded-full bg-fill-3 border-2 border-surface" />
-              <div className="w-6 h-6 rounded-full bg-fill-3 border-2 border-surface" />
+          <div className="mt-auto pt-4">
+            <div className="h-1 w-full rounded-full bg-fill-2" />
+            <div className="mt-2 flex items-center justify-between">
+              <div className="h-2.5 w-24 rounded bg-fill-2" />
+              <div className="flex -space-x-1.5">
+                <div className="size-5 rounded-full bg-fill-3" />
+                <div className="size-5 rounded-full bg-fill-3" />
+              </div>
             </div>
           </div>
         </div>
