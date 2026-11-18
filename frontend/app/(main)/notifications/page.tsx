@@ -20,39 +20,39 @@ const getTypeConfig = (type: string) => {
     case "comment_added":
       return {
         icon: MessageSquare,
-        color: "text-[#38bdf8]",
-        bg: "bg-[#38bdf8]/10",
+        color: "text-info",
+        bg: "bg-info/10",
       };
     case "card_assigned":
       return {
         icon: UserPlus,
-        color: "text-[#34d399]",
-        bg: "bg-[#34d399]/10",
+        color: "text-success",
+        bg: "bg-success/10",
       };
     case "card_due_soon":
       return {
         icon: Clock,
-        color: "text-[#fbbf24]",
-        bg: "bg-[#fbbf24]/10",
+        color: "text-warning",
+        bg: "bg-warning/10",
       };
     case "mentioned":
       return {
         icon: AtSign,
-        color: "text-[#fb7185]",
-        bg: "bg-[#fb7185]/10",
+        color: "text-danger",
+        bg: "bg-danger/10",
       };
 
     case "invitation":
       return {
         icon: Mail,
-        color: "text-[#818cf8]",
-        bg: "bg-[#818cf8]/10",
+        color: "text-accent",
+        bg: "bg-accent-solid/10",
       };
     default:
       return {
         icon: Mail,
-        color: "text-white/40",
-        bg: "bg-white/5",
+        color: "text-fg-muted",
+        bg: "bg-fill-2",
       };
   }
 };
@@ -98,36 +98,36 @@ export default function NotificationsPage() {
   if (isLoading) return <NotificationsSkeleton />;
 
   return (
-    <div className="min-h-screen w-full text-white font-sans pb-20">
+    <div className="min-h-screen w-full text-fg font-sans pb-20">
       <div className="max-w-3xl mx-auto space-y-8 animate-in fade-in duration-500">
         <div className="flex items-start justify-between">
           <div className="space-y-1.5">
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold tracking-tight text-white/90">
+              <h1 className="text-2xl font-bold tracking-tight text-fg">
                 Inbox
               </h1>
               {unreadCount > 0 && (
-                <span className="px-2 py-0.5 rounded-md bg-[#7C6EF5]/10 text-[#7C6EF5] text-[11px] font-bold tracking-wide">
+                <span className="px-2 py-0.5 rounded-md bg-accent-solid/10 text-accent text-[11px] font-bold tracking-wide">
                   {unreadCount} new
                 </span>
               )}
             </div>
-            <p className="text-white/40 text-[14px]">
+            <p className="text-fg-muted text-[14px]">
               Catch up on the latest activity across your projects.
             </p>
           </div>
           <div className="flex items-center gap-3">
             <button
               onClick={() => markAllRead()}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 text-[12px] font-semibold text-white/70 hover:text-white transition-all shadow-sm"
+              className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-fill-2 hover:bg-fill-3 border border-border hover:border-border-md text-[12px] font-semibold text-fg-secondary hover:text-fg transition-all shadow-sm"
             >
-              <Check size={14} className="text-white/40" />
+              <Check size={14} className="text-fg-muted" />
               Mark all as read
             </button>
           </div>
         </div>
 
-        <div className="flex items-center gap-8 border-b border-white/10 relative">
+        <div className="flex items-center gap-8 border-b border-border-md relative">
           {["All", "Unread", "Mentions"].map((tab) => (
             <button
               key={tab}
@@ -138,19 +138,19 @@ export default function NotificationsPage() {
               className={cn(
                 "pb-3 text-[13px] font-semibold transition-colors relative flex items-center gap-2",
                 activeTab === tab
-                  ? "text-white"
-                  : "text-white/40 hover:text-white/70",
+                  ? "text-fg"
+                  : "text-fg-muted hover:text-fg-secondary",
               )}
             >
               {tab}
               {tab === "Unread" && unreadCount > 0 && (
-                <span className="text-[11px] text-[#7C6EF5] font-bold">
+                <span className="text-[11px] text-accent font-bold">
                   {unreadCount}
                 </span>
               )}
 
               {activeTab === tab && (
-                <span className="absolute -bottom-px left-0 right-0 h-0.5 bg-[#7C6EF5] rounded-t-full" />
+                <span className="absolute -bottom-px left-0 right-0 h-0.5 bg-accent-solid rounded-t-full" />
               )}
             </button>
           ))}
@@ -164,8 +164,8 @@ export default function NotificationsPage() {
               className={cn(
                 "px-3.5 py-1.5 rounded-lg text-[12px] font-semibold transition-all flex items-center gap-2",
                 activeFilter === filter
-                  ? "bg-white/10 text-white shadow-sm"
-                  : "bg-transparent text-white/40 hover:text-white/80 hover:bg-white/5",
+                  ? "bg-fill-3 text-fg shadow-sm"
+                  : "bg-transparent text-fg-muted hover:text-fg hover:bg-fill-2",
               )}
             >
               {filter === "Comments" && (
@@ -186,13 +186,13 @@ export default function NotificationsPage() {
         <div className="space-y-10">
           {filteredNotifications.length === 0 ? (
             <div className="py-20 flex flex-col items-center justify-center text-center animate-in fade-in duration-300">
-              <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-5">
-                <BellOff size={28} className="text-white/20" />
+              <div className="w-16 h-16 rounded-2xl bg-fill-2 border border-border-md flex items-center justify-center mb-5">
+                <BellOff size={28} className="text-fg-muted" />
               </div>
-              <h3 className="text-[15px] font-bold text-white/90 mb-1.5">
+              <h3 className="text-[15px] font-bold text-fg mb-1.5">
                 All caught up
               </h3>
-              <p className="text-[13px] text-white/40 max-w-65">
+              <p className="text-[13px] text-fg-muted max-w-65">
                 You have no notifications matching this filter. Check back later
                 for updates.
               </p>
@@ -202,7 +202,7 @@ export default function NotificationsPage() {
                     setActiveTab("All");
                     setActiveFilter("All types");
                   }}
-                  className="mt-6 text-[13px] font-semibold text-[#7C6EF5] hover:text-[#B8B0FF] transition-colors"
+                  className="mt-6 text-[13px] font-semibold text-accent hover:text-accent transition-colors"
                 >
                   Clear filters
                 </button>
@@ -216,7 +216,7 @@ export default function NotificationsPage() {
                   className="space-y-4 animate-in fade-in duration-300"
                 >
                   <div className="flex items-center gap-4">
-                    <h3 className="text-[10px] font-bold text-white/30 tracking-widest uppercase">
+                    <h3 className="text-[10px] font-bold text-fg-muted tracking-widest uppercase">
                       {dateGroup}
                     </h3>
                   </div>
@@ -232,8 +232,8 @@ export default function NotificationsPage() {
                           className={cn(
                             "group relative flex items-start gap-4 p-4 rounded-xl transition-all duration-200",
                             notif.isRead
-                              ? "bg-transparent hover:bg-white/2 opacity-70 hover:opacity-100"
-                              : "bg-[#13131A] border border-white/5 shadow-xl shadow-black/20",
+                              ? "bg-transparent hover:bg-fill-1 opacity-70 hover:opacity-100"
+                              : "bg-surface border border-border shadow-xl shadow-black/20",
                           )}
                         >
                           <div className="relative shrink-0 mt-0.5">
@@ -246,19 +246,19 @@ export default function NotificationsPage() {
                               <Icon size={16} className={config.color} />
                             </div>
 
-                            <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#1A1A24] border-2 border-[#13131A] flex items-center justify-center">
-                              <div className="w-1.5 h-1.5 rounded-full bg-white/50" />
+                            <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-card border-2 border-surface flex items-center justify-center">
+                              <div className="w-1.5 h-1.5 rounded-full bg-fill-3" />
                             </div>
                           </div>
 
                           <div className="flex-1 min-w-0 pr-12">
-                            <div className="text-[13px] leading-relaxed text-white/60">
+                            <div className="text-[13px] leading-relaxed text-fg-secondary">
                               <span
                                 className={cn(
                                   "mr-1",
                                   notif.isRead
-                                    ? "font-medium text-white/80"
-                                    : "font-semibold text-white/90",
+                                    ? "font-medium text-fg"
+                                    : "font-semibold text-fg",
                                 )}
                               >
                                 {notif.title}
@@ -266,26 +266,26 @@ export default function NotificationsPage() {
                             </div>
 
                             {notif.body && (
-                              <div className="mt-2 text-[13px] text-white/50 line-clamp-2 border-l-2 border-white/10 pl-3 py-0.5">
+                              <div className="mt-2 text-[13px] text-fg-muted line-clamp-2 border-l-2 border-border-md pl-3 py-0.5">
                                 {notif.body}
                               </div>
                             )}
 
-                            <div className="flex items-center gap-2 text-[11px] font-medium text-white/30 pt-2">
+                            <div className="flex items-center gap-2 text-[11px] font-medium text-fg-muted pt-2">
                               {formatDistanceToNow(new Date(notif.createdAt))}{" "}
                               ago
                             </div>
                           </div>
 
                           <div className="absolute right-4 top-4 flex items-center gap-2">
-                            <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 bg-[#13131A] pl-2">
+                            <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 bg-surface pl-2">
                               {!notif.isRead && (
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     markRead(notif.id);
                                   }}
-                                  className="p-1.5 text-white/30 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+                                  className="p-1.5 text-fg-muted hover:text-fg hover:bg-fill-3 rounded-md transition-colors"
                                   title="Mark as read"
                                 >
                                   <Check size={14} />
@@ -294,7 +294,7 @@ export default function NotificationsPage() {
                             </div>
 
                             {!notif.isRead && (
-                              <div className="w-2 h-2 rounded-full bg-[#7C6EF5] group-hover:opacity-0 transition-opacity" />
+                              <div className="w-2 h-2 rounded-full bg-accent-solid group-hover:opacity-0 transition-opacity" />
                             )}
                           </div>
                         </div>

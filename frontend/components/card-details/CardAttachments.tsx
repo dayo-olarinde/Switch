@@ -34,10 +34,10 @@ function formatBytes(bytes: number) {
 
 function getFileIcon(mimeType: string) {
   if (mimeType.startsWith("image/"))
-    return <ImageIcon size={20} className="text-amber-400" />;
+    return <ImageIcon size={20} className="text-warning" />;
   if (mimeType.includes("pdf") || mimeType.includes("document"))
-    return <FileText size={20} className="text-purple-400" />;
-  return <GenericFile size={20} className="text-[#7C6EF5]" />;
+    return <FileText size={20} className="text-accent" />;
+  return <GenericFile size={20} className="text-accent" />;
 }
 
 export function CardAttachments({ card }: { card: BoardCard }) {
@@ -71,8 +71,8 @@ export function CardAttachments({ card }: { card: BoardCard }) {
 
   return (
     <section>
-      <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-3">
-        <div className="text-[11px] font-bold text-white/40 uppercase tracking-widest">
+      <div className="flex items-center justify-between mb-4 border-b border-border pb-3">
+        <div className="text-[11px] font-bold text-fg-muted uppercase tracking-widest">
           Attachments
         </div>
 
@@ -88,12 +88,12 @@ export function CardAttachments({ card }: { card: BoardCard }) {
           disabled={isUploading}
           aria-busy={isUploading}
           aria-live="polite"
-          className="flex items-center gap-1.5 px-3 py-1.5 text-[12px] font-semibold text-white/70 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg transition-colors border border-white/5 disabled:opacity-50"
+          className="flex items-center gap-1.5 px-3 py-1.5 text-[12px] font-semibold text-fg-secondary hover:text-fg bg-fill-2 hover:bg-fill-3 rounded-lg transition-colors border border-border disabled:opacity-50"
         >
           {isUploading ? (
             <>
               <div
-                className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin"
+                className="w-3 h-3 border-2 border-border-lg border-t-white rounded-full animate-spin"
                 aria-hidden="true"
               />
               <span>Uploading…</span>
@@ -118,17 +118,17 @@ export function CardAttachments({ card }: { card: BoardCard }) {
           return (
             <div
               key={file.id}
-              className="flex items-center justify-between p-3 rounded-xl border border-white/5 bg-[#13131A] hover:bg-[#16161F] transition-colors group"
+              className="flex items-center justify-between p-3 rounded-xl border border-border bg-surface hover:bg-surface transition-colors group"
             >
               <div className="flex items-center gap-4 min-w-0">
-                <div className="w-10 h-10 rounded-lg bg-[#1A1A24] flex items-center justify-center border border-white/5 shrink-0">
+                <div className="w-10 h-10 rounded-lg bg-card flex items-center justify-center border border-border shrink-0">
                   {getFileIcon(file.mimeType)}
                 </div>
                 <div className="flex flex-col min-w-0">
-                  <span className="text-[14px] font-semibold text-white/90 transition-colors truncate">
+                  <span className="text-[14px] font-semibold text-fg transition-colors truncate">
                     {file.fileName}
                   </span>
-                  <span className="text-[11px] text-white/40 flex items-center gap-1.5">
+                  <span className="text-[11px] text-fg-muted flex items-center gap-1.5">
                     {formatBytes(file.fileSize)}
                     <span>•</span>
                     {file.user?.firstName}
@@ -142,7 +142,7 @@ export function CardAttachments({ card }: { card: BoardCard }) {
               <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity pl-4 shrink-0">
                 <button
                   onClick={() => handleDownload(file.fileUrl, file.fileName)}
-                  className="p-1.5 text-white/40 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+                  className="p-1.5 text-fg-muted hover:text-fg hover:bg-fill-3 rounded-md transition-colors"
                 >
                   <Download size={14} />
                 </button>
@@ -153,10 +153,10 @@ export function CardAttachments({ card }: { card: BoardCard }) {
                       remove(file.id);
                     }}
                     disabled={isDeleting}
-                    className="p-1.5 text-white/40 hover:text-rose-400 hover:bg-rose-500/10 rounded-md transition-colors disabled:opacity-50"
+                    className="p-1.5 text-fg-muted hover:text-danger hover:bg-danger-dim rounded-md transition-colors disabled:opacity-50"
                   >
                     {isThisFileDeleting ? (
-                      <div className="w-3 h-3 border-2 border-white/30 border-t-rose-400 rounded-full animate-spin" />
+                      <div className="w-3 h-3 border-2 border-border-lg border-t-rose-400 rounded-full animate-spin" />
                     ) : (
                       <Trash2 size={14} />
                     )}
@@ -182,8 +182,8 @@ export function CardAttachments({ card }: { card: BoardCard }) {
         className={cn(
           "mt-3 w-full border-2 border-dashed rounded-xl p-6 flex flex-col items-center justify-center text-center transition-all cursor-pointer",
           isDragging
-            ? "border-[#7C6EF5] bg-[#7C6EF5]/10"
-            : "border-white/10 hover:border-[#7C6EF5]/50 hover:bg-[#7C6EF5]/5",
+            ? "border-accent bg-accent-solid/10"
+            : "border-border-md hover:border-accent/50 hover:bg-accent-solid/90/5",
           isUploading && "opacity-50 pointer-events-none",
         )}
       >
@@ -191,10 +191,10 @@ export function CardAttachments({ card }: { card: BoardCard }) {
           size={20}
           className={cn(
             "mb-2 transition-colors",
-            isDragging ? "text-[#7C6EF5]" : "text-white/20",
+            isDragging ? "text-accent" : "text-fg-muted",
           )}
         />
-        <span className="text-[13px] font-medium text-white/50">
+        <span className="text-[13px] font-medium text-fg-muted">
           {isDragging
             ? "Drop file to upload!"
             : "Drop files here or click to upload"}

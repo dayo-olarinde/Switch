@@ -25,27 +25,27 @@ export function Features() {
       className="mx-auto w-full max-w-6xl px-6 py-20 sm:py-28"
     >
       <div className="max-w-xl">
-        <p className="text-sm font-semibold text-landing-accent">
+        <p className="text-sm font-semibold text-accent">
           Built for focus
         </p>
-        <h2 className="landing-text-balance mt-3 text-3xl font-semibold tracking-tight text-landing-fg sm:text-4xl">
+        <h2 className="landing-text-balance mt-3 text-3xl font-semibold tracking-tight text-fg sm:text-4xl">
           Everything a small team needs. Nothing it does not.
         </h2>
       </div>
 
-      <div className="mt-12 grid gap-px overflow-hidden rounded-lg border border-landing-line bg-landing-line sm:grid-cols-3">
+      <div className="mt-12 grid gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-3">
         {FEATURES.map(({ icon: Icon, title, body }) => (
           <div
             key={title}
-            className="bg-landing-inset p-6 transition-colors duration-200 hover:bg-landing-surface"
+            className="bg-surface p-6 transition-colors duration-200 hover:bg-card"
           >
-            <span className="flex size-9 items-center justify-center rounded-sm bg-landing-accent-soft text-landing-accent">
+            <span className="flex size-9 items-center justify-center rounded-sm bg-accent-dim text-accent">
               <Icon size={17} />
             </span>
-            <h3 className="mt-4 text-base font-semibold text-landing-fg">
+            <h3 className="mt-4 text-base font-semibold text-fg">
               {title}
             </h3>
-            <p className="landing-text-pretty mt-1.5 text-sm leading-relaxed text-landing-fg-secondary">
+            <p className="landing-text-pretty mt-1.5 text-sm leading-relaxed text-fg-secondary">
               {body}
             </p>
           </div>

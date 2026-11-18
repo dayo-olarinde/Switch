@@ -58,36 +58,36 @@ function WorkspaceContent() {
 
   return (
     <div className="max-w-300 mx-auto w-full animate-in fade-in duration-500">
-      <div className="bg-[#1C1C1E] border border-[#2a2a2a] rounded-xl p-5 mb-8 flex items-center justify-between shadow-sm">
+      <div className="bg-card border border-overlay rounded-xl p-5 mb-8 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-4">
           <div
             style={{ backgroundColor: activeWorkspace?.colour }}
             className={cn(
-              "w-12 h-12 rounded-lg flex items-center justify-center text-xl font-black text-white shrink-0",
+              "w-12 h-12 rounded-lg flex items-center justify-center text-xl font-black text-fg shrink-0",
             )}
           >
             {activeWorkspace.name.substring(0, 2).toUpperCase()}
           </div>
           <div className="flex flex-col">
-            <h1 className="text-xl font-bold text-white tracking-tight">
+            <h1 className="text-xl font-bold text-fg tracking-tight">
               {activeWorkspace.name}
             </h1>
             <div className="flex items-center gap-2 text-sm font-medium mt-0.5">
-              <span className="text-[#a1a1a1] flex items-center gap-1.5">
+              <span className="text-fg-secondary flex items-center gap-1.5">
                 <LayoutGrid size={14} /> {projects?.length || 0} projects
               </span>
-              <span className="text-[#404040]">•</span>
-              <span className="text-[#a1a1a1] flex items-center gap-1.5">
+              <span className="text-fg-muted">•</span>
+              <span className="text-fg-secondary flex items-center gap-1.5">
                 <UserPlus size={14} /> {members?.length || 0} member(s)
               </span>
-              <span className="text-[#404040]">•</span>
-              <span className="text-[#7C6EF5]">{activeWorkspace.role}</span>
+              <span className="text-fg-muted">•</span>
+              <span className="text-accent">{activeWorkspace.role}</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="flex items-center gap-8 border-b border-[#2a2a2a] mb-6">
+      <div className="flex items-center gap-8 border-b border-overlay mb-6">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
           return (
@@ -96,12 +96,12 @@ function WorkspaceContent() {
               onClick={() => handleTabChange(tab.id)}
               className={cn(
                 "pb-3 text-sm font-semibold transition-all relative flex items-center group",
-                isActive ? "text-[#7C6EF5]" : "text-[#a1a1a1] hover:text-white",
+                isActive ? "text-accent" : "text-fg-secondary hover:text-fg",
               )}
             >
               {tab.id}
               {isActive && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#7C6EF5] rounded-t-full" />
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent-solid rounded-t-full" />
               )}
             </button>
           );
@@ -153,7 +153,7 @@ export default function WorkspacePage() {
   return (
     <Suspense
       fallback={
-        <div className="animate-pulse bg-[#1C1C1E] h-32 rounded-xl mb-8 border border-[#2a2a2a]" />
+        <div className="animate-pulse bg-card h-32 rounded-xl mb-8 border border-overlay" />
       }
     >
       <WorkspaceContent />

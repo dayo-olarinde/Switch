@@ -4,11 +4,11 @@ import { cn } from "@/lib/utils";
 import { useEffect, useRef, useState } from "react";
 
 const PRIORITY_STYLES: Record<string, string> = {
-  urgent: "bg-rose-500/10 text-rose-500 border-rose-500/20",
-  high: "bg-purple-500/10 text-purple-400 border-purple-500/20",
-  medium: "bg-amber-500/10 text-amber-500 border-amber-500/20",
-  low: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
-  none: "bg-white/5 text-white/40 border-white/10",
+  urgent: "bg-danger-dim text-danger border-danger",
+  high: "bg-accent-dim text-accent border-accent",
+  medium: "bg-warning-dim text-warning border-warning",
+  low: "bg-success-dim text-success border-success",
+  none: "bg-fill-2 text-fg-muted border-border-md",
 };
 
 interface CardTitleProps {
@@ -63,7 +63,7 @@ export function CardTitle({ title, priority, onSave }: CardTitleProps) {
             e.currentTarget.blur();
           }
         }}
-        className="w-full bg-transparent text-[24px] font-bold text-white border border-transparent hover:border-white/5 focus:border-[#7C6EF5]/50 focus:bg-white/2 rounded-lg px-3 py-1.5 -ml-3 outline-none transition-colors resize-none overflow-hidden leading-tight mb-3"
+        className="w-full bg-transparent text-[24px] font-bold text-fg border border-transparent hover:border-border focus:border-accent/50 focus:bg-fill-1 rounded-lg px-3 py-1.5 -ml-3 outline-none transition-colors resize-none overflow-hidden leading-tight mb-3"
         rows={1}
       />
       {priority && priority !== "none" && (

@@ -32,7 +32,7 @@ export default function DeleteProjectModal({
   return (
     <Portal>
       <div
-        className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 animate-in fade-in duration-200"
+        className="fixed inset-0 z-9999 flex items-center justify-center bg-scrim backdrop-blur-sm px-4 animate-in fade-in duration-200"
         onClick={(e) => {
           e.stopPropagation();
           onClose();
@@ -40,54 +40,54 @@ export default function DeleteProjectModal({
       >
         <div
           onClick={(e) => e.stopPropagation()}
-          className="w-full max-w-110 bg-[#0A0A0A] border border-white/8 rounded-2xl shadow-2xl relative flex flex-col overflow-hidden animate-in zoom-in-95 duration-200"
+          className="w-full max-w-110 bg-base border border-border rounded-2xl shadow-2xl relative flex flex-col overflow-hidden animate-in zoom-in-95 duration-200"
         >
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-white/20 hover:text-white transition-colors"
+            className="absolute top-4 right-4 text-fg-muted hover:text-fg transition-colors"
           >
             <X size={18} />
           </button>
 
           <div className="p-6">
-            <div className="w-10 h-10 bg-rose-500/10 border border-rose-500/20 rounded-xl flex items-center justify-center mb-4 shadow-sm">
-              <Trash2 size={18} className="text-rose-500" />
+            <div className="w-10 h-10 bg-danger-dim border border-danger rounded-xl flex items-center justify-center mb-4 shadow-sm">
+              <Trash2 size={18} className="text-danger" />
             </div>
 
             <div className="mb-6">
-              <h1 className="text-xl font-bold text-white mb-1 tracking-tight">
+              <h1 className="text-xl font-bold text-fg mb-1 tracking-tight">
                 Delete project
               </h1>
-              <p className="text-[13px] text-white/40 leading-relaxed">
+              <p className="text-[13px] text-fg-muted leading-relaxed">
                 This will permanently delete the project and all its data.
               </p>
             </div>
 
-            <div className="bg-white/3 border border-white/5 rounded-xl p-4 flex items-center gap-4 mb-4">
-              <div className="w-10 h-10 rounded-lg bg-[#111115] flex items-center justify-center text-xl">
-                <Icon size={20} className="text-white/70" />
+            <div className="bg-fill-1 border border-border rounded-xl p-4 flex items-center gap-4 mb-4">
+              <div className="w-10 h-10 rounded-lg bg-base flex items-center justify-center text-xl">
+                <Icon size={20} className="text-fg-secondary" />
               </div>
               <div className="flex flex-col">
-                <span className="text-sm font-bold text-white/90">
+                <span className="text-sm font-bold text-fg">
                   {project.name}
                 </span>
-                <span className="text-[11px] text-white/30 uppercase tracking-wider font-bold">
+                <span className="text-[11px] text-fg-muted uppercase tracking-wider font-bold">
                   {project.cardsCount || 0} cards ·{" "}
                   {(project.assignees && project.assignees.length) || 0} members
                 </span>
               </div>
             </div>
 
-            <div className="bg-rose-500/5 border border-rose-500/10 rounded-xl p-4 flex gap-3 mb-6">
+            <div className="bg-danger-dim border border-danger rounded-xl p-4 flex gap-3 mb-6">
               <AlertTriangle
                 size={18}
-                className="text-rose-500 shrink-0 mt-0.5"
+                className="text-danger shrink-0 mt-0.5"
               />
               <div className="flex flex-col gap-1">
-                <span className="text-[13px] font-bold text-rose-500">
+                <span className="text-[13px] font-bold text-danger">
                   All data will be lost
                 </span>
-                <p className="text-[12px] text-rose-500/60 leading-relaxed">
+                <p className="text-[12px] text-danger leading-relaxed">
                   All cards, comments, attachments, and activity will be
                   permanently deleted. This action cannot be undone.
                 </p>
@@ -95,9 +95,9 @@ export default function DeleteProjectModal({
             </div>
 
             <div className="space-y-3">
-              <p className="text-[12px] text-white/40">
+              <p className="text-[12px] text-fg-muted">
                 Type{" "}
-                <span className="text-rose-500 font-mono bg-rose-500/10 px-1.5 py-0.5 rounded">
+                <span className="text-danger font-mono bg-danger-dim px-1.5 py-0.5 rounded">
                   {project.name}
                 </span>{" "}
                 to confirm deletion.
@@ -108,15 +108,15 @@ export default function DeleteProjectModal({
                 onChange={(e) => setConfirmText(e.target.value)}
                 placeholder={project.name}
                 autoFocus
-                className="w-full bg-white/2 border border-white/8 focus:border-rose-500/50 rounded-xl px-4 py-3 text-sm text-white placeholder-white/10 outline-none transition-all"
+                className="w-full bg-fill-1 border border-border focus:border-danger rounded-xl px-4 py-3 text-sm text-fg placeholder-white/10 outline-none transition-all"
               />
             </div>
           </div>
 
-          <div className="px-6 py-4 bg-[#050505] border-t border-white/5 flex justify-end gap-3">
+          <div className="px-6 py-4 bg-base border-t border-border flex justify-end gap-3">
             <button
               onClick={onClose}
-              className="px-4 py-2 text-[13px] font-semibold text-white/40 hover:text-white transition-colors"
+              className="px-4 py-2 text-[13px] font-semibold text-fg-muted hover:text-fg transition-colors"
             >
               Cancel
             </button>
@@ -126,8 +126,8 @@ export default function DeleteProjectModal({
               className={cn(
                 "px-5 py-2 rounded-xl text-[13px] font-bold transition-all flex items-center gap-2",
                 isConfirmed && !isDeleting
-                  ? "bg-rose-500 text-white hover:bg-rose-600 shadow-[0_0_15px_rgba(244,63,94,0.2)]"
-                  : "bg-white/5 text-white/20 cursor-not-allowed",
+                  ? "bg-danger-dim text-fg hover:bg-danger-dim shadow-[0_0_15px_rgba(244,63,94,0.2)]"
+                  : "bg-fill-2 text-fg-muted cursor-not-allowed",
               )}
             >
               {isDeleting ? (

@@ -3,7 +3,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 /* ==========================================================
    SWITCH V2 — PREMIUM SAAS TOKEN SYSTEM
@@ -12,33 +12,49 @@
 
 @layer base {
   :root {
-    /* backgrounds */
-    --base: #13131c;
-    --surface: #13131c;
-    --card: #1a1a28;
-    --overlay: #1f1f32;
+    /* ---- surfaces ---- */
+    --base: #0f0f14;
+    --sidebar: #121218;
+    --surface: #15151c;
+    --card: #1a1a23;
+    --overlay: #21212c;
+
+    /* translucent fills for ghost/hover states */
+    --fill-1: rgba(255, 255, 255, 0.04);
+    --fill-2: rgba(255, 255, 255, 0.07);
+    --fill-3: rgba(255, 255, 255, 0.12);
+    --scrim: rgba(0, 0, 0, 0.62);
 
     /* borders */
-    --border: rgba(255, 255, 255, 0.06);
-    --border-md: rgba(255, 255, 255, 0.1);
-    --border-lg: rgba(255, 255, 255, 0.16);
+    --border: rgba(255, 255, 255, 0.07);
+    --border-md: rgba(255, 255, 255, 0.11);
+    --border-lg: rgba(255, 255, 255, 0.18);
 
     /* text */
     --text-primary: #eeeef5;
-    --text-secondary: #8585a0;
-    --text-muted: #4a4a65;
+    --text-secondary: #a0a0b2;
+    --text-muted: #82829a;
 
-    /* accent */
-    --accent: #7c6ef5;
-    --accent-dim: rgba(124, 110, 245, 0.14);
+    /* accent: --accent for text/icons, --accent-solid for filled buttons */
+    --accent: #a99efb;
+    --accent-solid: #5b4ee9;
+    --on-accent: #ffffff;
+    --accent-dim: rgba(124, 110, 245, 0.16);
 
     /* semantic */
     --success: #4aba85;
+    --success-dim: rgba(74, 186, 133, 0.14);
     --warning: #e5a23a;
-    --danger: #ff7070;
+    --warning-dim: rgba(229, 162, 58, 0.14);
+    --danger: #ff8a8a;
+    --danger-dim: rgba(255, 112, 112, 0.14);
+    --info: #6cb6e0;
+    --info-dim: rgba(108, 182, 224, 0.14);
 
     /* radius */
     --radius: 12px;
+
+    color-scheme: dark;
 
     /* shadcn tokens */
     --background: var(--base);
@@ -46,45 +62,83 @@
 
     --card-foreground: var(--text-primary);
 
-    --popover: var(--surface);
+    --popover: var(--overlay);
     --popover-foreground: var(--text-primary);
 
-    --primary: var(--accent);
-    --primary-foreground: #ffffff;
+    --primary: var(--accent-solid);
+    --primary-foreground: var(--on-accent);
 
-    --secondary: var(--surface);
+    --secondary: var(--card);
     --secondary-foreground: var(--text-primary);
 
-    --muted: var(--surface);
+    --muted: var(--card);
     --muted-foreground: var(--text-secondary);
 
-    --accent-foreground: #ffffff;
+    --accent-foreground: var(--on-accent);
 
     --destructive: var(--danger);
 
-    --input: var(--card);
+    --input: var(--border-md);
     --ring: var(--accent);
 
     /* sidebar */
-    --sidebar: var(--surface);
     --sidebar-foreground: var(--text-primary);
-    --sidebar-primary: var(--accent);
-    --sidebar-primary-foreground: white;
+    --sidebar-primary: var(--accent-solid);
+    --sidebar-primary-foreground: var(--on-accent);
     --sidebar-accent: var(--card);
     --sidebar-accent-foreground: var(--text-primary);
     --sidebar-border: var(--border);
     --sidebar-ring: var(--accent);
 
     /* charts */
-    --chart-1: #7c6ef5;
+    --chart-1: #8f82f9;
     --chart-2: #4aba85;
     --chart-3: #e5a23a;
-    --chart-4: #5ba4cf;
-    --chart-5: #ff7070;
+    --chart-4: #6cb6e0;
+    --chart-5: #ff8a8a;
   }
 
-  .dark {
-    /* same theme for now */
+  [data-theme="light"] {
+    --base: #f4f4f7;
+    --sidebar: #ffffff;
+    --surface: #ffffff;
+    --card: #ffffff;
+    --overlay: #f8f8fb;
+
+    --fill-1: rgba(17, 17, 28, 0.03);
+    --fill-2: rgba(17, 17, 28, 0.055);
+    --fill-3: rgba(17, 17, 28, 0.09);
+    --scrim: rgba(17, 17, 28, 0.45);
+
+    --border: rgba(17, 17, 28, 0.09);
+    --border-md: rgba(17, 17, 28, 0.14);
+    --border-lg: rgba(17, 17, 28, 0.22);
+
+    --text-primary: #16161d;
+    --text-secondary: #56566b;
+    --text-muted: #6b6b7d;
+
+    --accent: #5546e0;
+    --accent-solid: #5b4ee9;
+    --on-accent: #ffffff;
+    --accent-dim: rgba(91, 78, 233, 0.1);
+
+    --success: #18744c;
+    --success-dim: rgba(24, 116, 76, 0.12);
+    --warning: #8a5a09;
+    --warning-dim: rgba(138, 90, 9, 0.12);
+    --danger: #b4232a;
+    --danger-dim: rgba(180, 35, 42, 0.1);
+    --info: #2a66c4;
+    --info-dim: rgba(42, 102, 196, 0.1);
+
+    color-scheme: light;
+
+    --chart-1: #5b4ee9;
+    --chart-2: #18744c;
+    --chart-3: #8a5a09;
+    --chart-4: #2a66c4;
+    --chart-5: #b4232a;
   }
 
   * {
@@ -97,9 +151,11 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
+    background-color: var(--base);
+    color: var(--text-primary);
     font-family: "Geist", sans-serif;
     font-size: 14px;
+    -webkit-font-smoothing: antialiased;
   }
 
   a {
@@ -188,16 +244,16 @@
   /* buttons */
 
   .btn-primary {
-    background: var(--accent);
-    color: white;
+    background: var(--accent-solid);
+    color: var(--on-accent);
     border-radius: calc(var(--radius) - 4px);
-    transition: all 0.15s ease;
-    box-shadow: 0 8px 24px rgba(124, 110, 245, 0.25);
+    transition:
+      background-color 0.15s ease,
+      opacity 0.15s ease;
   }
 
   .btn-primary:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 10px 30px rgba(124, 110, 245, 0.35);
+    opacity: 0.9;
   }
 
   .btn-ghost {
@@ -219,7 +275,9 @@
     border: 1px solid var(--border-md);
     color: var(--text-primary);
     border-radius: calc(var(--radius) - 4px);
-    transition: all 0.15s ease;
+    transition:
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
   }
 
   .input-premium::placeholder {
@@ -228,13 +286,13 @@
 
   .input-premium:focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(124, 110, 245, 0.14);
+    box-shadow: 0 0 0 3px var(--accent-dim);
   }
 
   /* badge */
 
   .badge-accent {
-    background: rgba(124, 110, 245, 0.12);
+    background: var(--accent-dim);
     color: var(--accent);
     border-radius: 999px;
     padding: 2px 8px;
@@ -281,7 +339,7 @@
   }
 
   .bg-accent {
-    background: var(--accent);
+    background: var(--accent-solid);
   }
 
   .bg-accent-dim {
@@ -337,6 +395,35 @@
   --color-border: var(--border);
   --color-destructive: var(--destructive);
 
+  /* semantic surface + text scale */
+  --color-base: var(--base);
+  --color-surface: var(--surface);
+  --color-overlay: var(--overlay);
+  --color-fill-1: var(--fill-1);
+  --color-fill-2: var(--fill-2);
+  --color-fill-3: var(--fill-3);
+  --color-scrim: var(--scrim);
+
+  --color-border-md: var(--border-md);
+  --color-border-lg: var(--border-lg);
+
+  --color-fg: var(--text-primary);
+  --color-fg-secondary: var(--text-secondary);
+  --color-fg-muted: var(--text-muted);
+
+  --color-accent-solid: var(--accent-solid);
+  --color-accent-dim: var(--accent-dim);
+  --color-on-accent: var(--on-accent);
+
+  --color-success: var(--success);
+  --color-success-dim: var(--success-dim);
+  --color-warning: var(--warning);
+  --color-warning-dim: var(--warning-dim);
+  --color-danger: var(--danger);
+  --color-danger-dim: var(--danger-dim);
+  --color-info: var(--info);
+  --color-info-dim: var(--info-dim);
+
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
 
@@ -357,27 +444,6 @@
 
   --color-foreground: var(--foreground);
   --color-background: var(--background);
-
-  /* marketing surface — resolved from .landing scope */
-  --color-landing-bg: var(--l-bg);
-  --color-landing-inset: var(--l-inset);
-  --color-landing-surface: var(--l-surface);
-  --color-landing-elevated: var(--l-elevated);
-  --color-landing-line: var(--l-line);
-  --color-landing-line-strong: var(--l-line-strong);
-  --color-landing-fg: var(--l-fg);
-  --color-landing-fg-secondary: var(--l-fg-secondary);
-  --color-landing-fg-muted: var(--l-fg-muted);
-  --color-landing-accent: var(--l-accent);
-  --color-landing-accent-soft: var(--l-accent-soft);
-  --color-landing-on-accent: var(--l-on-accent);
-  --color-landing-success: var(--l-success);
-  --color-landing-warning: var(--l-warning);
-  --color-landing-info: var(--l-info);
-
-  --shadow-landing-1: var(--l-shadow-1);
-  --shadow-landing-2: var(--l-shadow-2);
-  --shadow-landing-3: var(--l-shadow-3);
 
   --radius-sm: 8px;
   --radius-md: 10px;
@@ -400,7 +466,7 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--border-lg);
   border-radius: 999px;
 }
 
@@ -410,124 +476,17 @@
 
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
+  scrollbar-color: var(--border-lg) transparent;
 }
 
 /* ==========================================================
-   MARKETING SURFACE — landing page only
-   Scoped to .landing so the app palette is untouched.
-   Theme switches via [data-landing] on <html>.
+   LANDING UTILITIES
 ========================================================= */
 
 @layer base {
-  /* browser canvas + native controls follow the landing palette, but only
-     while the landing page is mounted, so app routes stay untouched */
-  html[data-landing="dark"]:has(.landing) {
-    --l-bg: #0b0b0f;
-    background-color: var(--l-bg);
-    color-scheme: dark;
-  }
-
-  html[data-landing="light"]:has(.landing) {
-    --l-bg: #f2f2f5;
-    background-color: var(--l-bg);
-    color-scheme: light;
-  }
-
-  .landing {
-    --l-bg: #0b0b0f;
-    --l-inset: #0e0e14;
-    --l-surface: #13131a;
-    --l-elevated: #1a1a24;
-
-    --l-line: rgba(255, 255, 255, 0.07);
-    --l-line-strong: rgba(255, 255, 255, 0.14);
-
-    --l-fg: #ededf2;
-    --l-fg-secondary: #a0a0b2;
-    --l-fg-muted: #82829a;
-
-    --l-accent: #8f82f9;
-    --l-accent-soft: rgba(143, 130, 249, 0.14);
-    --l-on-accent: #0b0b0f;
-
-    --l-success: #4aba85;
-    --l-warning: #e5a23a;
-    --l-info: #5ba4cf;
-
-    --l-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
-    --l-shadow-2: 0 8px 24px -8px rgba(0, 0, 0, 0.6);
-    --l-shadow-3: 0 24px 64px -16px rgba(0, 0, 0, 0.75);
-
-    --l-grid: rgba(255, 255, 255, 0.035);
-
-    background-color: var(--l-bg);
-    color: var(--l-fg);
-    color-scheme: dark;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  html[data-landing="light"] .landing {
-    --l-bg: #f2f2f5;
-    --l-inset: #fafafc;
-    --l-surface: #ffffff;
-    --l-elevated: #ffffff;
-
-    --l-line: rgba(0, 0, 0, 0.07);
-    --l-line-strong: rgba(0, 0, 0, 0.13);
-
-    --l-fg: #16161a;
-    --l-fg-secondary: #5b5b66;
-    --l-fg-muted: #6b6b76;
-
-    --l-accent: #5b4ee9;
-    --l-accent-soft: rgba(91, 78, 233, 0.1);
-    --l-on-accent: #ffffff;
-
-    --l-success: #18744c;
-    --l-warning: #8a5a09;
-    --l-info: #2a66c4;
-
-    --l-shadow-1:
-      0 1px 3px rgba(16, 16, 24, 0.06), 0 1px 2px rgba(16, 16, 24, 0.04);
-    --l-shadow-2:
-      0 4px 12px -2px rgba(16, 16, 24, 0.08), 0 1px 3px rgba(16, 16, 24, 0.04);
-    --l-shadow-3:
-      0 24px 48px -12px rgba(16, 16, 24, 0.16),
-      0 4px 12px -2px rgba(16, 16, 24, 0.06);
-
-    --l-grid: rgba(0, 0, 0, 0.04);
-
-    color-scheme: light;
-  }
-
   .landing ::selection {
-    background-color: var(--l-accent-soft);
-    color: var(--l-fg);
-  }
-
-  /* theme icon swap in pure CSS: no hydration mismatch, no state */
-  .landing .theme-icon-sun {
-    display: none;
-  }
-
-  html[data-landing="light"] .landing .theme-icon-sun {
-    display: block;
-  }
-
-  html[data-landing="light"] .landing .theme-icon-moon {
-    display: none;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .landing *,
-    .landing *::before,
-    .landing *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
-    }
+    background-color: var(--accent-dim);
+    color: var(--text-primary);
   }
 }
 

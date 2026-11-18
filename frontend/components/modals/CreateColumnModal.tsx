@@ -80,7 +80,7 @@ export default function CreateColumnModal({
   return (
     <Portal>
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center bg-[#000000]/80 backdrop-blur-sm px-4 animate-in fade-in duration-200"
+        className="fixed inset-0 z-50 flex items-center justify-center bg-base/80 backdrop-blur-sm px-4 animate-in fade-in duration-200"
         onClick={onClose}
       >
         <div
@@ -108,7 +108,7 @@ export default function CreateColumnModal({
           <div className="p-6 space-y-6">
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-semibold text-primary flex gap-1">
-                Column name <span className="text-[#9436f6]">*</span>
+                Column name <span className="text-accent">*</span>
               </label>
               <input
                 value={name}
@@ -124,7 +124,7 @@ export default function CreateColumnModal({
 
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-semibold text-primary flex gap-1">
-                Status <span className="text-[#9436f6]">*</span>
+                Status <span className="text-accent">*</span>
               </label>
               <span className="text-xs text-muted mb-2">
                 Maps this column to a standard workflow stage used across

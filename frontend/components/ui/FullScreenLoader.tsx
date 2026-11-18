@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 export const FullScreenLoader = () => (
-  <div className="flex h-screen w-full items-center justify-center bg-[#0A0A0A]">
+  <div className="flex h-screen w-full items-center justify-center bg-base">
     <div className="w-18 h-18 rounded-xl flex items-center justify-center shrink-0 overflow-hidden animate-pulse">
       <Image
         src="/logo.svg"

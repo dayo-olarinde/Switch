@@ -12,10 +12,10 @@ import {
 type Tone = "accent" | "success" | "warning" | "info";
 
 const TONES: Record<Tone, string> = {
-  accent: "bg-landing-accent-soft text-landing-accent",
-  success: "bg-landing-success/12 text-landing-success",
-  warning: "bg-landing-warning/12 text-landing-warning",
-  info: "bg-landing-info/12 text-landing-info",
+  accent: "bg-accent-dim text-accent",
+  success: "bg-success/12 text-success",
+  warning: "bg-warning/12 text-warning",
+  info: "bg-info/12 text-info",
 };
 
 const COLUMNS: {
@@ -106,7 +106,7 @@ function AvatarStack({ names }: { names: string[] }) {
       {names.map((name) => (
         <span
           key={name}
-          className="flex size-6 items-center justify-center rounded-full border-2 border-landing-surface bg-landing-elevated text-xs font-semibold text-landing-fg-secondary"
+          className="flex size-6 items-center justify-center rounded-full border-2 border-card bg-overlay text-xs font-semibold text-fg-secondary"
         >
           {name}
         </span>
@@ -125,7 +125,7 @@ function Card({
   avatars,
 }: (typeof COLUMNS)[number]["cards"][number]) {
   return (
-    <div className="rounded-md border border-landing-line bg-landing-surface p-3 shadow-landing-1">
+    <div className="rounded-md border border-border bg-card p-3 shadow-sm">
       {label && (
         <span
           className={cn(
@@ -137,17 +137,17 @@ function Card({
         </span>
       )}
 
-      <p className="text-sm leading-snug font-medium text-landing-fg">{title}</p>
+      <p className="text-sm leading-snug font-medium text-fg">{title}</p>
 
       {typeof done === "number" && typeof total === "number" && (
         <div className="mt-3">
-          <div className="h-1 w-full overflow-hidden rounded-full bg-landing-line">
+          <div className="h-1 w-full overflow-hidden rounded-full bg-border">
             <div
-              className="h-full rounded-full bg-landing-accent"
+              className="h-full rounded-full bg-accent"
               style={{ width: `${(done / total) * 100}%` }}
             />
           </div>
-          <p className="mt-1.5 text-xs font-medium text-landing-fg-muted">
+          <p className="mt-1.5 text-xs font-medium text-fg-muted">
             {done}/{total} subtasks
           </p>
         </div>
@@ -156,7 +156,7 @@ function Card({
       <div className="mt-3 flex items-center justify-between">
         <AvatarStack names={avatars} />
         {comments ? (
-          <span className="flex items-center gap-1 text-xs font-medium text-landing-fg-muted">
+          <span className="flex items-center gap-1 text-xs font-medium text-fg-muted">
             <MessageSquare size={11} />
             {comments}
           </span>
@@ -168,34 +168,34 @@ function Card({
 
 export function BoardPreview() {
   return (
-    <div className="overflow-hidden rounded-lg border border-landing-line bg-landing-inset shadow-landing-3">
-      <div className="flex items-center gap-2 border-b border-landing-line bg-landing-surface px-4 py-2.5">
-        <span className="size-2.5 rounded-full bg-landing-line-strong" />
-        <span className="size-2.5 rounded-full bg-landing-line-strong" />
-        <span className="size-2.5 rounded-full bg-landing-line-strong" />
+    <div className="overflow-hidden rounded-lg border border-border bg-surface shadow-lg">
+      <div className="flex items-center gap-2 border-b border-border bg-card px-4 py-2.5">
+        <span className="size-2.5 rounded-full bg-border-md" />
+        <span className="size-2.5 rounded-full bg-border-md" />
+        <span className="size-2.5 rounded-full bg-border-md" />
 
-        <div className="mx-auto flex h-6 w-full max-w-xs items-center gap-2 rounded-sm border border-landing-line bg-landing-inset px-2">
-          <Search size={11} className="text-landing-fg-muted" />
-          <span className="truncate text-xs font-medium text-landing-fg-muted">
+        <div className="mx-auto flex h-6 w-full max-w-xs items-center gap-2 rounded-sm border border-border bg-surface px-2">
+          <Search size={11} className="text-fg-muted" />
+          <span className="truncate text-xs font-medium text-fg-muted">
             switch.app/atlas/sprint-24
           </span>
         </div>
 
         <div className="hidden items-center gap-1.5 sm:flex">
-          <span className="size-1.5 rounded-full bg-landing-success" />
-          <span className="text-xs font-medium text-landing-fg-muted">
+          <span className="size-1.5 rounded-full bg-success" />
+          <span className="text-xs font-medium text-fg-muted">
             3 online
           </span>
         </div>
       </div>
 
       <div className="flex">
-        <aside className="hidden w-40 shrink-0 border-r border-landing-line bg-landing-surface p-3 sm:block">
+        <aside className="hidden w-40 shrink-0 border-r border-border bg-card p-3 sm:block">
           <div className="mb-4 flex items-center gap-2 px-1">
-            <span className="flex size-5 items-center justify-center rounded-sm bg-landing-accent text-xs font-bold text-landing-on-accent">
+            <span className="flex size-5 items-center justify-center rounded-sm bg-accent text-xs font-bold text-on-accent">
               A
             </span>
-            <span className="text-xs font-semibold text-landing-fg">Atlas</span>
+            <span className="text-xs font-semibold text-fg">Atlas</span>
           </div>
 
           <div className="space-y-0.5">
@@ -205,20 +205,20 @@ export function BoardPreview() {
                 className={cn(
                   "flex items-center gap-2 rounded-sm px-2 py-1.5 text-xs font-medium",
                   active
-                    ? "bg-landing-accent-soft text-landing-fg"
-                    : "text-landing-fg-secondary",
+                    ? "bg-accent-dim text-fg"
+                    : "text-fg-secondary",
                 )}
               >
                 <Icon
                   size={12}
-                  className={active ? "text-landing-accent" : undefined}
+                  className={active ? "text-accent" : undefined}
                 />
                 {label}
               </div>
             ))}
           </div>
 
-          <p className="mt-5 mb-1.5 px-2 text-xs font-semibold text-landing-fg-muted">
+          <p className="mt-5 mb-1.5 px-2 text-xs font-semibold text-fg-muted">
             Sprints
           </p>
 
@@ -226,12 +226,12 @@ export function BoardPreview() {
             {["Sprint 24", "Sprint 23", "Backlog"].map((sprint, i) => (
               <div
                 key={sprint}
-                className="flex items-center gap-2 rounded-sm px-2 py-1.5 text-xs font-medium text-landing-fg-secondary"
+                className="flex items-center gap-2 rounded-sm px-2 py-1.5 text-xs font-medium text-fg-secondary"
               >
                 <span
                   className={cn(
                     "size-1.5 rounded-full",
-                    i === 0 ? "bg-landing-accent" : "bg-landing-line-strong",
+                    i === 0 ? "bg-accent" : "bg-border-md",
                   )}
                 />
                 {sprint}
@@ -243,15 +243,15 @@ export function BoardPreview() {
         <div className="min-w-0 flex-1 p-3 sm:p-4">
           <div className="mb-3 flex items-center justify-between gap-3">
             <div className="min-w-0">
-              <p className="truncate text-sm font-semibold text-landing-fg">
+              <p className="truncate text-sm font-semibold text-fg">
                 Sprint 24
               </p>
-              <p className="truncate text-xs font-medium text-landing-fg-muted">
+              <p className="truncate text-xs font-medium text-fg-muted">
                 19 cards · ends in 6 days
               </p>
             </div>
 
-            <span className="flex shrink-0 items-center gap-1 rounded-sm border border-landing-line px-2 py-1 text-xs font-medium text-landing-fg-secondary">
+            <span className="flex shrink-0 items-center gap-1 rounded-sm border border-border px-2 py-1 text-xs font-medium text-fg-secondary">
               <Plus size={11} />
               Add card
             </span>
@@ -261,14 +261,14 @@ export function BoardPreview() {
             {COLUMNS.map((column) => (
               <div key={column.title} className="min-w-0">
                 <div className="mb-2 flex items-center gap-1.5 px-0.5">
-                  <span className="truncate text-xs font-semibold text-landing-fg-secondary">
+                  <span className="truncate text-xs font-semibold text-fg-secondary">
                     {column.title}
                   </span>
-                  <span className="text-xs font-medium text-landing-fg-muted">
+                  <span className="text-xs font-medium text-fg-muted">
                     {column.count}
                   </span>
                   {column.title === "Done" && (
-                    <Check size={11} className="ml-auto text-landing-success" />
+                    <Check size={11} className="ml-auto text-success" />
                   )}
                 </div>
 
@@ -279,13 +279,13 @@ export function BoardPreview() {
 
                   {column.title === "Backlog" && (
                     <>
-                      <div className="rounded-md border border-dashed border-landing-line p-3">
-                        <div className="h-1.5 w-3/4 rounded-full bg-landing-line" />
-                        <div className="mt-2 h-1.5 w-1/2 rounded-full bg-landing-line" />
+                      <div className="rounded-md border border-dashed border-border p-3">
+                        <div className="h-1.5 w-3/4 rounded-full bg-border" />
+                        <div className="mt-2 h-1.5 w-1/2 rounded-full bg-border" />
                       </div>
-                      <div className="rounded-md border border-dashed border-landing-line p-3">
-                        <div className="h-1.5 w-2/3 rounded-full bg-landing-line" />
-                        <div className="mt-2 h-1.5 w-2/5 rounded-full bg-landing-line" />
+                      <div className="rounded-md border border-dashed border-border p-3">
+                        <div className="h-1.5 w-2/3 rounded-full bg-border" />
+                        <div className="mt-2 h-1.5 w-2/5 rounded-full bg-border" />
                       </div>
                     </>
                   )}

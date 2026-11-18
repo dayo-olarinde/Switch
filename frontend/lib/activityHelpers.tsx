@@ -24,88 +24,88 @@ export const getActivityConfig = (type: string) => {
   > = {
     card_created: {
       icon: Plus,
-      color: "text-emerald-400",
-      bg: "bg-emerald-500/10 border-emerald-500/20",
+      color: "text-success",
+      bg: "bg-success-dim border-success",
     },
     card_updated: {
       icon: Layout,
-      color: "text-blue-400",
-      bg: "bg-blue-500/10 border-blue-500/20",
+      color: "text-info",
+      bg: "bg-info-dim border-info",
     },
     card_moved: {
       icon: ArrowRightLeft,
-      color: "text-blue-400",
-      bg: "bg-blue-500/10 border-blue-500/20",
+      color: "text-info",
+      bg: "bg-info-dim border-info",
     },
 
     // Comments
     comment_added: {
       icon: MessageSquare,
-      color: "text-emerald-400",
-      bg: "bg-emerald-500/10 border-emerald-500/20",
+      color: "text-success",
+      bg: "bg-success-dim border-success",
     },
     comment_edited: {
       icon: Edit2,
-      color: "text-blue-400",
-      bg: "bg-blue-500/10 border-blue-500/20",
+      color: "text-info",
+      bg: "bg-info-dim border-info",
     },
     comment_deleted: {
       icon: Trash2,
-      color: "text-rose-400",
-      bg: "bg-rose-500/10 border-rose-500/20",
+      color: "text-danger",
+      bg: "bg-danger-dim border-danger",
     },
 
     // Assignees
     assignee_added: {
       icon: UserPlus,
-      color: "text-[#7C6EF5]",
-      bg: "bg-[#7C6EF5]/10 border-[#7C6EF5]/20",
+      color: "text-accent",
+      bg: "bg-accent-solid/10 border-accent/20",
     },
     assignee_removed: {
       icon: UserMinus,
-      color: "text-rose-400",
-      bg: "bg-rose-500/10 border-rose-500/20",
+      color: "text-danger",
+      bg: "bg-danger-dim border-danger",
     },
 
     // Labels
     label_added: {
       icon: Tag,
-      color: "text-amber-400",
-      bg: "bg-amber-500/10 border-amber-500/20",
+      color: "text-warning",
+      bg: "bg-warning-dim border-warning",
     },
     label_removed: {
       icon: Tag,
-      color: "text-rose-400",
-      bg: "bg-rose-500/10 border-rose-500/20",
+      color: "text-danger",
+      bg: "bg-danger-dim border-danger",
     },
 
     // Attachments
     attachment_added: {
       icon: Paperclip,
-      color: "text-emerald-400",
-      bg: "bg-emerald-500/10 border-emerald-500/20",
+      color: "text-success",
+      bg: "bg-success-dim border-success",
     },
     attachment_removed: {
       icon: Paperclip,
-      color: "text-rose-400",
-      bg: "bg-rose-500/10 border-rose-500/20",
+      color: "text-danger",
+      bg: "bg-danger-dim border-danger",
     },
 
     // Dates & Priority
     due_date_set: {
       icon: Calendar,
-      color: "text-blue-400",
-      bg: "bg-blue-500/10 border-blue-500/20",
+      color: "text-info",
+      bg: "bg-info-dim border-info",
     },
     due_date_removed: {
       icon: Calendar,
-      color: "text-rose-400",
-      bg: "bg-rose-500/10 border-rose-500/20",
+      color: "text-danger",
+      bg: "bg-danger-dim border-danger",
     },
     priority_changed: {
       icon: Flag,
-      color: "text-amber-400",
-      bg: "bg-amber-500/10 border-amber-500/20",
+      color: "text-warning",
+      bg: "bg-warning-dim border-warning",
     },
   };
 
@@ -113,8 +113,8 @@ export const getActivityConfig = (type: string) => {
   return (
     config[type] || {
       icon: Activity,
-      color: "text-white/50",
-      bg: "bg-white/5 border-white/10",
+      color: "text-fg-muted",
+      bg: "bg-fill-2 border-border-md",
     }
   );
 };
@@ -131,8 +131,8 @@ export const renderActivityText = (activity: CardActivity) => {
       return meta?.from && meta?.to ? (
         <>
           moved this card from{" "}
-          <span className="font-semibold text-white/80">{meta.from}</span> to{" "}
-          <span className="inline-flex px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 font-medium text-xs border border-blue-500/20">
+          <span className="font-semibold text-fg">{meta.from}</span> to{" "}
+          <span className="inline-flex px-2 py-0.5 rounded bg-info-dim text-info font-medium text-xs border border-info">
             {meta.to}
           </span>
         </>
@@ -151,7 +151,7 @@ export const renderActivityText = (activity: CardActivity) => {
       return (
         <>
           assigned{" "}
-          <span className="font-bold text-[#7C6EF5]">{meta.assigneeName}</span>{" "}
+          <span className="font-bold text-accent">{meta.assigneeName}</span>{" "}
           to this card
         </>
       );
@@ -160,7 +160,7 @@ export const renderActivityText = (activity: CardActivity) => {
       return (
         <>
           removed{" "}
-          <span className="font-bold text-[#7C6EF5]">{meta.assigneeName}</span>{" "}
+          <span className="font-bold text-accent">{meta.assigneeName}</span>{" "}
           from this card
         </>
       );
@@ -169,7 +169,7 @@ export const renderActivityText = (activity: CardActivity) => {
       return (
         <>
           attached a label:{" "}
-          <span className="inline-flex items-center px-1.5 py-0.5 rounded text-md font-bold  tracking-wider bg-white/10 text-white/80">
+          <span className="inline-flex items-center px-1.5 py-0.5 rounded text-md font-bold  tracking-wider bg-fill-3 text-fg">
             {meta.labelName || "label"}
           </span>{" "}
         </>
@@ -178,7 +178,7 @@ export const renderActivityText = (activity: CardActivity) => {
       return (
         <>
           removed a label:{" "}
-          <span className="inline-flex items-center px-1.5 py-0.5 rounded text-md font-bold  tracking-wider bg-white/10 text-white/80">
+          <span className="inline-flex items-center px-1.5 py-0.5 rounded text-md font-bold  tracking-wider bg-fill-3 text-fg">
             {meta.labelName || "label"}
           </span>{" "}
         </>

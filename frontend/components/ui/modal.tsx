@@ -50,20 +50,20 @@ export function Modal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim backdrop-blur-sm"
       onClick={onClose}
     >
       <div
         onClick={(e) => e.stopPropagation()}
         className={cn(
-          "relative w-full bg-surface border border-[--border-md] rounded-xl",
+          "relative w-full bg-surface border border-border-md rounded-xl",
           "animate-in fade-in-0 zoom-in-95 duration-150",
           sizes[size],
           className,
         )}
       >
         {title && (
-          <div className="flex items-center justify-between px-5 py-4 border-b border-[--border]">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-border">
             <h2 className="font-display font-semibold text-sm text-primary">
               {title}
             </h2>

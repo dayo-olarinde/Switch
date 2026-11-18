@@ -93,26 +93,26 @@ const collisionDetection: CollisionDetection = (args) => {
 
 const getColumnColor = (name: string) => {
   const lower = name.toLowerCase();
-  if (lower.includes("backlog")) return "bg-[#52525b]";
-  if (lower.includes("progress")) return "bg-[#a855f7]";
-  if (lower.includes("review")) return "bg-[#f59e0b]";
-  if (lower.includes("done")) return "bg-[#10b981]";
-  return "bg-[#7C6EF5]";
+  if (lower.includes("backlog")) return "bg-fg-muted";
+  if (lower.includes("progress")) return "bg-accent-solid";
+  if (lower.includes("review")) return "bg-warning";
+  if (lower.includes("done")) return "bg-success";
+  return "bg-accent-solid";
 };
 
 const getPriorityStyles = (priority: string) => {
   const p = priority?.toLowerCase() || "none";
   switch (p) {
     case "urgent":
-      return "bg-rose-500/10 text-rose-500 border-rose-500/20";
+      return "bg-danger-dim text-danger border-danger";
     case "high":
-      return "bg-purple-500/10 text-purple-400 border-purple-500/20";
+      return "bg-accent-dim text-accent border-accent";
     case "medium":
-      return "bg-amber-500/10 text-amber-500 border-amber-500/20";
+      return "bg-warning-dim text-warning border-warning";
     case "low":
-      return "bg-emerald-500/10 text-emerald-500 border-emerald-500/20";
+      return "bg-success-dim text-success border-success";
     default:
-      return "bg-white/5 text-white/40 border-white/10";
+      return "bg-fill-2 text-fg-muted border-border-md";
   }
 };
 
@@ -402,9 +402,9 @@ export default function KanbanBoardPage() {
   const columnIds = useMemo(() => columns.map((c) => c.id), [columns]);
 
   return (
-    <div className="h-full min-h-0 flex flex-col bg-[#0E0E14]">
-      <header className="px-8 h-16 border-b border-white/5 flex items-center justify-between bg-[#0A0A0A]/80 backdrop-blur-md shrink-0 z-10">
-        <h1 className="text-lg font-bold text-white/90 tracking-tight">
+    <div className="h-full min-h-0 flex flex-col bg-base">
+      <header className="px-8 h-16 border-b border-border flex items-center justify-between bg-base/80 backdrop-blur-md shrink-0 z-10">
+        <h1 className="text-lg font-bold text-fg tracking-tight">
           {project?.name || "Board"}
         </h1>
       </header>
@@ -446,7 +446,7 @@ export default function KanbanBoardPage() {
 
                 <button
                   onClick={() => setIsColumnModalOpen(true)}
-                  className="self-start flex items-center justify-center gap-2 w-85 shrink-0 h-15 rounded-2xl border border-dashed border-white/10 bg-white/1 text-white/40 font-medium hover:text-white/80 hover:bg-white/3 hover:border-white/20 transition-all group"
+                  className="self-start flex items-center justify-center gap-2 w-85 shrink-0 h-15 rounded-2xl border border-dashed border-border-md bg-fill-1 text-fg-muted font-medium hover:text-fg hover:bg-fill-1 hover:border-border-lg transition-all group"
                 >
                   <Plus
                     size={16}
@@ -616,12 +616,12 @@ const SortableColumn = memo(function SortableColumn({
     <div
       ref={setNodeRef}
       style={style}
-      className="flex max-h-[min(680px,calc(100dvh-180px))] min-h-33 flex-col w-85 shrink-0 bg-[#111119] border border-white/5 rounded-2xl overflow-hidden shadow-sm"
+      className="flex max-h-[min(680px,calc(100dvh-180px))] min-h-33 flex-col w-85 shrink-0 bg-base border border-border rounded-2xl overflow-hidden shadow-sm"
     >
       <div
         {...attributes}
         {...listeners}
-        className="p-4 flex items-center justify-between border-b border-white/4 cursor-grab active:cursor-grabbing hover:bg-white/2 transition-colors group shrink-0"
+        className="p-4 flex items-center justify-between border-b border-border cursor-grab active:cursor-grabbing hover:bg-fill-1 transition-colors group shrink-0"
       >
         <div className="flex items-center gap-2.5 flex-1 min-w-0 mr-2">
           {isEditing ? (
@@ -639,12 +639,12 @@ const SortableColumn = memo(function SortableColumn({
                 }
               }}
               onPointerDown={(e) => e.stopPropagation()}
-              className="bg-black/50 border border-[#7C6EF5] rounded-md px-2 py-1 text-sm font-bold text-white w-full outline-none"
+              className="bg-scrim border border-accent rounded-md px-2 py-1 text-sm font-bold text-fg w-full outline-none"
             />
           ) : (
             <>
               <div className={cn("w-2 h-2 rounded-full shrink-0", dotColor)} />
-              <h3 className="text-[14px] font-bold text-white/90 select-none truncate">
+              <h3 className="text-[14px] font-bold text-fg select-none truncate">
                 {column.name}
               </h3>
             </>
@@ -656,45 +656,45 @@ const SortableColumn = memo(function SortableColumn({
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               onPointerDown={(e) => e.stopPropagation()}
-              className="text-white/20 hover:text-white/80 p-1 rounded-md hover:bg-white/5 opacity-0 group-hover:opacity-100 transition-all"
+              className="text-fg-muted hover:text-fg p-1 rounded-md hover:bg-fill-2 opacity-0 group-hover:opacity-100 transition-all"
             >
               <MoreHorizontal size={14} />
             </button>
             {isMenuOpen && (
-              <div className="absolute right-0 top-full mt-1 w-56 bg-[#18181B] border border-white/8 rounded-xl shadow-2xl z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-100 py-1.5">
+              <div className="absolute right-0 top-full mt-1 w-56 bg-card border border-border rounded-xl shadow-2xl z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-100 py-1.5">
                 <button
                   onClick={() => {
                     setIsEditing(true);
                     setIsMenuOpen(false);
                   }}
                   onPointerDown={(e) => e.stopPropagation()}
-                  className="flex items-center justify-between px-3 py-2 text-[13px] font-medium text-white/70 hover:bg-white/5 hover:text-white transition-colors w-full text-left"
+                  className="flex items-center justify-between px-3 py-2 text-[13px] font-medium text-fg-secondary hover:bg-fill-2 hover:text-fg transition-colors w-full text-left"
                 >
                   <span className="flex items-center gap-2.5">
-                    <Edit2 size={14} className="text-white/40" /> Rename column
+                    <Edit2 size={14} className="text-fg-muted" /> Rename column
                   </span>
-                  <kbd className="hidden md:inline-flex bg-white/10 rounded px-1.5 py-0.5 text-[10px] text-white/40 font-sans">
+                  <kbd className="hidden md:inline-flex bg-fill-3 rounded px-1.5 py-0.5 text-[10px] text-fg-muted font-sans">
                     R
                   </kbd>
                 </button>
 
                 {canManageWorkspace && (
                   <>
-                    <div className="h-px bg-white/4 my-1.5 mx-2" />
+                    <div className="h-px bg-fill-2 my-1.5 mx-2" />
                     <button
                       onClick={handleClearCards}
                       onPointerDown={(e) => e.stopPropagation()}
-                      className="flex items-center gap-2.5 px-3 py-2 text-[13px] font-medium text-white/70 hover:bg-white/5 hover:text-white transition-colors w-full text-left"
+                      className="flex items-center gap-2.5 px-3 py-2 text-[13px] font-medium text-fg-secondary hover:bg-fill-2 hover:text-fg transition-colors w-full text-left"
                     >
-                      <Eraser size={14} className="text-white/40" /> Clear all
+                      <Eraser size={14} className="text-fg-muted" /> Clear all
                       cards
                     </button>
                     <button
                       onClick={handleDeleteColumn}
                       onPointerDown={(e) => e.stopPropagation()}
-                      className="flex items-center gap-2.5 px-3 py-2 text-[13px] font-medium text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 transition-colors w-full text-left"
+                      className="flex items-center gap-2.5 px-3 py-2 text-[13px] font-medium text-danger hover:bg-danger-dim hover:text-danger transition-colors w-full text-left"
                     >
-                      <Trash2 size={14} className="text-rose-400/60" /> Delete
+                      <Trash2 size={14} className="text-danger" /> Delete
                       column
                     </button>
                   </>
@@ -704,7 +704,7 @@ const SortableColumn = memo(function SortableColumn({
           </div>
 
           {!isEditing && (
-            <div className="flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-white/5 border border-white/10 text-[11px] font-bold text-white/40 select-none shrink-0">
+            <div className="flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-fill-2 border border-border-md text-[11px] font-bold text-fg-muted select-none shrink-0">
               {column.cards?.length || 0}
             </div>
           )}
@@ -714,10 +714,10 @@ const SortableColumn = memo(function SortableColumn({
       <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar">
         {!column.cards || column.cards?.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 px-4 text-center">
-            <div className="w-10 h-10 rounded-xl border border-dashed border-white/20 flex items-center justify-center mb-3 bg-white/1">
-              <Plus size={16} className="text-white/20" />
+            <div className="w-10 h-10 rounded-xl border border-dashed border-border-lg flex items-center justify-center mb-3 bg-fill-1">
+              <Plus size={16} className="text-fg-muted" />
             </div>
-            <p className="text-[12px] text-white/30 mb-4 leading-relaxed">
+            <p className="text-[12px] text-fg-muted mb-4 leading-relaxed">
               No cards here yet. <br /> Drag one in or add below.
             </p>
           </div>
@@ -751,11 +751,11 @@ const SortableColumn = memo(function SortableColumn({
         )}
       </div>
 
-      <div className="p-3 border-t border-white/4 shrink-0">
+      <div className="p-3 border-t border-border shrink-0">
         <button
           onPointerDown={(e) => e.stopPropagation()}
           onClick={() => setIsAddModalOpen(true)}
-          className="flex items-center gap-2 text-[13px] font-semibold text-white/40 hover:text-white hover:bg-white/5 w-full px-3 py-2 rounded-lg transition-colors"
+          className="flex items-center gap-2 text-[13px] font-semibold text-fg-muted hover:text-fg hover:bg-fill-2 w-full px-3 py-2 rounded-lg transition-colors"
         >
           <Plus size={14} /> Add card
         </button>
@@ -791,22 +791,22 @@ function ColumnContent({
   return (
     <div
       className={cn(
-        "flex flex-col h-max w-85 shrink-0 bg-[#16161D] rounded-2xl overflow-hidden",
+        "flex flex-col h-max w-85 shrink-0 bg-surface rounded-2xl overflow-hidden",
         isDragging
-          ? "border border-[#7C6EF5]/50 shadow-[0_0_30px_rgba(124,110,245,0.15)] scale-[1.02] opacity-90"
-          : "border border-white/5",
+          ? "border border-accent/50 shadow-[0_0_30px_rgba(124,110,245,0.15)] scale-[1.02] opacity-90"
+          : "border border-border",
       )}
     >
-      <div className="p-4 flex items-center justify-between border-b border-white/4 bg-white/2">
+      <div className="p-4 flex items-center justify-between border-b border-border bg-fill-1">
         <div className="flex items-center gap-2.5">
           <div className={cn("w-2 h-2 rounded-full", dotColor)} />
-          <h3 className="text-[14px] font-bold text-white/90">{column.name}</h3>
+          <h3 className="text-[14px] font-bold text-fg">{column.name}</h3>
         </div>
-        <div className="flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-white/5 border border-white/10 text-[11px] font-bold text-white/40">
+        <div className="flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-fill-2 border border-border-md text-[11px] font-bold text-fg-muted">
           {column.cards.length || 0}
         </div>
       </div>
-      <div className="p-6 text-center text-sm text-white/30 border-2 border-dashed border-white/10 mx-4 my-4 rounded-xl bg-white/1">
+      <div className="p-6 text-center text-sm text-fg-muted border-2 border-dashed border-border-md mx-4 my-4 rounded-xl bg-fill-1">
         {column.cards.length || 0} Cards inside
       </div>
     </div>
@@ -873,10 +873,10 @@ const CardContent = memo(function CardContent({
     <div
       onClick={onClick}
       className={cn(
-        "group bg-[#1A1A28] border rounded-xl p-4 cursor-grab active:cursor-grabbing transition-all flex flex-col",
+        "group bg-card border rounded-xl p-4 cursor-grab active:cursor-grabbing transition-all flex flex-col",
         isDragging
-          ? "border-[#7C6EF5]/50 shadow-[0_0_30px_rgba(124,110,245,0.15)] scale-[1.02] bg-[#1F1F2E]"
-          : "border-white/4 hover:border-white/10 shadow-sm",
+          ? "border-accent/50 shadow-[0_0_30px_rgba(124,110,245,0.15)] scale-[1.02] bg-card"
+          : "border-border hover:border-border-md shadow-sm",
         isDone && !isDragging && "opacity-50 hover:opacity-80",
       )}
     >
@@ -884,8 +884,8 @@ const CardContent = memo(function CardContent({
         className={cn(
           "text-[14px] font-semibold leading-snug transition-colors mb-3",
           isDone
-            ? "line-through text-white/40 group-hover:text-white/60"
-            : "text-white/90 group-hover:text-white",
+            ? "line-through text-fg-muted group-hover:text-fg-secondary"
+            : "text-fg group-hover:text-fg",
         )}
       >
         {card.title}
@@ -923,7 +923,7 @@ const CardContent = memo(function CardContent({
       <div className="border mb-2.5"></div>
 
       <div className="flex items-center justify-between mt-auto pt-1">
-        <div className="flex items-center gap-3.5 text-[11px] font-medium text-white/40">
+        <div className="flex items-center gap-3.5 text-[11px] font-medium text-fg-muted">
           {card.dueDate && (
             <div className={cn("flex items-center gap-1.5")}>
               <Clock size={12} className="opacity-80" />
@@ -932,14 +932,14 @@ const CardContent = memo(function CardContent({
           )}
 
           {card.commentCount !== 0 && (
-            <div className="flex items-center gap-1.5 hover:text-white/70 transition-colors">
+            <div className="flex items-center gap-1.5 hover:text-fg-secondary transition-colors">
               <MessageSquare size={12} className="opacity-80" />
               {card.commentCount}
             </div>
           )}
 
           {card.activityCount && (
-            <div className="flex items-center gap-1.5 hover:text-white/70 transition-colors">
+            <div className="flex items-center gap-1.5 hover:text-fg-secondary transition-colors">
               <Activity size={12} className="opacity-80" />
               {card.activityCount}
             </div>

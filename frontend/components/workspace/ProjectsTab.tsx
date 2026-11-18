@@ -61,13 +61,13 @@ export const ProjectsTab = ({
           {canManageWorkspace && (
             <button
               onClick={onOpenProjectModal}
-              className="bg-transparent border border-dashed border-[#333] rounded-xl p-6 hover:border-[#7C6EF5] hover:bg-[#7C6EF5]/5 transition-all flex flex-col items-center justify-center min-h-55 group"
+              className="bg-transparent border border-dashed border-border-md rounded-xl p-6 hover:border-accent hover:bg-accent-solid/90/5 transition-all flex flex-col items-center justify-center min-h-55 group"
             >
               <Plus
                 size={24}
-                className="text-[#a1a1a1] group-hover:text-[#7C6EF5] mb-2 transition-colors"
+                className="text-fg-secondary group-hover:text-accent mb-2 transition-colors"
               />
-              <span className="text-sm font-semibold text-[#a1a1a1] group-hover:text-white transition-colors">
+              <span className="text-sm font-semibold text-fg-secondary group-hover:text-fg transition-colors">
                 Create Project
               </span>
             </button>
@@ -118,15 +118,15 @@ export const ProjectCard = ({
   return (
     <div
       onClick={() => router.push(`/${activeWorkspaceSlug}/${project.slug}`)}
-      className="group/card bg-[#141419] border border-white/4 hover:border-white/10 rounded-2xl p-5 transition-all duration-300 cursor-pointer flex flex-col min-h-55 relative overflow-hidden shadow-sm hover:shadow-md"
+      className="group/card bg-surface border border-border hover:border-border-md rounded-2xl p-5 transition-all duration-300 cursor-pointer flex flex-col min-h-55 relative overflow-hidden shadow-sm hover:shadow-md"
     >
       <div className="flex items-start justify-between mb-4">
-        <div className="w-11 h-11 rounded-[14px] bg-[#7C6EF5]/10 flex items-center justify-center text-xl shrink-0">
-          <Icon className="text-[#7C6EF5]" size={20} />
+        <div className="w-11 h-11 rounded-[14px] bg-accent-solid/10 flex items-center justify-center text-xl shrink-0">
+          <Icon className="text-accent" size={20} />
         </div>
 
         <div className="flex items-center gap-2.5 shrink-0">
-          <span className="px-2.5 py-1 rounded-md text-[11px] font-bold tracking-wide bg-emerald-500/10 text-emerald-400">
+          <span className="px-2.5 py-1 rounded-md text-[11px] font-bold tracking-wide bg-success-dim text-success">
             {project.status || "Active"}
           </span>
 
@@ -137,7 +137,7 @@ export const ProjectCard = ({
                   e.stopPropagation();
                   setIsEditModalOpen(true);
                 }}
-                className="p-1.5 rounded-md text-white/30 hover:text-white hover:bg-white/5 transition-all"
+                className="p-1.5 rounded-md text-fg-muted hover:text-fg hover:bg-fill-2 transition-all"
                 title="Edit Project"
               >
                 <Edit2 size={14} />
@@ -149,7 +149,7 @@ export const ProjectCard = ({
                     e.stopPropagation();
                     setIsDeleteModalOpen(true);
                   }}
-                  className="p-1.5 rounded-md text-white/30 hover:text-rose-400 hover:bg-rose-500/10 transition-all"
+                  className="p-1.5 rounded-md text-fg-muted hover:text-danger hover:bg-danger-dim transition-all"
                   title="Delete Project"
                 >
                   <Trash2 size={14} />
@@ -161,16 +161,16 @@ export const ProjectCard = ({
       </div>
 
       <div className="flex-1 mt-1">
-        <h3 className="text-[17px] font-semibold text-white tracking-tight mb-1.5 line-clamp-1">
+        <h3 className="text-[17px] font-semibold text-fg tracking-tight mb-1.5 line-clamp-1">
           {project.name}
         </h3>
-        <p className="text-[13px] text-white/40 leading-relaxed line-clamp-2 pr-4">
+        <p className="text-[13px] text-fg-muted leading-relaxed line-clamp-2 pr-4">
           {project.description || "No description provided."}
         </p>
       </div>
 
       <div className="mt-6">
-        <div className="h-1.5 w-full bg-white/4 rounded-full overflow-hidden">
+        <div className="h-1.5 w-full bg-fill-2 rounded-full overflow-hidden">
           <div
             className="h-full rounded-full transition-all duration-1000 ease-out"
             style={{
@@ -179,18 +179,18 @@ export const ProjectCard = ({
             }}
           />
         </div>
-        <div className="mt-2.5 text-[12px] font-medium text-white/30">
+        <div className="mt-2.5 text-[12px] font-medium text-fg-muted">
           {progressPercent}% · {project.finishedCards} of {project.cardsCount}{" "}
           cards done
         </div>
       </div>
 
-      <div className="h-px w-full bg-white/4 my-4" />
+      <div className="h-px w-full bg-fill-2 my-4" />
 
       <div className="flex items-center justify-between mt-auto">
-        <div className="flex items-center gap-4 text-[12px] font-medium text-white/40">
+        <div className="flex items-center gap-4 text-[12px] font-medium text-fg-muted">
           <div className="flex items-center gap-1.5">
-            <Layout size={14} className="text-white/30" />
+            <Layout size={14} className="text-fg-muted" />
             <span>{project.cardsCount || 0}</span>
           </div>
         </div>
@@ -202,7 +202,7 @@ export const ProjectCard = ({
                 a.avatarUrl ? (
                   <div
                     key={i}
-                    className="w-6 h-6 rounded-full border-2 border-[#1C1C1E] bg-emerald-500 flex items-center justify-center text-[9px] font-bold text-white z-10 overflow-hidden relative shrink-0"
+                    className="w-6 h-6 rounded-full border-2 border-card bg-success-dim flex items-center justify-center text-[9px] font-bold text-fg z-10 overflow-hidden relative shrink-0"
                   >
                     <Image
                       src={a.avatarUrl}
@@ -217,7 +217,7 @@ export const ProjectCard = ({
                 ) : (
                   <div
                     key={i}
-                    className="w-6 h-6 rounded-full border-2 border-[#1C1C1E] bg-emerald-500 flex items-center justify-center text-[9px] font-bold text-white z-10 shrink-0"
+                    className="w-6 h-6 rounded-full border-2 border-card bg-success-dim flex items-center justify-center text-[9px] font-bold text-fg z-10 shrink-0"
                   >
                     {a.firstName ? a.firstName.charAt(0).toUpperCase() : "U"}
                   </div>
@@ -225,7 +225,7 @@ export const ProjectCard = ({
               )}
 
             {project.assignees && project.assignees.length > 3 && (
-              <div className="w-6 h-6 rounded-full border-2 border-[#1C1C1E] bg-[#2a2a2a] flex items-center justify-center text-[9px] font-bold text-white z-0 shrink-0">
+              <div className="w-6 h-6 rounded-full border-2 border-card bg-overlay flex items-center justify-center text-[9px] font-bold text-fg z-0 shrink-0">
                 +{project.assignees.length - 3}
               </div>
             )}

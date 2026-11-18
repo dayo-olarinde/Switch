@@ -72,14 +72,14 @@ export const MembersTab = ({
           <div className="relative group">
             <Search
               size={15}
-              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/30 group-focus-within:text-[#7C6EF5] transition-colors"
+              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-fg-muted group-focus-within:text-accent transition-colors"
             />
             <input
               type="text"
               placeholder="Search members..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-10 w-64 lg:w-72 bg-black/20 border border-white/10 rounded-lg pl-10 pr-4 text-[13px] text-white placeholder:text-white/30 focus:outline-none focus:border-[#7C6EF5]/50 focus:ring-4 focus:ring-[#7C6EF5]/10 transition-all shadow-sm"
+              className="h-10 w-64 lg:w-72 bg-scrim border border-border-md rounded-lg pl-10 pr-4 text-[13px] text-fg placeholder:text-fg-muted focus:outline-none focus:border-accent/50 focus:ring-4 focus:ring-accent/10 transition-all shadow-sm"
             />
           </div>
 
@@ -87,24 +87,24 @@ export const MembersTab = ({
             <select
               value={roleFilter}
               onChange={(e) => setRoleFilter(e.target.value)}
-              className="h-10 pl-3 pr-9 appearance-none bg-black/20 border border-white/10 rounded-lg text-[13px] font-medium text-white/70 hover:text-white hover:bg-black/40 transition-all cursor-pointer focus:outline-none focus:border-[#7C6EF5]/50 focus:ring-4 focus:ring-[#7C6EF5]/10 shadow-sm"
+              className="h-10 pl-3 pr-9 appearance-none bg-scrim border border-border-md rounded-lg text-[13px] font-medium text-fg-secondary hover:text-fg hover:bg-scrim transition-all cursor-pointer focus:outline-none focus:border-accent/50 focus:ring-4 focus:ring-accent/10 shadow-sm"
             >
-              <option value="All" className="bg-[#13131A] text-white">
+              <option value="All" className="bg-surface text-fg">
                 All Roles
               </option>
-              <option value="Owner" className="bg-[#13131A] text-white">
+              <option value="Owner" className="bg-surface text-fg">
                 Owner
               </option>
-              <option value="Admin" className="bg-[#13131A] text-white">
+              <option value="Admin" className="bg-surface text-fg">
                 Admin
               </option>
-              <option value="Member" className="bg-[#13131A] text-white">
+              <option value="Member" className="bg-surface text-fg">
                 Member
               </option>
             </select>
             <ChevronDown
               size={14}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-[#7C6EF5] pointer-events-none transition-colors"
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-fg-muted group-focus-within:text-accent pointer-events-none transition-colors"
             />
           </div>
         </div>
@@ -113,7 +113,7 @@ export const MembersTab = ({
           {!isOwner && (
             <button
               onClick={() => setIsLeaveModalOpen(true)}
-              className="h-10 px-4 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 flex items-center justify-center gap-2 rounded-lg text-[13px] font-semibold transition-all shrink-0"
+              className="h-10 px-4 bg-danger-dim hover:bg-danger-dim text-danger border border-danger flex items-center justify-center gap-2 rounded-lg text-[13px] font-semibold transition-all shrink-0"
             >
               <LogOut size={15} /> Leave Workspace
             </button>
@@ -121,7 +121,7 @@ export const MembersTab = ({
           {canManageWorkspace && (
             <button
               onClick={() => setInviteModal(true)}
-              className="h-10 px-5 bg-[#7C6EF5] hover:bg-[#6b5ee6] text-white flex items-center justify-center gap-2 rounded-lg text-[13px] font-semibold transition-all shadow-lg shadow-[#7C6EF5]/20 shrink-0"
+              className="h-10 px-5 bg-accent-solid hover:bg-accent-solid/90 text-on-accent flex items-center justify-center gap-2 rounded-lg text-[13px] font-semibold transition-all shadow-lg shadow-accent shrink-0"
             >
               <Plus size={16} /> Invite Member
             </button>
@@ -132,8 +132,8 @@ export const MembersTab = ({
       {membersLoading ? (
         <MembersSkeleton />
       ) : (
-        <div className="bg-[#13131A] border border-white/5 rounded-xl overflow-hidden shadow-xl">
-          <div className="grid grid-cols-[2.5fr_1fr_1fr_auto] gap-4 px-6 py-3.5 border-b border-white/5 bg-white/2 text-[10px] font-bold text-white/40 uppercase tracking-widest">
+        <div className="bg-surface border border-border rounded-xl overflow-hidden shadow-xl">
+          <div className="grid grid-cols-[2.5fr_1fr_1fr_auto] gap-4 px-6 py-3.5 border-b border-border bg-fill-1 text-[10px] font-bold text-fg-muted uppercase tracking-widest">
             <div>Member</div>
             <div>Joined</div>
             <div>Role</div>
@@ -159,7 +159,7 @@ export const MembersTab = ({
                   return (
                     <div
                       key={member.id || index}
-                      className="group grid grid-cols-[2.5fr_1fr_1fr_auto] gap-4 px-6 py-4 items-center border-b border-white/5 last:border-b-0 hover:bg-white/2 transition-colors"
+                      className="group grid grid-cols-[2.5fr_1fr_1fr_auto] gap-4 px-6 py-4 items-center border-b border-border last:border-b-0 hover:bg-fill-1 transition-colors"
                     >
                       <div className="flex items-center gap-3.5 min-w-0">
                         {member.avatarUrl ? (
@@ -168,13 +168,13 @@ export const MembersTab = ({
                             alt={name}
                             width={36}
                             height={36}
-                            className="w-9 h-9 rounded-full object-cover shrink-0 border border-white/10 shadow-sm"
+                            className="w-9 h-9 rounded-full object-cover shrink-0 border border-border-md shadow-sm"
                             unoptimized
                             referrerPolicy="no-referrer"
                           />
                         ) : (
                           <div
-                            className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0 border border-white/10 shadow-sm"
+                            className="w-9 h-9 rounded-full flex items-center justify-center text-fg text-xs font-bold shrink-0 border border-border-md shadow-sm"
                             style={{
                               backgroundColor: getConsistentColor(
                                 member.id || name,
@@ -185,22 +185,22 @@ export const MembersTab = ({
                           </div>
                         )}
                         <div className="flex flex-col min-w-0">
-                          <span className="text-[13px] font-semibold text-white/90 truncate">
+                          <span className="text-[13px] font-semibold text-fg truncate">
                             {name}
                           </span>
-                          <span className="text-[12px] font-medium text-white/40 truncate mt-0.5">
+                          <span className="text-[12px] font-medium text-fg-muted truncate mt-0.5">
                             {email}
                           </span>
                         </div>
                       </div>
 
-                      <div className="text-[13px] text-white/50 font-medium">
+                      <div className="text-[13px] text-fg-muted font-medium">
                         {joinedDate}
                       </div>
 
                       <div>
                         {role === "Owner" ? (
-                          <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-[#7C6EF5]/10 border border-[#7C6EF5]/20 text-[#7C6EF5] text-[11px] font-bold tracking-wide">
+                          <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-accent-solid/10 border border-accent/20 text-accent text-[11px] font-bold tracking-wide">
                             Owner
                           </span>
                         ) : isOwner ? (
@@ -210,28 +210,28 @@ export const MembersTab = ({
                               onChange={(e) =>
                                 handleRoleChange(e, member.userId)
                               }
-                              className="w-full h-8 pl-3 pr-8 appearance-none bg-transparent hover:bg-white/5 border border-transparent hover:border-white/10 rounded-md text-[13px] font-medium text-white/70 hover:text-white transition-all focus:outline-none focus:border-[#7C6EF5]/50 focus:bg-black/20 cursor-pointer"
+                              className="w-full h-8 pl-3 pr-8 appearance-none bg-transparent hover:bg-fill-2 border border-transparent hover:border-border-md rounded-md text-[13px] font-medium text-fg-secondary hover:text-fg transition-all focus:outline-none focus:border-accent/50 focus:bg-scrim cursor-pointer"
                             >
                               <option
                                 value="Admin"
-                                className="bg-[#13131A] text-white"
+                                className="bg-surface text-fg"
                               >
                                 Admin
                               </option>
                               <option
                                 value="Member"
-                                className="bg-[#13131A] text-white"
+                                className="bg-surface text-fg"
                               >
                                 Member
                               </option>
                             </select>
                             <ChevronDown
                               size={14}
-                              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/30 group-hover/select:text-white/60 pointer-events-none transition-colors"
+                              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-fg-muted group-hover/select:text-fg-secondary pointer-events-none transition-colors"
                             />
                           </div>
                         ) : (
-                          <span className="text-[13px] font-medium text-white/50 pl-3">
+                          <span className="text-[13px] font-medium text-fg-muted pl-3">
                             {role}
                           </span>
                         )}
@@ -241,7 +241,7 @@ export const MembersTab = ({
                         {role !== "Owner" && canManageWorkspace && (
                           <button
                             onClick={() => setMemberToRemove(member)}
-                            className="text-white/30 hover:text-rose-400 p-1.5 rounded-md hover:bg-rose-500/10 transition-colors"
+                            className="text-fg-muted hover:text-danger p-1.5 rounded-md hover:bg-danger-dim transition-colors"
                             title="Remove member"
                           >
                             <Trash2 size={15} />
@@ -253,13 +253,13 @@ export const MembersTab = ({
                 })
             ) : (
               <div className="py-16 flex flex-col items-center justify-center text-center">
-                <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-4 text-white/20">
+                <div className="w-12 h-12 rounded-2xl bg-fill-2 border border-border-md flex items-center justify-center mb-4 text-fg-muted">
                   <Users size={24} />
                 </div>
-                <span className="text-[14px] font-semibold text-white/90 mb-1">
+                <span className="text-[14px] font-semibold text-fg mb-1">
                   No members found
                 </span>
-                <span className="text-[13px] text-white/40 max-w-62.5">
+                <span className="text-[13px] text-fg-muted max-w-62.5">
                   Try adjusting your search query or role filter to find what
                   you&apos;re looking for.
                 </span>

@@ -1,4 +1,5 @@
 import QueryProvider from "@/components/QueryProviders";
+import { ThemeScript } from "@/components/ThemeToggle";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
@@ -22,13 +23,17 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
+      data-theme="dark"
       className={cn("font-sans", geist.variable)}
     >
+      <head>
+        <ThemeScript />
+      </head>
       <body>
         <MobileBlocker>
           <QueryProvider>{children}</QueryProvider>
         </MobileBlocker>
-        <Toaster richColors />
+        <Toaster richColors theme="system" />
       </body>
     </html>
   );

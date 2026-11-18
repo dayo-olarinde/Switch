@@ -50,9 +50,9 @@ function SignupContent() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#0A0A0A] p-4 font-sans text-white selection:bg-[#7C6EF5]/30">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-base p-4 font-sans text-on-accent selection:bg-accent-solid/30">
       <div className="flex items-center gap-3 mb-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <div className="w-10 h-10 rounded-xl bg-[#7C6EF5] flex items-center justify-center text-white text-lg font-black shadow-lg shadow-[#7C6EF5]/20">
+        <div className="w-10 h-10 rounded-xl bg-accent-solid flex items-center justify-center text-on-accent text-lg font-black shadow-lg shadow-accent">
           <Image
             src="/logo.svg"
             alt="Switch Logo"
@@ -61,44 +61,44 @@ function SignupContent() {
             priority
           />
         </div>
-        <span className="text-2xl font-bold tracking-tight text-white/90">
+        <span className="text-2xl font-bold tracking-tight text-fg">
           Switch
         </span>
       </div>
 
-      <div className="w-full max-w-105 bg-[#13131A] border border-white/5 rounded-2xl p-8 shadow-2xl animate-in fade-in zoom-in-95 duration-500 ">
+      <div className="w-full max-w-105 bg-surface border border-border rounded-2xl p-8 shadow-2xl animate-in fade-in zoom-in-95 duration-500 ">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-full bg-[#7C6EF5] flex items-center justify-center text-[11px] font-bold text-white shadow-sm">
+            <div className="w-6 h-6 rounded-full bg-accent-solid flex items-center justify-center text-[11px] font-bold text-on-accent shadow-sm">
               1
             </div>
-            <span className="text-[12px] font-bold text-white/90">Email</span>
+            <span className="text-[12px] font-bold text-fg">Email</span>
           </div>
 
-          <div className="flex-1 h-px bg-white/10 mx-3"></div>
+          <div className="flex-1 h-px bg-fill-3 mx-3"></div>
 
           <div className="flex items-center gap-2 opacity-40">
-            <div className="w-6 h-6 rounded-full border border-white/20 flex items-center justify-center text-[11px] font-bold text-white">
+            <div className="w-6 h-6 rounded-full border border-border-lg flex items-center justify-center text-[11px] font-bold text-fg">
               2
             </div>
-            <span className="text-[12px] font-medium text-white">Verify</span>
+            <span className="text-[12px] font-medium text-fg">Verify</span>
           </div>
 
-          <div className="flex-1 h-px bg-white/10 mx-3"></div>
+          <div className="flex-1 h-px bg-fill-3 mx-3"></div>
 
           <div className="flex items-center gap-2 opacity-40">
-            <div className="w-6 h-6 rounded-full border border-white/20 flex items-center justify-center text-[11px] font-bold text-white">
+            <div className="w-6 h-6 rounded-full border border-border-lg flex items-center justify-center text-[11px] font-bold text-fg">
               3
             </div>
-            <span className="text-[12px] font-medium text-white">Profile</span>
+            <span className="text-[12px] font-medium text-fg">Profile</span>
           </div>
         </div>
 
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-white/90 tracking-tight mb-2">
+          <h1 className="text-2xl font-bold text-fg tracking-tight mb-2">
             Create your account
           </h1>
-          <p className="text-[13px] text-white/40 leading-relaxed">
+          <p className="text-[13px] text-fg-muted leading-relaxed">
             Start with your work email address. We'll send a verification code.
           </p>
         </div>
@@ -107,7 +107,7 @@ function SignupContent() {
           <button
             onClick={() => handleSocialAuth("google")}
             disabled={isRedirecting || isPending || isSuccess}
-            className="w-full h-11 flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/5 rounded-xl text-[14px] font-medium text-white/80 transition-all group"
+            className="w-full h-11 flex items-center justify-center gap-3 bg-fill-2 hover:bg-fill-3 border border-border rounded-xl text-[14px] font-medium text-fg transition-all group"
           >
             <GoogleIcon />
             Sign up with Google
@@ -116,7 +116,7 @@ function SignupContent() {
           <button
             onClick={() => handleSocialAuth("github")}
             disabled={isRedirecting || isPending || isSuccess}
-            className="w-full h-11 flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/5 rounded-xl text-[14px] font-medium text-white/80 transition-all group"
+            className="w-full h-11 flex items-center justify-center gap-3 bg-fill-2 hover:bg-fill-3 border border-border rounded-xl text-[14px] font-medium text-fg transition-all group"
           >
             <GithubIcon />
             Sign up with GitHub
@@ -124,18 +124,18 @@ function SignupContent() {
         </div>
 
         <div className="flex items-center gap-3 mb-6">
-          <div className="flex-1 h-px bg-white/5"></div>
-          <span className="text-[12px] font-medium text-white/30 tracking-wide">
+          <div className="flex-1 h-px bg-fill-2"></div>
+          <span className="text-[12px] font-medium text-fg-muted tracking-wide">
             or use email
           </span>
-          <div className="flex-1 h-px bg-white/5"></div>
+          <div className="flex-1 h-px bg-fill-2"></div>
         </div>
 
         <form className="space-y-4" onSubmit={handleSubmit(handleSignup)}>
           <div className="space-y-1.5">
-            <label className="text-[13px] font-medium text-white/60 pl-1 flex items-center gap-1">
+            <label className="text-[13px] font-medium text-fg-secondary pl-1 flex items-center gap-1">
               Work email
-              <span className="text-[#7C6EF5] text-lg leading-none">*</span>
+              <span className="text-accent text-lg leading-none">*</span>
             </label>
             <input
               {...register("email", {
@@ -147,14 +147,14 @@ function SignupContent() {
               })}
               type="email"
               placeholder="you@company.com"
-              className="w-full h-11 bg-black/20 border border-white/10 rounded-xl px-4 text-[14px] text-white placeholder:text-white/20 focus:outline-none focus:border-[#7C6EF5]/50 focus:ring-4 focus:ring-[#7C6EF5]/10 transition-all shadow-inner"
+              className="w-full h-11 bg-scrim border border-border-md rounded-xl px-4 text-[14px] text-fg placeholder:text-fg-muted focus:outline-none focus:border-accent/50 focus:ring-4 focus:ring-accent/10 transition-all shadow-inner"
             />
             {errors.email ? (
-              <p className="text-[11px] text-rose-400 pl-1">
+              <p className="text-[11px] text-danger pl-1">
                 {errors.email.message}
               </p>
             ) : (
-              <p className="text-[11px] text-white/30 pl-1 pt-0.5">
+              <p className="text-[11px] text-fg-muted pl-1 pt-0.5">
                 We'll send a 6-digit code to verify this address.
               </p>
             )}
@@ -163,7 +163,7 @@ function SignupContent() {
           <button
             type="submit"
             disabled={isPending || isSuccess}
-            className="w-full h-11 mt-4 bg-[#7C6EF5] hover:bg-[#6B5ED4] disabled:bg-[#7C6EF5]/50 text-white rounded-xl text-[14px] font-semibold transition-all shadow-lg shadow-[#7C6EF5]/20 active:scale-[0.98] flex items-center justify-center gap-2 group"
+            className="w-full h-11 mt-4 bg-accent-solid hover:bg-accent-solid/90 disabled:bg-accent-solid/50 text-on-accent rounded-xl text-[14px] font-semibold transition-all shadow-lg shadow-accent active:scale-[0.98] flex items-center justify-center gap-2 group"
           >
             {isPending || isSuccess ? (
               <>
@@ -184,11 +184,11 @@ function SignupContent() {
       </div>
 
       <div className="mt-8 animate-in fade-in duration-500">
-        <p className="text-[13px] text-white/40">
+        <p className="text-[13px] text-fg-muted">
           Already have an account?{" "}
           <Link
             href="/login"
-            className="text-[#7C6EF5] hover:text-[#B8B0FF] font-medium transition-colors"
+            className="text-accent hover:text-accent font-medium transition-colors"
           >
             Sign in
           </Link>

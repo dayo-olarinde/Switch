@@ -33,11 +33,11 @@ import { useCardMenus } from "./useCardMenu";
 import { generateKeyBetween } from "fractional-indexing";
 
 const PRIORITIES = [
-  { label: "Urgent", value: "urgent", color: "bg-rose-500" },
-  { label: "High", value: "high", color: "bg-purple-500" },
-  { label: "Medium", value: "medium", color: "bg-amber-500" },
-  { label: "Low", value: "low", color: "bg-emerald-500" },
-  { label: "None", value: "none", color: "bg-white/20" },
+  { label: "Urgent", value: "urgent", color: "bg-danger" },
+  { label: "High", value: "high", color: "bg-accent-dim" },
+  { label: "Medium", value: "medium", color: "bg-warning" },
+  { label: "Low", value: "low", color: "bg-success" },
+  { label: "None", value: "none", color: "bg-fill-3" },
 ];
 
 interface CardSidebarProps {
@@ -119,34 +119,34 @@ export function CardSidebar({
 
   return (
     <aside
-      className="w-[320px] shrink-0 border-l border-white/5 overflow-y-auto custom-scrollbar p-6 bg-[#16161D]"
+      className="w-[320px] shrink-0 border-l border-border overflow-y-auto custom-scrollbar p-6 bg-surface"
       onClick={handleContainerClick}
     >
       <div className="space-y-6">
         <div className="space-y-2 relative">
-          <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest">
+          <label className="text-[10px] font-bold text-fg-muted uppercase tracking-widest">
             Status
           </label>
           <button
             onClick={() => toggleMenu("status")}
-            className="w-full flex items-center justify-between p-2.5 bg-[#1C1C24] hover:bg-[#22222C] border border-white/5 rounded-lg transition-colors"
+            className="w-full flex items-center justify-between p-2.5 bg-card hover:bg-overlay border border-border rounded-lg transition-colors"
           >
             <div className="flex items-center gap-2 truncate">
-              <div className="w-2 h-2 rounded-full bg-purple-500 shrink-0" />
-              <span className="text-[13px] font-semibold text-white/90 truncate">
+              <div className="w-2 h-2 rounded-full bg-accent-dim shrink-0" />
+              <span className="text-[13px] font-semibold text-fg truncate">
                 {currentColumn?.name || "Unknown"}
               </span>
             </div>
             <ChevronRight
               size={14}
               className={cn(
-                "text-white/20 transition-transform shrink-0",
-                isStatusOpen && "rotate-90 text-white/60",
+                "text-fg-muted transition-transform shrink-0",
+                isStatusOpen && "rotate-90 text-fg-secondary",
               )}
             />
           </button>
           {isStatusOpen && (
-            <div className="absolute top-full mt-2 w-full bg-[#18181B] border border-white/8 rounded-xl shadow-2xl z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-100 py-1.5">
+            <div className="absolute top-full mt-2 w-full bg-card border border-border rounded-xl shadow-2xl z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-100 py-1.5">
               {columns.map((col) => (
                 <button
                   key={col.id}
@@ -168,11 +168,11 @@ export function CardSidebar({
                     }
                     toggleMenu(null);
                   }}
-                  className="flex items-center justify-between w-full px-3 py-2 text-[13px] font-medium text-white/70 hover:bg-white/5 hover:text-white transition-colors text-left"
+                  className="flex items-center justify-between w-full px-3 py-2 text-[13px] font-medium text-fg-secondary hover:bg-fill-2 hover:text-fg transition-colors text-left"
                 >
                   <span className="truncate">{col.name}</span>
                   {col.id === currentColumn?.id && (
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#7C6EF5] shrink-0" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-accent-solid shrink-0" />
                   )}
                 </button>
               ))}
@@ -181,12 +181,12 @@ export function CardSidebar({
         </div>
 
         <div className="space-y-2 relative">
-          <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest">
+          <label className="text-[10px] font-bold text-fg-muted uppercase tracking-widest">
             Priority
           </label>
           <button
             onClick={() => toggleMenu("priority")}
-            className="w-full flex items-center justify-between p-2.5 bg-[#1C1C24] hover:bg-[#22222C] border border-white/5 rounded-lg transition-colors"
+            className="w-full flex items-center justify-between p-2.5 bg-card hover:bg-overlay border border-border rounded-lg transition-colors"
           >
             <div className="flex items-center gap-2 truncate">
               <div
@@ -195,20 +195,20 @@ export function CardSidebar({
                   currentPriority.color,
                 )}
               />
-              <span className="text-[13px] font-semibold text-white/90 truncate">
+              <span className="text-[13px] font-semibold text-fg truncate">
                 {currentPriority.label}
               </span>
             </div>
             <ChevronRight
               size={14}
               className={cn(
-                "text-white/20 transition-transform shrink-0",
-                isPriorityOpen && "rotate-90 text-white/60",
+                "text-fg-muted transition-transform shrink-0",
+                isPriorityOpen && "rotate-90 text-fg-secondary",
               )}
             />
           </button>
           {isPriorityOpen && (
-            <div className="absolute top-full mt-2 w-full bg-[#18181B] border border-white/8 rounded-xl shadow-2xl z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-100 py-1.5">
+            <div className="absolute top-full mt-2 w-full bg-card border border-border rounded-xl shadow-2xl z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-100 py-1.5">
               {PRIORITIES.map((p) => (
                 <button
                   key={p.value}
@@ -217,7 +217,7 @@ export function CardSidebar({
                       updateCard({ priority: p.value as CardPriority });
                     toggleMenu(null);
                   }}
-                  className="flex items-center justify-between w-full px-3 py-2 text-[13px] font-medium text-white/70 hover:bg-white/5 hover:text-white transition-colors text-left"
+                  className="flex items-center justify-between w-full px-3 py-2 text-[13px] font-medium text-fg-secondary hover:bg-fill-2 hover:text-fg transition-colors text-left"
                 >
                   <div className="flex items-center gap-2">
                     <div
@@ -226,7 +226,7 @@ export function CardSidebar({
                     <span>{p.label}</span>
                   </div>
                   {p.value === (card.priority?.toLowerCase() || "none") && (
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#7C6EF5] shrink-0" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-accent-solid shrink-0" />
                   )}
                 </button>
               ))}
@@ -235,7 +235,7 @@ export function CardSidebar({
         </div>
 
         <div className="space-y-2">
-          <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest">
+          <label className="text-[10px] font-bold text-fg-muted uppercase tracking-widest">
             Due Date
           </label>
           <div className="relative w-full">
@@ -263,14 +263,14 @@ export function CardSidebar({
               className={cn(
                 "w-full flex items-center justify-between p-2.5 rounded-lg transition-colors border",
                 isOverdue
-                  ? "bg-rose-500/10 hover:bg-rose-500/20 border-rose-500/20"
-                  : "bg-[#1C1C24] hover:bg-[#22222C] border-white/5",
+                  ? "bg-danger-dim hover:bg-danger-dim border-danger"
+                  : "bg-card hover:bg-overlay border-border",
               )}
             >
               <div
                 className={cn(
                   "flex items-center gap-2",
-                  isOverdue ? "text-rose-500" : "text-white/70",
+                  isOverdue ? "text-danger" : "text-fg-secondary",
                 )}
               >
                 <Clock size={14} />
@@ -281,12 +281,12 @@ export function CardSidebar({
                 </span>
               </div>
               {isOverdue && (
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-500">
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-danger-dim text-danger">
                   {Math.abs(diffDays)}d overdue
                 </span>
               )}
               {!isOverdue && dueDateObj && diffDays === 0 && (
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-500">
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-warning-dim text-warning">
                   Today
                 </span>
               )}
@@ -295,23 +295,23 @@ export function CardSidebar({
         </div>
 
         <div className="space-y-3">
-          <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest">
+          <label className="text-[10px] font-bold text-fg-muted uppercase tracking-widest">
             Assignees
           </label>
 
-          <div className="flex flex-col bg-[#1C1C24] border border-white/5 rounded-xl overflow-hidden shadow-inner">
-            <div className="p-2 border-b border-white/5 bg-[#18181F]">
+          <div className="flex flex-col bg-card border border-border rounded-xl overflow-hidden shadow-inner">
+            <div className="p-2 border-b border-border bg-card">
               <div className="relative">
                 <Search
                   size={13}
-                  className="absolute left-2.5 top-1/2 -translate-y-1/2 text-white/30"
+                  className="absolute left-2.5 top-1/2 -translate-y-1/2 text-fg-muted"
                 />
                 <input
                   type="text"
                   value={assigneeSearch}
                   onChange={(e) => setAssigneeSearch(e.target.value)}
                   placeholder="Search members..."
-                  className="w-full bg-[#13131A] hover:bg-[#16161F] focus:bg-[#16161F] border border-white/5 focus:border-[#7C6EF5]/50 rounded-lg pl-8 pr-3 py-1.5 text-[12px] text-white placeholder:text-white/30 outline-none transition-all"
+                  className="w-full bg-surface hover:bg-surface focus:bg-surface border border-border focus:border-accent/50 rounded-lg pl-8 pr-3 py-1.5 text-[12px] text-fg placeholder:text-fg-muted outline-none transition-all"
                 />
               </div>
             </div>
@@ -319,10 +319,10 @@ export function CardSidebar({
             <div className="max-h-45 overflow-y-auto custom-scrollbar p-1.5 space-y-0.5">
               {membersLoading ? (
                 <div className="flex items-center justify-center py-6">
-                  <div className="w-4 h-4 border-2 border-[#7C6EF5]/30 border-t-[#7C6EF5] rounded-full animate-spin" />
+                  <div className="w-4 h-4 border-2 border-accent/30 border-t-accent rounded-full animate-spin" />
                 </div>
               ) : filteredMembers?.length === 0 ? (
-                <div className="text-center py-6 text-[12px] text-white/40">
+                <div className="text-center py-6 text-[12px] text-fg-muted">
                   No members found
                 </div>
               ) : (
@@ -339,7 +339,7 @@ export function CardSidebar({
                         toggleAssignee({ member, isAssigned: !!isAssigned });
                       }}
                       className={cn(
-                        "flex items-center justify-between p-2 rounded-lg hover:bg-white/5 cursor-pointer group transition-colors",
+                        "flex items-center justify-between p-2 rounded-lg hover:bg-fill-2 cursor-pointer group transition-colors",
                         isTogglingAssignee && "pointer-events-none opacity-50",
                       )}
                     >
@@ -350,13 +350,13 @@ export function CardSidebar({
                             alt={`${member.firstName} ${member.lastName}`}
                             width={28}
                             height={28}
-                            className="w-7 h-7 rounded-full object-cover border border-white/10 shrink-0"
+                            className="w-7 h-7 rounded-full object-cover border border-border-md shrink-0"
                             unoptimized
                             referrerPolicy="no-referrer"
                           />
                         ) : (
                           <div
-                            className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold text-white shrink-0 border border-white/5 shadow-sm"
+                            className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold text-fg shrink-0 border border-border shadow-sm"
                             style={{
                               backgroundColor: getConsistentColor(
                                 member.userId,
@@ -368,10 +368,10 @@ export function CardSidebar({
                           </div>
                         )}
                         <div className="flex flex-col min-w-0">
-                          <span className="text-[13px] font-medium text-white/90 truncate">
+                          <span className="text-[13px] font-medium text-fg truncate">
                             {member.firstName} {member.lastName}
                           </span>
-                          <span className="text-[11px] text-white/30 truncate group-hover:text-white/50 transition-colors">
+                          <span className="text-[11px] text-fg-muted truncate group-hover:text-fg-muted transition-colors">
                             {member.email}
                           </span>
                         </div>
@@ -381,13 +381,13 @@ export function CardSidebar({
                         className={cn(
                           "relative inline-flex h-4.5 w-8 shrink-0 items-center rounded-full transition-colors duration-200 ease-in-out",
                           isAssigned
-                            ? "bg-[#7C6EF5]"
-                            : "bg-white/10 group-hover:bg-white/20",
+                            ? "bg-accent-solid"
+                            : "bg-fill-3 group-hover:bg-fill-3",
                         )}
                       >
                         <span
                           className={cn(
-                            "inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow-sm transition duration-200 ease-in-out",
+                            "inline-block h-3.5 w-3.5 transform rounded-full bg-card shadow-sm transition duration-200 ease-in-out",
                             isAssigned ? "translate-x-4" : "translate-x-0.5",
                           )}
                         />
@@ -401,30 +401,30 @@ export function CardSidebar({
         </div>
 
         <div className="space-y-3">
-          <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest">
+          <label className="text-[10px] font-bold text-fg-muted uppercase tracking-widest">
             Labels
           </label>
 
-          <div className="flex flex-col bg-[#1C1C24] border border-white/5 rounded-xl overflow-hidden shadow-inner">
-            <div className="p-2 border-b border-white/5 bg-[#18181F]">
+          <div className="flex flex-col bg-card border border-border rounded-xl overflow-hidden shadow-inner">
+            <div className="p-2 border-b border-border bg-card">
               <div className="relative">
                 <Search
                   size={13}
-                  className="absolute left-2.5 top-1/2 -translate-y-1/2 text-white/30"
+                  className="absolute left-2.5 top-1/2 -translate-y-1/2 text-fg-muted"
                 />
                 <input
                   type="text"
                   value={labelSearch}
                   onChange={(e) => setLabelSearch(e.target.value)}
                   placeholder="Search labels..."
-                  className="w-full bg-[#13131A] hover:bg-[#16161F] focus:bg-[#16161F] border border-white/5 focus:border-[#7C6EF5]/50 rounded-lg pl-8 pr-3 py-1.5 text-[12px] text-white placeholder:text-white/30 outline-none transition-all"
+                  className="w-full bg-surface hover:bg-surface focus:bg-surface border border-border focus:border-accent/50 rounded-lg pl-8 pr-3 py-1.5 text-[12px] text-fg placeholder:text-fg-muted outline-none transition-all"
                 />
               </div>
             </div>
 
             <div className="max-h-45 overflow-y-auto custom-scrollbar p-1.5 space-y-0.5">
               {filteredLabels?.length === 0 && !isCreatingLabelMode ? (
-                <div className="text-center py-6 text-[12px] text-white/40">
+                <div className="text-center py-6 text-[12px] text-fg-muted">
                   No labels found
                 </div>
               ) : (
@@ -443,14 +443,14 @@ export function CardSidebar({
                           isAttached: !!isAttached,
                         })
                       }
-                      className="flex items-center justify-between p-2 rounded-lg hover:bg-white/5 cursor-pointer group transition-colors"
+                      className="flex items-center justify-between p-2 rounded-lg hover:bg-fill-2 cursor-pointer group transition-colors"
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
                         <div
                           className="w-3 h-3 rounded-full shrink-0 shadow-sm"
                           style={{ backgroundColor: hex }}
                         />
-                        <span className="text-[13px] font-medium text-white/90 truncate group-hover:text-white transition-colors">
+                        <span className="text-[13px] font-medium text-fg truncate group-hover:text-fg transition-colors">
                           {label.name}
                         </span>
                       </div>
@@ -465,7 +465,7 @@ export function CardSidebar({
                                 boardId: boardId ?? "",
                               });
                             }}
-                            className="opacity-0 group-hover:opacity-100 p-1 text-white/30 hover:text-rose-400 hover:bg-rose-500/10 rounded transition-all"
+                            className="opacity-0 group-hover:opacity-100 p-1 text-fg-muted hover:text-danger hover:bg-danger-dim rounded transition-all"
                             title="Delete label"
                           >
                             <Trash2 size={13} />
@@ -476,13 +476,13 @@ export function CardSidebar({
                           className={cn(
                             "relative inline-flex h-4.5 w-8 shrink-0 items-center rounded-full transition-colors duration-200 ease-in-out",
                             isAttached
-                              ? "bg-[#7C6EF5]"
-                              : "bg-white/10 group-hover:bg-white/20",
+                              ? "bg-accent-solid"
+                              : "bg-fill-3 group-hover:bg-fill-3",
                           )}
                         >
                           <span
                             className={cn(
-                              "inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow-sm transition duration-200 ease-in-out",
+                              "inline-block h-3.5 w-3.5 transform rounded-full bg-card shadow-sm transition duration-200 ease-in-out",
                               isAttached ? "translate-x-4" : "translate-x-0.5",
                             )}
                           />
@@ -495,14 +495,14 @@ export function CardSidebar({
 
               {canManageWorkspace &&
                 (isCreatingLabelMode ? (
-                  <div className="p-3 border-t border-white/5 space-y-3 bg-[#13131A] mt-1 rounded-b-lg animate-in slide-in-from-top-2 duration-150">
+                  <div className="p-3 border-t border-border space-y-3 bg-surface mt-1 rounded-b-lg animate-in slide-in-from-top-2 duration-150">
                     <input
                       type="text"
                       value={newLabelName}
                       onChange={(e) => setNewLabelName(e.target.value)}
                       placeholder="Label name..."
                       autoFocus
-                      className="w-full bg-[#1A1A24] border border-white/10 focus:border-[#7C6EF5]/50 rounded-md px-3 py-1.5 text-[12px] text-white outline-none placeholder:text-white/30 transition-all"
+                      className="w-full bg-card border border-border-md focus:border-accent/50 rounded-md px-3 py-1.5 text-[12px] text-fg outline-none placeholder:text-fg-muted transition-all"
                     />
                     <div className="flex flex-wrap gap-2">
                       {LABEL_COLORS.map((c) => (
@@ -527,7 +527,7 @@ export function CardSidebar({
                           e.stopPropagation();
                           setIsCreatingLabelMode(false);
                         }}
-                        className="text-[11px] font-medium text-white/40 hover:text-white px-2 py-1 transition-colors"
+                        className="text-[11px] font-medium text-fg-muted hover:text-fg px-2 py-1 transition-colors"
                       >
                         Cancel
                       </button>
@@ -547,7 +547,7 @@ export function CardSidebar({
                           setLabelSearch("");
                         }}
                         disabled={isCreatingLabel}
-                        className="text-[11px] font-medium bg-[#7C6EF5] text-white px-3 py-1 rounded-md hover:bg-[#6B5ED4] transition-colors disabled:opacity-50"
+                        className="text-[11px] font-medium bg-accent-solid text-on-accent px-3 py-1 rounded-md hover:bg-accent-solid/90 transition-colors disabled:opacity-50"
                       >
                         {isCreatingLabel ? "Saving..." : "Create"}
                       </button>
@@ -560,7 +560,7 @@ export function CardSidebar({
                       setNewLabelName(labelSearch);
                       setIsCreatingLabelMode(true);
                     }}
-                    className="w-full flex items-center justify-center gap-2 p-2 mt-1 border-t border-white/5 text-[12px] font-medium text-white/50 hover:text-white hover:bg-white/5 transition-all"
+                    className="w-full flex items-center justify-center gap-2 p-2 mt-1 border-t border-border text-[12px] font-medium text-fg-muted hover:text-fg hover:bg-fill-2 transition-all"
                   >
                     <Plus size={12} />
                     {labelSearch.trim()
@@ -572,34 +572,34 @@ export function CardSidebar({
           </div>
         </div>
 
-        <div className="h-px bg-white/5 my-6" />
+        <div className="h-px bg-fill-2 my-6" />
 
         <div className="space-y-4">
           <div className="space-y-1">
-            <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest">
+            <label className="text-[10px] font-bold text-fg-muted uppercase tracking-widest">
               Created
             </label>
-            <div className="text-[12px] text-white/40 font-medium">
+            <div className="text-[12px] text-fg-muted font-medium">
               {card.createdAt ? formatDate(card.createdAt) : ""}{" "}
               <span className="opacity-50">by</span>{" "}
-              <span className="text-white/70">
+              <span className="text-fg-secondary">
                 {card.creator?.firstName} {card.creator?.lastName}
               </span>
             </div>
           </div>
           <div className="space-y-1">
-            <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest">
+            <label className="text-[10px] font-bold text-fg-muted uppercase tracking-widest">
               Last Updated
             </label>
-            <div className="text-[12px] text-white/40">
+            <div className="text-[12px] text-fg-muted">
               {card.updatedAt ? formatDate(card.updatedAt) : ""}
             </div>
           </div>
           <div className="space-y-1">
-            <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest">
+            <label className="text-[10px] font-bold text-fg-muted uppercase tracking-widest">
               Card ID
             </label>
-            <div className="text-[12px] text-white/30 font-mono mt-1">
+            <div className="text-[12px] text-fg-muted font-mono mt-1">
               {card.id.slice(0, 6).toUpperCase()}
             </div>
           </div>

@@ -76,26 +76,26 @@ export default function AddCardModal({
       >
         <div
           onClick={(e) => e.stopPropagation()}
-          className="w-full max-w-125 bg-[#13131C] border border-white/8 rounded-2xl shadow-2xl relative flex flex-col overflow-hidden animate-in zoom-in-95 duration-200"
+          className="w-full max-w-125 bg-surface border border-border rounded-2xl shadow-2xl relative flex flex-col overflow-hidden animate-in zoom-in-95 duration-200"
         >
           <div className="p-5 pb-0 flex items-start justify-between">
             <div className="flex flex-col gap-0.5">
-              <div className="w-9 h-9 bg-[#7C6EF5]/10 border border-[#7C6EF5]/20 rounded-lg flex items-center justify-center mb-2">
-                <Plus size={18} className="text-[#7C6EF5]" />
+              <div className="w-9 h-9 bg-accent-solid/10 border border-accent/20 rounded-lg flex items-center justify-center mb-2">
+                <Plus size={18} className="text-accent" />
               </div>
-              <h2 className="text-lg font-bold text-white tracking-tight">
+              <h2 className="text-lg font-bold text-fg tracking-tight">
                 Add a card
               </h2>
-              <div className="text-[12px] font-medium text-white/30">
+              <div className="text-[12px] font-medium text-fg-muted">
                 Adding to:{" "}
-                <span className="text-white/60 text-[12px]">{columnName}</span>{" "}
+                <span className="text-fg-secondary text-[12px]">{columnName}</span>{" "}
                 in{" "}
-                <span className="text-white/60 text-[12px]">{projectName}</span>
+                <span className="text-fg-secondary text-[12px]">{projectName}</span>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="text-white/20 hover:text-white transition-colors mt-1"
+              className="text-fg-muted hover:text-fg transition-colors mt-1"
             >
               <X size={18} />
             </button>
@@ -103,8 +103,8 @@ export default function AddCardModal({
 
           <div className="p-5 space-y-4 overflow-y-auto max-h-[60vh] custom-scrollbar">
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest">
-                Title <span className="text-rose-500">*</span>
+              <label className="text-[10px] font-bold text-fg-muted uppercase tracking-widest">
+                Title <span className="text-danger">*</span>
               </label>
               <input
                 autoFocus
@@ -113,12 +113,12 @@ export default function AddCardModal({
                 onChange={(e) =>
                   setFormData({ ...formData, title: e.target.value })
                 }
-                className="w-full bg-white/3 border border-white/8 focus:border-[#7C6EF5]/50 rounded-md px-3.5 py-2.5 text-[13px] text-white placeholder-white/10 outline-none transition-all"
+                className="w-full bg-fill-1 border border-border focus:border-accent/50 rounded-md px-3.5 py-2.5 text-[13px] text-fg placeholder-white/10 outline-none transition-all"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest">
+              <label className="text-[10px] font-bold text-fg-muted uppercase tracking-widest">
                 Description
               </label>
               <textarea
@@ -128,13 +128,13 @@ export default function AddCardModal({
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
                 }
-                className="w-full bg-white/3 border border-white/8 focus:border-[#7C6EF5]/50 rounded-md px-3.5 py-2.5 text-[13px] text-white placeholder-white/10 outline-none transition-all resize-none"
+                className="w-full bg-fill-1 border border-border focus:border-accent/50 rounded-md px-3.5 py-2.5 text-[13px] text-fg placeholder-white/10 outline-none transition-all resize-none"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest">
+                <label className="text-[10px] font-bold text-fg-muted uppercase tracking-widest">
                   Priority
                 </label>
                 <div className="relative">
@@ -146,7 +146,7 @@ export default function AddCardModal({
                         priority: e.target.value as AddCardFormData["priority"],
                       })
                     }
-                    className="w-full bg-white/3 border border-white/8 rounded-md px-3.5 py-2.5 text-[13px] text-white appearance-none outline-none focus:border-[#7C6EF5]/50 scheme-dark [&>option]:bg-[#0D0D12]"
+                    className="w-full bg-fill-1 border border-border rounded-md px-3.5 py-2.5 text-[13px] text-fg appearance-none outline-none focus:border-accent/50 scheme-dark [&>option]:bg-base"
                   >
                     <option value="none">None</option>
                     <option value="low">Low</option>
@@ -156,13 +156,13 @@ export default function AddCardModal({
                   </select>
                   <ChevronDown
                     size={14}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/20 pointer-events-none"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-fg-muted pointer-events-none"
                   />
                 </div>
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest">
+                <label className="text-[10px] font-bold text-fg-muted uppercase tracking-widest">
                   Due date
                 </label>
                 <div className="relative">
@@ -172,27 +172,27 @@ export default function AddCardModal({
                     onChange={(e) =>
                       setFormData({ ...formData, dueDate: e.target.value })
                     }
-                    className="w-full bg-white/3 border border-white/8 rounded-md px-3.5 py-2.5 text-[13px] text-white outline-none focus:border-[#7C6EF5]/50 scheme-dark"
+                    className="w-full bg-fill-1 border border-border rounded-md px-3.5 py-2.5 text-[13px] text-fg outline-none focus:border-accent/50 scheme-dark"
                   />
                 </div>
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest">
+              <label className="text-[10px] font-bold text-fg-muted uppercase tracking-widest">
                 Assignees
               </label>
               <div className="space-y-0.5">
                 {membersLoading ? (
                   <div className="flex items-center justify-center py-5">
-                    <div className="w-4 h-4 border-2 border-[#7C6EF5]/30 border-t-[#7C6EF5] rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-accent/30 border-t-accent rounded-full animate-spin" />
                   </div>
                 ) : workspaceMembers.length > 0 ? (
                   workspaceMembers.map((member) => (
                     <div
                       key={member.id}
                       onClick={() => toggleAssignee(member.userId)}
-                      className="flex items-center justify-between p-1.5 rounded-md hover:bg-white/3 cursor-pointer group transition-colors"
+                      className="flex items-center justify-between p-1.5 rounded-md hover:bg-fill-1 cursor-pointer group transition-colors"
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
                         {member.avatarUrl ? (
@@ -201,19 +201,19 @@ export default function AddCardModal({
                             alt={`${member.firstName} ${member.lastName}`}
                             width={28}
                             height={28}
-                            className="w-7 h-7 rounded-full object-cover border border-white/10 shrink-0"
+                            className="w-7 h-7 rounded-full object-cover border border-border-md shrink-0"
                             referrerPolicy="no-referrer"
                           />
                         ) : (
-                          <div className="w-7 h-7 rounded-full bg-[#7C6EF5]/20 border border-white/10 flex items-center justify-center text-[9px] font-bold text-[#B8B0FF] shrink-0">
+                          <div className="w-7 h-7 rounded-full bg-accent-solid/20 border border-border-md flex items-center justify-center text-[9px] font-bold text-accent shrink-0">
                             {getInitials(member)}
                           </div>
                         )}
                         <div className="flex flex-col min-w-0">
-                          <span className="text-[12px] font-medium text-white/90 truncate">
+                          <span className="text-[12px] font-medium text-fg truncate">
                             {member.firstName} {member.lastName}
                           </span>
-                          <span className="text-[10px] text-white/30 truncate">
+                          <span className="text-[10px] text-fg-muted truncate">
                             {member.email}
                           </span>
                         </div>
@@ -222,8 +222,8 @@ export default function AddCardModal({
                         className={cn(
                           "w-4 h-4 rounded border transition-all flex items-center justify-center mr-1 shrink-0",
                           formData.assignees.includes(member.userId)
-                            ? "bg-[#7C6EF5] border-[#7C6EF5]"
-                            : "border-white/10 bg-transparent group-hover:border-white/20",
+                            ? "bg-accent-solid border-accent"
+                            : "border-border-md bg-transparent group-hover:border-border-lg",
                         )}
                       >
                         {formData.assignees.includes(member.userId) && (
@@ -233,7 +233,7 @@ export default function AddCardModal({
                     </div>
                   ))
                 ) : (
-                  <div className="px-2 py-4 text-center text-[12px] text-white/30">
+                  <div className="px-2 py-4 text-center text-[12px] text-fg-muted">
                     No workspace members found.
                   </div>
                 )}
@@ -241,17 +241,17 @@ export default function AddCardModal({
             </div>
           </div>
 
-          <div className="p-4 bg-[#13131C] border-t border-white/5 flex justify-end gap-2.5">
+          <div className="p-4 bg-surface border-t border-border flex justify-end gap-2.5">
             <button
               onClick={onClose}
-              className="px-4 py-2 text-[13px] font-medium text-white/40 hover:text-white transition-colors"
+              className="px-4 py-2 text-[13px] font-medium text-fg-muted hover:text-fg transition-colors"
             >
               Cancel
             </button>
             <button
               onClick={handleSubmit}
               disabled={!formData.title.trim() || isSubmitting}
-              className="px-5 py-2 bg-[#7C6EF5] hover:bg-[#6b5ee6] disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-[13px] font-bold text-white flex items-center gap-2 shadow-[0_0_15px_rgba(124,110,245,0.2)] transition-all min-w-30 justify-center"
+              className="px-5 py-2 bg-accent-solid hover:bg-accent-solid/90 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-[13px] font-bold text-on-accent flex items-center gap-2 shadow-[0_0_15px_rgba(124,110,245,0.2)] transition-all min-w-30 justify-center"
             >
               {isSubmitting ? (
                 <>

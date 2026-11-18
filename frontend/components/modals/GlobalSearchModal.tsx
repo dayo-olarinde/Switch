@@ -135,22 +135,22 @@ export default function GlobalSearchModal({
   return (
     <div className="fixed inset-0 z-100 flex items-start justify-center pt-[15vh] sm:pt-[20vh]">
       <div
-        className="fixed inset-0 bg-[#0A0A0A]/80 backdrop-blur-sm transition-opacity animate-in fade-in duration-200"
+        className="fixed inset-0 bg-base/80 backdrop-blur-sm transition-opacity animate-in fade-in duration-200"
         onClick={onClose}
       />
 
-      <div className="relative w-full max-w-lg bg-[#13131A] border border-white/10 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-        <div className="flex items-center px-4 border-b border-white/5">
-          <Search size={18} className="text-[#7C6EF5] mr-3 shrink-0" />
+      <div className="relative w-full max-w-lg bg-surface border border-border-md rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+        <div className="flex items-center px-4 border-b border-border">
+          <Search size={18} className="text-accent mr-3 shrink-0" />
           <input
             autoFocus
             type="text"
             placeholder="Search projects, members, or type a command..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full h-14 bg-transparent text-[15px] text-white placeholder:text-white/30 focus:outline-none"
+            className="w-full h-14 bg-transparent text-[15px] text-fg placeholder:text-fg-muted focus:outline-none"
           />
-          <kbd className="hidden sm:inline-flex items-center justify-center h-6 px-2 text-[10px] font-bold text-white/40 bg-white/5 border border-white/10 rounded ml-3">
+          <kbd className="hidden sm:inline-flex items-center justify-center h-6 px-2 text-[10px] font-bold text-fg-muted bg-fill-2 border border-border-md rounded ml-3">
             ESC
           </kbd>
         </div>
@@ -158,16 +158,16 @@ export default function GlobalSearchModal({
         <div className="p-2 max-h-[60vh] overflow-y-auto custom-scrollbar">
           {normalizedQuery === "" ? (
             <div className="py-2">
-              <div className="px-3 pb-2 text-[10px] font-bold text-white/30 uppercase tracking-widest">
+              <div className="px-3 pb-2 text-[10px] font-bold text-fg-muted uppercase tracking-widest">
                 Quick Links
               </div>
               {quickLinks.map((link) => (
                 <button
                   key={link.name}
                   onClick={() => handleNavigate(link.href)}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 text-[13px] font-medium text-white/70 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+                  className="w-full flex items-center gap-3 px-3 py-2.5 text-[13px] font-medium text-fg-secondary hover:text-fg hover:bg-fill-2 rounded-xl transition-all"
                 >
-                  <link.icon size={16} className="text-white/30" /> {link.name}
+                  <link.icon size={16} className="text-fg-muted" /> {link.name}
                 </button>
               ))}
             </div>
@@ -175,7 +175,7 @@ export default function GlobalSearchModal({
             <div className="py-2 space-y-4">
               {filteredProjects.length > 0 && (
                 <div>
-                  <div className="px-3 pb-2 text-[10px] font-bold text-white/30 uppercase tracking-widest">
+                  <div className="px-3 pb-2 text-[10px] font-bold text-fg-muted uppercase tracking-widest">
                     Projects
                   </div>
                   {filteredProjects.map((project) => (
@@ -184,18 +184,18 @@ export default function GlobalSearchModal({
                       onClick={() =>
                         handleNavigate(`/${workspaceSlug}/${project.slug}`)
                       }
-                      className="w-full flex items-center justify-between px-3 py-2.5 text-[13px] font-medium text-white/70 hover:text-white hover:bg-[#7C6EF5]/10 rounded-xl transition-all group"
+                      className="w-full flex items-center justify-between px-3 py-2.5 text-[13px] font-medium text-on-accent hover:text-on-accent hover:bg-accent-solid/90/10 rounded-xl transition-all group"
                     >
                       <div className="flex items-center gap-3">
                         <Package
                           size={16}
-                          className="text-[#7C6EF5]/60 group-hover:text-[#7C6EF5]"
+                          className="text-accent/60 group-hover:text-accent"
                         />{" "}
                         {project.name}
                       </div>
                       <ArrowRight
                         size={14}
-                        className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-[#7C6EF5]"
+                        className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-accent"
                       />
                     </button>
                   ))}
@@ -204,7 +204,7 @@ export default function GlobalSearchModal({
 
               {filteredMembers.length > 0 && (
                 <div>
-                  <div className="px-3 pb-2 text-[10px] font-bold text-white/30 uppercase tracking-widest">
+                  <div className="px-3 pb-2 text-[10px] font-bold text-fg-muted uppercase tracking-widest">
                     Members
                   </div>
                   {filteredMembers.map((member) => {
@@ -219,7 +219,7 @@ export default function GlobalSearchModal({
                             `/${workspaceSlug}?tab=members&search=${member.firstName}`,
                           )
                         }
-                        className="w-full flex items-center justify-between px-3 py-2 text-[13px] font-medium text-white/70 hover:text-white hover:bg-white/5 rounded-xl transition-all group"
+                        className="w-full flex items-center justify-between px-3 py-2 text-[13px] font-medium text-fg-secondary hover:text-fg hover:bg-fill-2 rounded-xl transition-all group"
                       >
                         <div className="flex items-center gap-3">
                           {member.avatarUrl ? (
@@ -228,12 +228,12 @@ export default function GlobalSearchModal({
                               alt={name}
                               width={24}
                               height={24}
-                              className="w-6 h-6 rounded-full object-cover border border-white/10"
+                              className="w-6 h-6 rounded-full object-cover border border-border-md"
                               unoptimized
                             />
                           ) : (
                             <div
-                              className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white border border-white/10"
+                              className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-fg border border-border-md"
                               style={{
                                 backgroundColor: getConsistentColor(member.id),
                               }}
@@ -243,14 +243,14 @@ export default function GlobalSearchModal({
                           )}
                           <div className="flex flex-col items-start">
                             <span>{name}</span>
-                            <span className="text-[11px] text-white/30 font-normal leading-none mt-0.5">
+                            <span className="text-[11px] text-fg-muted font-normal leading-none mt-0.5">
                               {member.email}
                             </span>
                           </div>
                         </div>
                         <ArrowRight
                           size={14}
-                          className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-white/40"
+                          className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-fg-muted"
                         />
                       </button>
                     );
@@ -260,21 +260,21 @@ export default function GlobalSearchModal({
 
               {filteredActions.length > 0 && (
                 <div>
-                  <div className="px-3 pb-2 text-[10px] font-bold text-white/30 uppercase tracking-widest">
+                  <div className="px-3 pb-2 text-[10px] font-bold text-fg-muted uppercase tracking-widest">
                     Commands
                   </div>
                   {filteredActions.map((action) => (
                     <button
                       key={action.id}
                       onClick={() => handleTriggerAction(action.id)}
-                      className={`w-full flex items-center gap-3 px-3 py-2.5 text-[13px] font-medium rounded-xl transition-all group ${action.danger ? "text-rose-400 hover:text-rose-300 hover:bg-rose-500/10" : "text-white/70 hover:text-white hover:bg-white/5"}`}
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 text-[13px] font-medium rounded-xl transition-all group ${action.danger ? "text-danger hover:text-danger hover:bg-danger-dim" : "text-fg-secondary hover:text-fg hover:bg-fill-2"}`}
                     >
                       <action.icon
                         size={16}
                         className={
                           action.danger
-                            ? "text-rose-400/70 group-hover:text-rose-300"
-                            : "text-white/30 group-hover:text-white/70"
+                            ? "text-danger group-hover:text-danger"
+                            : "text-fg-muted group-hover:text-fg-secondary"
                         }
                       />
                       {action.name}
@@ -285,10 +285,10 @@ export default function GlobalSearchModal({
             </div>
           ) : (
             <div className="py-12 flex flex-col items-center justify-center text-center">
-              <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4">
-                <Command size={20} className="text-white/30" />
+              <div className="w-12 h-12 rounded-full bg-fill-2 flex items-center justify-center mb-4">
+                <Command size={20} className="text-fg-muted" />
               </div>
-              <p className="text-[14px] text-white/80 font-semibold">
+              <p className="text-[14px] text-fg font-semibold">
                 No results found
               </p>
             </div>

@@ -17,7 +17,7 @@ export default function FullPageCard() {
   const boardId = board?.id;
   useBoardSocket(boardId ?? "");
 
-  if (isLoading || !board) return <div className="min-h-screen bg-[#0b0e14]" />;
+  if (isLoading || !board) return <div className="min-h-screen bg-base" />;
 
   const columns = board?.columns ?? [];
   const card = columns
@@ -26,13 +26,13 @@ export default function FullPageCard() {
 
   if (!card)
     return (
-      <div className="min-h-screen bg-[#0b0e14] flex items-center justify-center text-white">
+      <div className="min-h-screen bg-base flex items-center justify-center text-fg">
         Card not found
       </div>
     );
 
   return (
-    <div className="min-h-screen bg-[#0b0e14]">
+    <div className="min-h-screen bg-base">
       <CardDetailModal
         isOpen={true}
         onClose={() => router.push(`/${workspaceSlug}/${projectSlug}`)}

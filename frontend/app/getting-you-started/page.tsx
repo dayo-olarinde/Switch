@@ -22,26 +22,26 @@ export default function GettingStartedPage() {
 
   if (isLoading || workspaces.length > 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0E0E14]">
-        <Loader2 size={32} className="animate-spin text-[#7C6EF5]" />
+      <div className="min-h-screen flex items-center justify-center bg-base">
+        <Loader2 size={32} className="animate-spin text-accent" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center bg-[#0E0E14] font-sans text-white selection:bg-[#7C6EF5]/30">
-      <header className="w-full h-14 border-b border-white/5 flex items-center justify-between px-8 bg-[#0A0A0A]/80 backdrop-blur-md">
+    <div className="min-h-screen flex flex-col items-center bg-base font-sans text-on-accent selection:bg-accent-solid/30">
+      <header className="w-full h-14 border-b border-border flex items-center justify-between px-8 bg-base/80 backdrop-blur-md">
         <div className="flex items-center gap-3">
-          <div className="w-6 h-6 rounded-md bg-[#7C6EF5]/80 flex items-center justify-center text-white text-[11px] font-black shadow-[0_0_10px_rgba(124,110,245,0.4)]">
+          <div className="w-6 h-6 rounded-md bg-accent-solid/80 flex items-center justify-center text-on-accent text-[11px] font-black shadow-[0_0_10px_rgba(124,110,245,0.4)]">
             S
           </div>
-          <span className="text-[15px] font-bold text-white tracking-tight">
+          <span className="text-[15px] font-bold text-fg tracking-tight">
             Switch
           </span>
         </div>
         <button
           onClick={() => logout()}
-          className="text-[13px] font-medium text-white/40 hover:text-white transition-colors"
+          className="text-[13px] font-medium text-fg-muted hover:text-fg transition-colors"
         >
           Sign out
         </button>
@@ -50,18 +50,18 @@ export default function GettingStartedPage() {
       <main className="flex-1 w-full max-w-140 flex flex-col items-center justify-center p-8 animate-in fade-in zoom-in-95 duration-500">
         <div className="flex flex-col items-center text-center mb-8">
           <div className="relative mb-8">
-            <div className="w-16 h-16 rounded-3xl bg-[#13131A] border border-white/5 flex items-center justify-center relative z-10 shadow-2xl">
-              <LayoutGrid size={28} className="text-[#7C6EF5]" />
+            <div className="w-16 h-16 rounded-3xl bg-surface border border-border flex items-center justify-center relative z-10 shadow-2xl">
+              <LayoutGrid size={28} className="text-accent" />
             </div>
-            <div className="w-12 h-12 rounded-2xl bg-[#13131A] border border-white/5 flex items-center justify-center absolute -top-4 -left-4 z-0 opacity-50">
-              <LayoutGrid size={20} className="text-[#7C6EF5]/50" />
+            <div className="w-12 h-12 rounded-2xl bg-surface border border-border flex items-center justify-center absolute -top-4 -left-4 z-0 opacity-50">
+              <LayoutGrid size={20} className="text-accent/50" />
             </div>
           </div>
 
-          <h1 className="text-2xl font-bold text-white/90 tracking-tight mb-3">
+          <h1 className="text-2xl font-bold text-fg tracking-tight mb-3">
             Create your first workspace
           </h1>
-          <p className="text-[14px] text-white/40 leading-relaxed max-w-100">
+          <p className="text-[14px] text-fg-muted leading-relaxed max-w-100">
             A workspace brings your team, projects, and boards together in one
             place. Create yours to get started.
           </p>
@@ -69,37 +69,37 @@ export default function GettingStartedPage() {
 
         <button
           onClick={() => setIsModalOpen(true)}
-          className="h-11 px-6 bg-[#7C6EF5] hover:bg-[#6B5ED4] text-white rounded-xl text-[14px] font-semibold transition-all shadow-lg shadow-[#7C6EF5]/20 active:scale-[0.98] flex items-center justify-center gap-2 mb-12"
+          className="h-11 px-6 bg-accent-solid hover:bg-accent-solid/90 text-on-accent rounded-xl text-[14px] font-semibold transition-all shadow-lg shadow-accent active:scale-[0.98] flex items-center justify-center gap-2 mb-12"
         >
           <Plus size={16} />
           Create workspace
         </button>
 
         <div className="w-full space-y-3">
-          <div className="w-full p-5 bg-white/2 border border-white/5 rounded-2xl flex items-start gap-4">
-            <div className="p-2.5 bg-white/5 rounded-xl border border-white/5 shrink-0">
-              <LayoutGrid size={18} className="text-[#a855f7]" />
+          <div className="w-full p-5 bg-fill-1 border border-border rounded-2xl flex items-start gap-4">
+            <div className="p-2.5 bg-fill-2 rounded-xl border border-border shrink-0">
+              <LayoutGrid size={18} className="text-accent" />
             </div>
             <div className="flex flex-col text-left">
-              <span className="text-[14px] font-semibold text-white/90 mb-1">
+              <span className="text-[14px] font-semibold text-fg mb-1">
                 Workspaces hold projects
               </span>
-              <span className="text-[13px] text-white/40 leading-relaxed">
+              <span className="text-[13px] text-fg-muted leading-relaxed">
                 Group related projects — like &quot;Acme Corp&quot; or
                 &quot;Side Projects&quot; — under one workspace.
               </span>
             </div>
           </div>
 
-          <div className="w-full p-5 bg-white/2 border border-white/5 rounded-2xl flex items-start gap-4">
-            <div className="p-2.5 bg-white/5 rounded-xl border border-white/5 shrink-0">
-              <UserPlus size={18} className="text-[#34d399]" />
+          <div className="w-full p-5 bg-fill-1 border border-border rounded-2xl flex items-start gap-4">
+            <div className="p-2.5 bg-fill-2 rounded-xl border border-border shrink-0">
+              <UserPlus size={18} className="text-success" />
             </div>
             <div className="flex flex-col text-left">
-              <span className="text-[14px] font-semibold text-white/90 mb-1">
+              <span className="text-[14px] font-semibold text-fg mb-1">
                 Invite your team
               </span>
-              <span className="text-[13px] text-white/40 leading-relaxed">
+              <span className="text-[13px] text-fg-muted leading-relaxed">
                 Add members and assign roles — Owner, Admin, or Member — per
                 workspace.
               </span>

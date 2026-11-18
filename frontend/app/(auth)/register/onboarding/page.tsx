@@ -85,9 +85,9 @@ function RegisterContent() {
   if (!email) return null;
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#0A0A0A] p-4 font-sans text-white selection:bg-[#7C6EF5]/30">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-base p-4 font-sans text-on-accent selection:bg-accent-solid/30">
       <div className="flex items-center gap-3 mb-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <div className="w-10 h-10 rounded-xl bg-[#7C6EF5] flex items-center justify-center text-white text-lg font-black shadow-lg shadow-[#7C6EF5]/20">
+        <div className="w-10 h-10 rounded-xl bg-accent-solid flex items-center justify-center text-on-accent text-lg font-black shadow-lg shadow-accent">
           <Image
             src="/logo.svg"
             alt="Switch Logo"
@@ -96,56 +96,56 @@ function RegisterContent() {
             priority
           />
         </div>
-        <span className="text-2xl font-bold tracking-tight text-white/90">
+        <span className="text-2xl font-bold tracking-tight text-fg">
           Switch
         </span>
       </div>
 
-      <div className="w-full max-w-105 bg-[#13131A] border border-white/5 rounded-2xl p-8 shadow-2xl animate-in fade-in zoom-in-95 duration-500 ">
+      <div className="w-full max-w-105 bg-surface border border-border rounded-2xl p-8 shadow-2xl animate-in fade-in zoom-in-95 duration-500 ">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-full bg-[#00D287] flex items-center justify-center shadow-sm">
-              <Check size={14} strokeWidth={3} className="text-[#13131A]" />
+            <div className="w-6 h-6 rounded-full bg-success flex items-center justify-center shadow-sm">
+              <Check size={14} strokeWidth={3} className="text-on-accent" />
             </div>
-            <span className="text-[12px] font-bold text-[#00D287]">Email</span>
+            <span className="text-[12px] font-bold text-success">Email</span>
           </div>
 
-          <div className="flex-1 h-px bg-[#00D287]/30 mx-3"></div>
+          <div className="flex-1 h-px bg-success/30 mx-3"></div>
 
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-full bg-[#00D287] flex items-center justify-center shadow-sm">
-              <Check size={14} strokeWidth={3} className="text-[#13131A]" />
+            <div className="w-6 h-6 rounded-full bg-success flex items-center justify-center shadow-sm">
+              <Check size={14} strokeWidth={3} className="text-on-accent" />
             </div>
-            <span className="text-[12px] font-bold text-[#00D287]">Verify</span>
+            <span className="text-[12px] font-bold text-success">Verify</span>
           </div>
 
-          <div className="flex-1 h-px bg-[#00D287]/30 mx-3"></div>
+          <div className="flex-1 h-px bg-success/30 mx-3"></div>
 
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-full bg-[#7C6EF5] flex items-center justify-center text-[11px] font-bold text-white shadow-sm">
+            <div className="w-6 h-6 rounded-full bg-accent-solid flex items-center justify-center text-[11px] font-bold text-on-accent shadow-sm">
               3
             </div>
-            <span className="text-[12px] font-bold text-white/90">Profile</span>
+            <span className="text-[12px] font-bold text-fg">Profile</span>
           </div>
         </div>
 
         <div className="flex flex-col items-center mb-8 text-center">
-          <div className="w-14 h-14 rounded-full bg-[#00D287]/10 border-2 border-[#00D287]/20 flex items-center justify-center mb-4">
-            <Check size={24} strokeWidth={3} className="text-[#00D287]" />
+          <div className="w-14 h-14 rounded-full bg-success/10 border-2 border-success/20 flex items-center justify-center mb-4">
+            <Check size={24} strokeWidth={3} className="text-success" />
           </div>
-          <h1 className="text-xl font-bold text-white/90 tracking-tight mb-2">
+          <h1 className="text-xl font-bold text-fg tracking-tight mb-2">
             Email verified!
           </h1>
-          <p className="text-[13px] text-white/40">
+          <p className="text-[13px] text-fg-muted">
             One last step — set up your profile.
           </p>
         </div>
 
         <form onSubmit={handleSubmit(onFinish)} className="space-y-4">
           <div className="space-y-1.5">
-            <label className="text-[13px] font-medium text-white/60 pl-1 flex items-center gap-1">
+            <label className="text-[13px] font-medium text-fg-secondary pl-1 flex items-center gap-1">
               Full name
-              <span className="text-[#7C6EF5] text-lg leading-none">*</span>
+              <span className="text-accent text-lg leading-none">*</span>
             </label>
             <div className="grid grid-cols-2 gap-3">
               <div className="relative">
@@ -155,10 +155,10 @@ function RegisterContent() {
                   })}
                   type="text"
                   placeholder="First name"
-                  className="w-full h-11 bg-black/20 border border-white/10 rounded-xl px-4 text-[14px] text-white placeholder:text-white/20 focus:outline-none focus:border-[#7C6EF5]/50 focus:ring-4 focus:ring-[#7C6EF5]/10 transition-all shadow-inner"
+                  className="w-full h-11 bg-scrim border border-border-md rounded-xl px-4 text-[14px] text-fg placeholder:text-fg-muted focus:outline-none focus:border-accent/50 focus:ring-4 focus:ring-accent/10 transition-all shadow-inner"
                 />
                 {errors.firstName && (
-                  <p className="absolute -bottom-4 left-1 text-[10px] text-rose-400">
+                  <p className="absolute -bottom-4 left-1 text-[10px] text-danger">
                     {errors.firstName.message}
                   </p>
                 )}
@@ -169,16 +169,16 @@ function RegisterContent() {
                   {...register("lastName")}
                   type="text"
                   placeholder="Last name"
-                  className="w-full h-11 bg-black/20 border border-white/10 rounded-xl px-4 text-[14px] text-white placeholder:text-white/20 focus:outline-none focus:border-[#7C6EF5]/50 focus:ring-4 focus:ring-[#7C6EF5]/10 transition-all shadow-inner"
+                  className="w-full h-11 bg-scrim border border-border-md rounded-xl px-4 text-[14px] text-fg placeholder:text-fg-muted focus:outline-none focus:border-accent/50 focus:ring-4 focus:ring-accent/10 transition-all shadow-inner"
                 />
               </div>
             </div>
           </div>
           <div className="h-2"></div>{" "}
           <div className="space-y-1.5">
-            <label className="text-[13px] font-medium text-white/60 pl-1 flex items-center gap-1">
+            <label className="text-[13px] font-medium text-fg-secondary pl-1 flex items-center gap-1">
               Password
-              <span className="text-[#7C6EF5] text-lg leading-none">*</span>
+              <span className="text-accent text-lg leading-none">*</span>
             </label>
             <div className="relative">
               <input
@@ -191,27 +191,27 @@ function RegisterContent() {
                 })}
                 type={showPassword ? "text" : "password"}
                 placeholder="Min. 8 characters"
-                className="w-full h-11 bg-black/20 border border-white/10 rounded-xl pl-4 pr-10 text-[14px] text-white placeholder:text-white/20 focus:outline-none focus:border-[#7C6EF5]/50 focus:ring-4 focus:ring-[#7C6EF5]/10 transition-all shadow-inner"
+                className="w-full h-11 bg-scrim border border-border-md rounded-xl pl-4 pr-10 text-[14px] text-fg placeholder:text-fg-muted focus:outline-none focus:border-accent/50 focus:ring-4 focus:ring-accent/10 transition-all shadow-inner"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/70 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-fg-muted hover:text-fg-secondary transition-colors"
                 tabIndex={-1}
               >
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
             {errors.password && (
-              <p className="text-[11px] text-rose-400 pl-1">
+              <p className="text-[11px] text-danger pl-1">
                 {errors.password.message}
               </p>
             )}
           </div>
           <div className="space-y-1.5">
-            <label className="text-[13px] font-medium text-white/60 pl-1 flex items-center gap-1">
+            <label className="text-[13px] font-medium text-fg-secondary pl-1 flex items-center gap-1">
               Confirm password
-              <span className="text-[#7C6EF5] text-lg leading-none">*</span>
+              <span className="text-accent text-lg leading-none">*</span>
             </label>
             <div className="relative">
               <input
@@ -221,19 +221,19 @@ function RegisterContent() {
                 })}
                 type={showConfirmPassword ? "text" : "password"}
                 placeholder="Repeat your password"
-                className="w-full h-11 bg-black/20 border border-white/10 rounded-xl pl-4 pr-10 text-[14px] text-white placeholder:text-white/20 focus:outline-none focus:border-[#7C6EF5]/50 focus:ring-4 focus:ring-[#7C6EF5]/10 transition-all shadow-inner"
+                className="w-full h-11 bg-scrim border border-border-md rounded-xl pl-4 pr-10 text-[14px] text-fg placeholder:text-fg-muted focus:outline-none focus:border-accent/50 focus:ring-4 focus:ring-accent/10 transition-all shadow-inner"
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/70 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-fg-muted hover:text-fg-secondary transition-colors"
                 tabIndex={-1}
               >
                 {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
             {errors.confirmPassword && (
-              <p className="text-[11px] text-rose-400 pl-1">
+              <p className="text-[11px] text-danger pl-1">
                 {errors.confirmPassword.message}
               </p>
             )}
@@ -241,7 +241,7 @@ function RegisterContent() {
           <button
             type="submit"
             disabled={isPending || isSuccess || isAccepting}
-            className="w-full h-11 mt-6 bg-[#7C6EF5] hover:bg-[#6B5ED4] disabled:bg-[#7C6EF5]/50 text-white rounded-xl text-[14px] font-semibold transition-all shadow-lg shadow-[#7C6EF5]/20 active:scale-[0.98] flex items-center justify-center gap-2 group"
+            className="w-full h-11 mt-6 bg-accent-solid hover:bg-accent-solid/90 disabled:bg-accent-solid/50 text-on-accent rounded-xl text-[14px] font-semibold transition-all shadow-lg shadow-accent active:scale-[0.98] flex items-center justify-center gap-2 group"
           >
             {isPending || isSuccess ? (
               <>
@@ -262,18 +262,18 @@ function RegisterContent() {
       </div>
 
       <div className="mt-6 text-center animate-in fade-in duration-500 ">
-        <p className="text-[12px] text-white/30">
+        <p className="text-[12px] text-fg-muted">
           By creating an account you agree to our{" "}
           <Link
             href="/terms"
-            className="text-[#7C6EF5] hover:text-[#B8B0FF] transition-colors"
+            className="text-accent hover:text-accent transition-colors"
           >
             Terms of Service
           </Link>{" "}
           and{" "}
           <Link
             href="/privacy"
-            className="text-[#7C6EF5] hover:text-[#B8B0FF] transition-colors"
+            className="text-accent hover:text-accent transition-colors"
           >
             Privacy Policy
           </Link>

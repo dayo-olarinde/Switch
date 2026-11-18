@@ -60,7 +60,7 @@ export function CreateInput({
     return (
       <div
         className={cn(
-          "bg-[#161b22] border border-[#58a6ff] rounded-lg p-2 shadow-lg transition-all",
+          "bg-surface border border-accent rounded-lg p-2 shadow-lg transition-all",
           isColumn ? "w-[320px] shrink-0" : "w-full",
         )}
       >
@@ -74,7 +74,7 @@ export function CreateInput({
           }}
           disabled={loading}
           placeholder={placeholder}
-          className="w-full bg-transparent text-sm text-[#f0f6fc] placeholder:text-[#8b949e] focus:outline-none mb-2"
+          className="w-full bg-transparent text-sm text-fg placeholder:text-fg-secondary focus:outline-none mb-2"
         />
         <div className="flex items-center justify-end gap-2">
           <button
@@ -82,14 +82,14 @@ export function CreateInput({
               setIsEditing(false);
               setValue("");
             }}
-            className="px-2 py-1 text-xs font-medium text-[#8b949e] hover:text-[#c9d1d9] transition-colors"
+            className="px-2 py-1 text-xs font-medium text-fg-secondary hover:text-fg transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={loading || !value.trim()}
-            className="flex items-center justify-center min-w-12.5 px-3 py-1 bg-[#238636] hover:bg-[#2ea043] disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-semibold rounded-md transition-colors"
+            className="flex items-center justify-center min-w-12.5 px-3 py-1 bg-success hover:bg-success disabled:opacity-50 disabled:cursor-not-allowed text-on-accent text-xs font-semibold rounded-md transition-colors"
           >
             {loading ? <Loader2 size={12} className="animate-spin" /> : "Add"}
           </button>
@@ -104,8 +104,8 @@ export function CreateInput({
       className={cn(
         "flex items-center justify-center gap-2 py-2 text-sm font-medium transition-all",
         isColumn
-          ? "w-[320px] shrink-0 h-14 border-2 border-dashed border-[#30363d] hover:border-[#484f58] rounded-xl text-[#8b949e] hover:text-[#c9d1d9] bg-[#0d1117]/50 hover:bg-[#161b22]"
-          : "w-full text-[#8b949e] hover:text-[#f0f6fc] hover:bg-[#1c2128] rounded-md",
+          ? "w-[320px] shrink-0 h-14 border-2 border-dashed border-border-md hover:border-border-md rounded-xl text-fg-secondary hover:text-fg bg-base/50 hover:bg-surface"
+          : "w-full text-fg-secondary hover:text-fg hover:bg-card rounded-md",
       )}
     >
       <Plus size={16} /> {buttonText}

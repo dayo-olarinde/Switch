@@ -37,13 +37,13 @@ export function ActivityTab({ cardId }: { cardId: string }) {
                   <Icon size={14} className={color} />
                 </div>
                 <div className="flex-1 space-y-1">
-                  <div className="text-[13px] text-white/70 leading-relaxed">
-                    <span className="font-bold text-white/90">
+                  <div className="text-[13px] text-fg-secondary leading-relaxed">
+                    <span className="font-bold text-fg">
                       {activity.user?.firstName} {activity.user?.lastName}
                     </span>{" "}
                     {renderActivityText(activity)}
                   </div>
-                  <div className="text-[11px] font-medium text-white/30">
+                  <div className="text-[11px] font-medium text-fg-muted">
                     {formatDistanceToNow(new Date(activity.createdAt), {
                       addSuffix: true,
                     })}
@@ -57,21 +57,21 @@ export function ActivityTab({ cardId }: { cardId: string }) {
             <button
               onClick={() => fetchNextPage()}
               disabled={isFetchingNextPage}
-              className="w-full text-[12px] text-white/40 hover:text-white/60 py-2 transition-colors disabled:opacity-50"
+              className="w-full text-[12px] text-fg-muted hover:text-fg-secondary py-2 transition-colors disabled:opacity-50"
             >
               {isFetchingNextPage ? "Loading..." : "Load more activity"}
             </button>
           )}
 
           {!hasNextPage && (
-            <p className="text-center text-[11px] text-white/20 py-2">
+            <p className="text-center text-[11px] text-fg-muted py-2">
               No more activity
             </p>
           )}
         </>
       ) : (
-        <div className="py-10 text-center border-2 border-white/5 border-dashed rounded-xl bg-white/1">
-          <p className="text-[13px] text-white/40 font-medium">
+        <div className="py-10 text-center border-2 border-border border-dashed rounded-xl bg-fill-1">
+          <p className="text-[13px] text-fg-muted font-medium">
             No activity logged yet.
           </p>
         </div>

@@ -51,34 +51,34 @@ export default function RemoveMemberModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-0">
       <div
-        className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-scrim backdrop-blur-sm transition-opacity"
         onClick={onClose}
       />
 
-      <div className="relative w-full max-w-115 bg-[#151517] border border-[#2a2a2a] rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-115 bg-surface border border-overlay rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         <button
           onClick={onClose}
           disabled={isPending}
-          className="absolute top-4 right-4 text-[#a1a1a1] hover:text-white transition-colors disabled:opacity-50"
+          className="absolute top-4 right-4 text-fg-secondary hover:text-fg transition-colors disabled:opacity-50"
         >
           <X size={18} />
         </button>
 
         <div className="p-6">
-          <div className="w-10 h-10 rounded-xl bg-[#3f1c22] text-[#ef4444] flex items-center justify-center mb-5 border border-[#3f1c22]">
+          <div className="w-10 h-10 rounded-xl bg-danger-dim text-danger flex items-center justify-center mb-5 border border-danger-dim">
             <UserMinus size={20} />
           </div>
 
-          <h2 className="text-xl font-bold text-white mb-1.5 tracking-tight">
+          <h2 className="text-xl font-bold text-fg mb-1.5 tracking-tight">
             Remove member
           </h2>
-          <p className="text-[13px] text-[#8a8a93] mb-6 leading-relaxed">
+          <p className="text-[13px] text-fg-secondary mb-6 leading-relaxed">
             Are you sure you want to remove this member from the workspace?
           </p>
 
-          <div className="bg-[#1C1C1E] border border-[#2a2a2a] rounded-xl p-4 mb-4 flex items-center gap-3">
+          <div className="bg-card border border-overlay rounded-xl p-4 mb-4 flex items-center gap-3">
             {member.avatarUrl ? (
-              <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-[#2a2a2a]">
+              <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-overlay">
                 <Image
                   src={member.avatarUrl}
                   alt={name}
@@ -91,7 +91,7 @@ export default function RemoveMemberModal({
               </div>
             ) : (
               <div
-                className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0"
+                className="w-10 h-10 rounded-full flex items-center justify-center text-fg text-sm font-bold shrink-0"
                 style={{
                   backgroundColor: getConsistentColor(member.id || name),
                 }}
@@ -100,25 +100,25 @@ export default function RemoveMemberModal({
               </div>
             )}
             <div className="flex flex-col min-w-0">
-              <span className="text-sm font-semibold text-white truncate">
+              <span className="text-sm font-semibold text-fg truncate">
                 {name}
               </span>
-              <span className="text-[13px] text-[#8a8a93] truncate mt-0.5">
+              <span className="text-[13px] text-fg-secondary truncate mt-0.5">
                 {email} · {role} · {workspaceName}
               </span>
             </div>
           </div>
 
-          <div className="bg-[#2a1318]/80 border border-[#7f1d1d]/40 rounded-xl p-4 flex gap-3 items-start">
+          <div className="bg-danger-dim/80 border border-danger/40 rounded-xl p-4 flex gap-3 items-start">
             <AlertTriangle
               size={16}
-              className="text-[#ef4444] shrink-0 mt-0.5"
+              className="text-danger shrink-0 mt-0.5"
             />
             <div className="flex flex-col">
-              <span className="text-[13px] font-bold text-[#ef4444] mb-1">
+              <span className="text-[13px] font-bold text-danger mb-1">
                 This can&apos;t be undone
               </span>
-              <p className="text-[13px] text-[#a1a1aa] leading-relaxed">
+              <p className="text-[13px] text-fg-secondary leading-relaxed">
                 {firstName} will lose access to all projects in {workspaceName}{" "}
                 immediately. Their assigned cards will remain but become
                 unassigned.
@@ -130,14 +130,14 @@ export default function RemoveMemberModal({
             <button
               onClick={onClose}
               disabled={isPending}
-              className="px-4 h-10 rounded-lg text-sm font-semibold text-white bg-transparent border border-[#2a2a2a] hover:bg-[#252529] transition-colors disabled:opacity-50"
+              className="px-4 h-10 rounded-lg text-sm font-semibold text-fg bg-transparent border border-overlay hover:bg-overlay transition-colors disabled:opacity-50"
             >
               Cancel
             </button>
             <button
               onClick={() => handleRemove(member.userId)}
               disabled={isPending}
-              className="px-4 h-10 rounded-lg text-sm font-semibold text-[#ef4444] bg-[#3f1c22] border border-[#7f1d1d]/50 hover:bg-[#4c1d28] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="px-4 h-10 rounded-lg text-sm font-semibold text-danger bg-danger-dim border border-danger/50 hover:bg-danger-dim transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
               {isPending ? (
                 <>

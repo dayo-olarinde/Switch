@@ -27,22 +27,22 @@ export const IconPickerModal = memo(
     return (
       <Portal>
         <div
-          className="fixed inset-0 z-9999 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4"
+          className="fixed inset-0 z-9999 flex items-center justify-center bg-scrim backdrop-blur-sm px-4"
           onClick={onClose}
         >
           <div
             onClick={(e) => e.stopPropagation()}
             className={cn(
-              "w-full max-w-[320px] bg-[#0A0A0A] border border-white/8 rounded-2xl shadow-2xl p-5 animate-in zoom-in-95 duration-200",
+              "w-full max-w-[320px] bg-base border border-border rounded-2xl shadow-2xl p-5 animate-in zoom-in-95 duration-200",
               isUpdating && "opacity-50 pointer-events-none",
             )}
           >
             <div className="flex items-center justify-between mb-4 px-1">
-              <h4 className="text-[13px] font-bold text-white uppercase tracking-wider">
+              <h4 className="text-[13px] font-bold text-fg uppercase tracking-wider">
                 Select Icon
               </h4>
               {isUpdating && (
-                <Loader2 size={14} className="animate-spin text-[#7C6EF5]" />
+                <Loader2 size={14} className="animate-spin text-accent" />
               )}
             </div>
             <div className="grid grid-cols-4 gap-2.5">
@@ -54,8 +54,8 @@ export const IconPickerModal = memo(
                   className={cn(
                     "w-full aspect-square rounded-xl flex items-center justify-center transition-all",
                     currentIcon === key
-                      ? "bg-[#7C6EF5] text-white shadow-[0_0_15px_rgba(124,110,245,0.2)]"
-                      : "bg-white/3 text-white/30 hover:text-white hover:bg-white/8",
+                      ? "bg-accent-solid text-on-accent shadow-[0_0_15px_rgba(124,110,245,0.2)]"
+                      : "bg-fill-1 text-on-accent hover:text-on-accent hover:bg-fill-3",
                   )}
                 >
                   <Icon size={20} />

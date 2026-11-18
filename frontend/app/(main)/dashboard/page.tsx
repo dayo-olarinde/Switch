@@ -44,15 +44,15 @@ export default function DashboardPage() {
     return (
       <div className="max-w-6xl mx-auto w-full animate-pulse">
         <div className="mb-8 space-y-3">
-          <div className="h-8 w-64 bg-[#1C1C1E] rounded-md" />
-          <div className="h-4 w-96 bg-[#1C1C1E] rounded-md" />
+          <div className="h-8 w-64 bg-card rounded-md" />
+          <div className="h-4 w-96 bg-card rounded-md" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
           {[...Array(4)].map((_, i) => (
             <div
               key={i}
-              className="bg-[#1c1728]/50 border border-[#262626] rounded-xl p-5 h-29"
+              className="bg-accent-dim border border-border rounded-xl p-5 h-29"
             />
           ))}
         </div>
@@ -60,14 +60,14 @@ export default function DashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <div className="flex items-center justify-between mb-4">
-              <div className="h-5 w-32 bg-[#1C1C1E] rounded-md" />
-              <div className="h-8 w-32 bg-[#1C1C1E] rounded-md" />
+              <div className="h-5 w-32 bg-card rounded-md" />
+              <div className="h-8 w-32 bg-card rounded-md" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[...Array(2)].map((_, i) => (
                 <div
                   key={i}
-                  className="bg-[#131315] border border-[#262626] rounded-xl h-44"
+                  className="bg-surface border border-border rounded-xl h-44"
                 />
               ))}
             </div>
@@ -87,37 +87,37 @@ export default function DashboardPage() {
         ) : (
           <>
             <header className="mb-8">
-              <h1 className="text-3xl font-bold text-white mb-2 tracking-tight">
+              <h1 className="text-3xl font-bold text-fg mb-2 tracking-tight">
                 {greeting}, {user?.firstName || "James"}
               </h1>
-              <p className="text-white/40 text-[13px]">
+              <p className="text-fg-muted text-[13px]">
                 Here&apos;s what&apos;s happening across your workspaces.
               </p>
             </header>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
               <StatCard
-                icon={<LayoutGrid size={16} className="text-[#7C6EF5]" />}
-                iconBg="bg-[#7C6EF5]/10"
+                icon={<LayoutGrid size={16} className="text-accent" />}
+                iconBg="bg-accent-solid/10"
                 title="Workspaces"
                 value={workspaces.length.toString()}
               />
               <StatCard
-                icon={<ListTodo size={16} className="text-emerald-400" />}
-                iconBg="bg-emerald-500/10"
+                icon={<ListTodo size={16} className="text-success" />}
+                iconBg="bg-success-dim"
                 title="Active Projects"
                 value={projects?.count.toString()}
               />
               <StatCard
-                icon={<Layers size={16} className="text-amber-400" />}
-                iconBg="bg-amber-500/10"
+                icon={<Layers size={16} className="text-warning" />}
+                iconBg="bg-warning-dim"
                 title="Open Cards"
                 value={cards?.count.toString()}
                 subtitle="across all boards"
               />
               <StatCard
-                icon={<Users size={16} className="text-rose-400" />}
-                iconBg="bg-rose-500/10"
+                icon={<Users size={16} className="text-danger" />}
+                iconBg="bg-danger-dim"
                 title="Team Members"
                 value={teammates?.count.toString()}
                 subtitle="across workspaces"
@@ -127,7 +127,7 @@ export default function DashboardPage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <div className="lg:col-span-2">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-[13px] font-bold text-white/90 uppercase tracking-wider">
+                  <h2 className="text-[13px] font-bold text-fg uppercase tracking-wider">
                     Your Workspaces
                   </h2>
                 </div>
@@ -145,15 +145,15 @@ export default function DashboardPage() {
 
                   <button
                     onClick={() => setIsAddWorkspaceOpen(true)}
-                    className="bg-white/1 border border-dashed border-white/10 rounded-xl p-5 hover:border-white/20 hover:bg-white/3 transition-all flex flex-col items-center justify-center h-50 group"
+                    className="bg-fill-1 border border-dashed border-border-md rounded-xl p-5 hover:border-border-lg hover:bg-fill-1 transition-all flex flex-col items-center justify-center h-50 group"
                   >
-                    <div className="w-10 h-10 rounded-full bg-white/3 flex items-center justify-center mb-3 group-hover:bg-[#7C6EF5]/10 group-hover:scale-110 transition-all duration-300">
+                    <div className="w-10 h-10 rounded-full bg-fill-1 flex items-center justify-center mb-3 group-hover:bg-accent-solid/90/10 group-hover:scale-110 transition-all duration-300">
                       <Plus
                         size={20}
-                        className="text-white/40 group-hover:text-[#7C6EF5] transition-colors"
+                        className="text-fg-muted group-hover:text-accent transition-colors"
                       />
                     </div>
-                    <span className="text-[13px] font-semibold text-white/40 group-hover:text-white/80 transition-colors">
+                    <span className="text-[13px] font-semibold text-fg-muted group-hover:text-fg transition-colors">
                       Create Workspace
                     </span>
                   </button>
@@ -189,7 +189,7 @@ function StatCard({
   subtitle,
 }: StatCardProps) {
   return (
-    <div className="bg-white/2 border border-white/5 rounded-xl p-5 flex flex-col hover:border-white/10 transition-colors">
+    <div className="bg-fill-1 border border-border rounded-xl p-5 flex flex-col hover:border-border-md transition-colors">
       <div className="flex items-center gap-3 mb-3">
         <div
           className={cn(
@@ -199,19 +199,19 @@ function StatCard({
         >
           {icon}
         </div>
-        <span className="text-xs font-semibold text-white/40">{title}</span>
+        <span className="text-xs font-semibold text-fg-muted">{title}</span>
       </div>
       <div className="mt-auto">
-        <div className="text-2xl font-black text-white/90">{value || "0"}</div>
+        <div className="text-2xl font-black text-fg">{value || "0"}</div>
         {trend ? (
-          <div className="flex items-center gap-1 mt-1 text-[11px] font-medium text-white/40">
-            <span className="flex items-center text-emerald-400 bg-emerald-400/10 px-1 rounded-sm">
+          <div className="flex items-center gap-1 mt-1 text-[11px] font-medium text-fg-muted">
+            <span className="flex items-center text-success bg-success-dim px-1 rounded-sm">
               <ArrowUp size={10} className="mr-0.5" /> {trend}
             </span>
             <span>this month</span>
           </div>
         ) : (
-          <div className="mt-1 text-[11px] font-medium text-white/30">
+          <div className="mt-1 text-[11px] font-medium text-fg-muted">
             {subtitle || "Total"}
           </div>
         )}

@@ -29,7 +29,7 @@ export function Avatar({
       title={`${firstName} ${lastName ?? ""}`.trim()}
       className={cn(
         "relative rounded-full flex items-center justify-center shrink-0",
-        "bg-accent-dim text-accent font-medium border border-[--border-md]",
+        "bg-accent-dim text-accent font-medium border border-border-md",
         sizes[size],
         className,
       )}
@@ -80,7 +80,7 @@ export function AvatarGroup({ users, max = 3, size = "sm" }: AvatarGroupProps) {
         <div
           className={cn(
             "-ml-1.5 rounded-full flex items-center justify-center shrink-0",
-            "bg-overlay text-muted font-medium border border-[--border-md] text-[10px]",
+            "bg-overlay text-muted font-medium border border-border-md text-[10px]",
             sizes[size],
           )}
         >

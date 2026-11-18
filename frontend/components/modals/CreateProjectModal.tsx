@@ -159,7 +159,7 @@ export default function CreateProjectModal({
   return (
     <Portal>
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center bg-[#000000]/80 backdrop-blur-sm px-4 animate-in fade-in duration-200"
+        className="fixed inset-0 z-50 flex items-center justify-center bg-base/80 backdrop-blur-sm px-4 animate-in fade-in duration-200"
         onClick={(e) => {
           e.stopPropagation();
           handleCloseModal();

@@ -9,6 +9,7 @@ import {
   ProjectsListSkeleton,
 } from "@/components/skeletons/LayoutPage";
 import { SocketProvider } from "@/components/SocketProvider";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { FullScreenLoader } from "@/components/ui/FullScreenLoader";
 import { useLogout, useMe } from "@/hooks/useAuth";
 import { useWorkspaceProjects } from "@/hooks/useProjects";
@@ -193,8 +194,8 @@ function MainLayoutContent({ children }: { children: ReactNode }) {
 
   return (
     <SocketProvider>
-      <div className="flex h-screen bg-[#0A0A0A] overflow-hidden text-[#A1A1AA] font-sans selection:bg-[#7C6EF5]/30">
-        <aside className="w-65 shrink-0 bg-[#13131A] border-r border-white/5 flex flex-col z-20">
+      <div className="flex h-screen bg-base overflow-hidden text-fg-secondary font-sans selection:bg-accent-dim">
+        <aside className="w-65 shrink-0 bg-surface border-r border-border flex flex-col z-20">
           <div className="p-4">
             <div className="flex items-center gap-3 mb-6 px-1">
               <Image
@@ -204,7 +205,7 @@ function MainLayoutContent({ children }: { children: ReactNode }) {
                 height={32}
                 priority
               />
-              <span className="text-xl font-bold text-white tracking-tight">
+              <span className="text-xl font-bold text-fg tracking-tight">
                 Switch
               </span>
             </div>
@@ -218,15 +219,15 @@ function MainLayoutContent({ children }: { children: ReactNode }) {
               className={cn(
                 "w-full flex items-center gap-3 p-2.5 rounded-xl transition-all duration-200 border group",
                 isSwitcherOpen
-                  ? "bg-white/5 border-white/10 shadow-sm"
-                  : "bg-white/2 border-white/5 hover:bg-white/4 hover:border-white/10",
+                  ? "bg-fill-2 border-border-md shadow-sm"
+                  : "bg-fill-1 border-border hover:bg-fill-2 hover:border-border-md",
               )}
             >
               <div
                 className={cn(
-                  "w-8 h-8 shrink-0 rounded-lg flex items-center justify-center text-white text-[11px] font-black transition-colors",
+                  "w-8 h-8 shrink-0 rounded-lg flex items-center justify-center text-fg text-[11px] font-black transition-colors",
                   !hasWorkspaces &&
-                    "bg-[#7C6EF5]/10 text-[#7C6EF5] group-hover:bg-[#7C6EF5]/20",
+                    "bg-accent-solid/10 text-accent group-hover:bg-accent-solid/90/20",
                 )}
                 style={
                   hasWorkspaces && activeWorkspace
@@ -248,12 +249,12 @@ function MainLayoutContent({ children }: { children: ReactNode }) {
                 <span
                   className={cn(
                     "text-[13px] font-semibold truncate w-full text-left transition-colors",
-                    hasWorkspaces ? "text-white/90" : "text-[#7C6EF5]",
+                    hasWorkspaces ? "text-fg" : "text-accent",
                   )}
                 >
                   {hasWorkspaces ? activeWorkspace?.name : "New Workspace"}
                 </span>
-                <span className="text-[10px] font-medium text-[#7C6EF5] mt-0.5">
+                <span className="text-[10px] font-medium text-accent mt-0.5">
                   {activeWorkspace?.role}
                 </span>
               </div>
@@ -261,8 +262,8 @@ function MainLayoutContent({ children }: { children: ReactNode }) {
                 <ChevronDown
                   size={14}
                   className={cn(
-                    "text-white/40 shrink-0 ml-auto transition-transform duration-200",
-                    isSwitcherOpen && "rotate-180 text-white/80",
+                    "text-fg-muted shrink-0 ml-auto transition-transform duration-200",
+                    isSwitcherOpen && "rotate-180 text-fg",
                   )}
                 />
               )}
@@ -279,21 +280,21 @@ function MainLayoutContent({ children }: { children: ReactNode }) {
                   className={cn(
                     "flex items-center gap-3 px-3 py-2 text-[13px] font-medium rounded-lg transition-all duration-200 group",
                     isActive
-                      ? "bg-white/5 text-white"
-                      : "text-white/60 hover:bg-white/5 hover:text-white",
+                      ? "bg-fill-2 text-fg"
+                      : "text-fg-secondary hover:bg-fill-2 hover:text-fg",
                   )}
                 >
                   <item.icon
                     size={16}
                     className={
                       isActive
-                        ? "text-white"
-                        : "text-white/40 group-hover:text-white/80"
+                        ? "text-fg"
+                        : "text-fg-muted group-hover:text-fg"
                     }
                   />
                   {item.name}
                   {item.count !== undefined && (
-                    <div className="ml-auto flex items-center justify-center px-2 py-0.5 rounded-full bg-white/5 text-[10px] font-bold text-white/70 min-w-5 border border-white/5">
+                    <div className="ml-auto flex items-center justify-center px-2 py-0.5 rounded-full bg-fill-2 text-[10px] font-bold text-fg-secondary min-w-5 border border-border">
                       {item.count}
                     </div>
                   )}
@@ -304,7 +305,7 @@ function MainLayoutContent({ children }: { children: ReactNode }) {
             {hasWorkspaces && (
               <div className="mt-8 animate-in fade-in duration-300">
                 <div className="flex items-center justify-between mb-2 px-3">
-                  <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">
+                  <span className="text-[10px] font-bold text-fg-muted uppercase tracking-wider">
                     Projects
                   </span>
                 </div>
@@ -322,8 +323,8 @@ function MainLayoutContent({ children }: { children: ReactNode }) {
                           className={cn(
                             "flex items-center gap-3 px-3 py-2 text-[13px] font-medium rounded-lg transition-colors group",
                             isActive
-                              ? "bg-white/5 text-white"
-                              : "text-white/60 hover:bg-white/5 hover:text-white",
+                              ? "bg-fill-2 text-fg"
+                              : "text-fg-secondary hover:bg-fill-2 hover:text-fg",
                           )}
                         >
                           <div
@@ -340,11 +341,11 @@ function MainLayoutContent({ children }: { children: ReactNode }) {
                     {canManageWorkspace && (
                       <button
                         onClick={() => setIsProjectModalOpen(true)}
-                        className="flex items-center gap-3 px-3 py-2 mt-1 w-full text-left text-[13px] font-medium text-white/40 hover:text-white hover:bg-white/5 rounded-lg transition-colors group"
+                        className="flex items-center gap-3 px-3 py-2 mt-1 w-full text-left text-[13px] font-medium text-fg-muted hover:text-fg hover:bg-fill-2 rounded-lg transition-colors group"
                       >
                         <Plus
                           size={14}
-                          className="text-white/30 group-hover:text-white/70 transition-colors"
+                          className="text-fg-muted group-hover:text-fg-secondary transition-colors"
                         />
                         New project
                       </button>
@@ -357,7 +358,7 @@ function MainLayoutContent({ children }: { children: ReactNode }) {
             {hasWorkspaces && (
               <div className="mt-8 animate-in fade-in duration-300">
                 <div className="mb-2 px-3">
-                  <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">
+                  <span className="text-[10px] font-bold text-fg-muted uppercase tracking-wider">
                     Workspace
                   </span>
                 </div>
@@ -366,15 +367,15 @@ function MainLayoutContent({ children }: { children: ReactNode }) {
                     <Link
                       key={item.href}
                       href={item.href}
-                      className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-white/60 hover:bg-white/5 hover:text-white rounded-lg transition-colors group"
+                      className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-fg-secondary hover:bg-fill-2 hover:text-fg rounded-lg transition-colors group"
                     >
                       <item.icon
                         size={16}
-                        className="text-white/40 group-hover:text-white/80 transition-colors"
+                        className="text-fg-muted group-hover:text-fg transition-colors"
                       />
                       {item.name}
                       {item.count !== undefined && (
-                        <div className="ml-auto flex items-center justify-center px-2 py-0.5 rounded-full bg-white/5 text-[10px] font-bold text-white/70 min-w-5 border border-white/5">
+                        <div className="ml-auto flex items-center justify-center px-2 py-0.5 rounded-full bg-fill-2 text-[10px] font-bold text-fg-secondary min-w-5 border border-border">
                           {item.count}
                         </div>
                       )}
@@ -393,18 +394,18 @@ function MainLayoutContent({ children }: { children: ReactNode }) {
               />
             )}
             {isUserDropdownOpen && (
-              <div className="absolute bottom-[calc(100%-8px)] left-4 right-4 bg-[#121212]/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-[0_-8px_30px_rgb(0,0,0,0.5)] z-50 overflow-hidden p-1.5 animate-in fade-in slide-in-from-bottom-2 duration-200">
+              <div className="absolute bottom-[calc(100%-8px)] left-4 right-4 bg-surface/95 backdrop-blur-xl border border-border-md rounded-xl shadow-[0_-8px_30px_rgb(0,0,0,0.5)] z-50 overflow-hidden p-1.5 animate-in fade-in slide-in-from-bottom-2 duration-200">
                 {hasWorkspaces && (
                   <>
                     <Link
                       href={`/${activeWorkspace?.slug}?tab=settings`}
                       onClick={() => setIsUserDropdownOpen(false)}
-                      className="flex items-center gap-3 p-2.5 text-[13px] font-medium text-white/70 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                      className="flex items-center gap-3 p-2.5 text-[13px] font-medium text-fg-secondary hover:text-fg hover:bg-fill-2 rounded-lg transition-colors"
                     >
                       <Settings size={15} />
                       <span>Account Settings</span>
                     </Link>
-                    <div className="h-px bg-white/5 my-1 mx-1" />
+                    <div className="h-px bg-fill-2 my-1 mx-1" />
                   </>
                 )}
                 <button
@@ -412,7 +413,7 @@ function MainLayoutContent({ children }: { children: ReactNode }) {
                     setIsUserDropdownOpen(false);
                     await logout();
                   }}
-                  className="w-full flex items-center gap-3 p-2.5 text-[13px] font-medium text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 rounded-lg transition-colors"
+                  className="w-full flex items-center gap-3 p-2.5 text-[13px] font-medium text-danger hover:text-danger hover:bg-danger-dim rounded-lg transition-colors"
                 >
                   <LogOut size={15} />
                   <span>Sign Out</span>
@@ -423,11 +424,11 @@ function MainLayoutContent({ children }: { children: ReactNode }) {
             <button
               onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
               className={cn(
-                "w-full flex items-center gap-3 p-2 rounded-xl transition-all duration-200 hover:bg-white/5",
-                isUserDropdownOpen && "bg-white/5",
+                "w-full flex items-center gap-3 p-2 rounded-xl transition-all duration-200 hover:bg-fill-2",
+                isUserDropdownOpen && "bg-fill-2",
               )}
             >
-              <div className="w-8 h-8 shrink-0 rounded-full overflow-hidden bg-white/10 flex items-center justify-center text-white text-xs font-bold ring-2 ring-transparent hover:ring-white/10 transition-all">
+              <div className="w-8 h-8 shrink-0 rounded-full overflow-hidden bg-fill-3 flex items-center justify-center text-fg text-xs font-bold ring-2 ring-transparent hover:ring-white/10 transition-all">
                 {user?.avatarUrl ? (
                   <Image
                     src={user.avatarUrl}
@@ -446,10 +447,10 @@ function MainLayoutContent({ children }: { children: ReactNode }) {
                 )}
               </div>
               <div className="flex flex-col items-start overflow-hidden flex-1">
-                <span className="text-[13px] font-semibold text-white/90 truncate w-full text-left">
+                <span className="text-[13px] font-semibold text-fg truncate w-full text-left">
                   {user?.firstName} {user?.lastName}
                 </span>
-                <span className="text-[11px] text-white/40 font-medium truncate w-full text-left">
+                <span className="text-[11px] text-fg-muted font-medium truncate w-full text-left">
                   {user?.email}
                 </span>
               </div>
@@ -458,26 +459,26 @@ function MainLayoutContent({ children }: { children: ReactNode }) {
         </aside>
 
         <div className="flex flex-col flex-1 min-w-0 relative z-10">
-          <header className="h-14 shrink-0 bg-[#0A0A0A]/80 backdrop-blur-md border-b border-white/5 flex items-center px-8 z-20 sticky top-0">
+          <header className="h-14 shrink-0 bg-base/80 backdrop-blur-md border-b border-border flex items-center px-8 z-20 sticky top-0">
             {hasWorkspaces && (
               <div className="flex items-center gap-2 text-[13px] font-medium ml-4 animate-in fade-in duration-300">
-                <span className="text-white/40 hover:text-white/60 transition-colors cursor-pointer">
+                <span className="text-fg-muted hover:text-fg-secondary transition-colors cursor-pointer">
                   {activeWorkspace?.name}
                 </span>
-                <ChevronRight size={14} className="text-white/20" />
-                <span className="text-white/90">{pageLabel}</span>
+                <ChevronRight size={14} className="text-fg-muted" />
+                <span className="text-fg">{pageLabel}</span>
               </div>
             )}
 
             <div className="flex items-center gap-3 ml-auto">
               {projectSlug && onlineUsers.length > 0 && (
-                <div className="flex items-center mr-2 pr-4 border-r border-white/5">
+                <div className="flex items-center mr-2 pr-4 border-r border-border">
                   <div className="flex items-center -space-x-2">
                     {onlineUsers.slice(0, 4).map((u, i) => (
                       <div
                         key={u.userId ?? i}
                         title={`${u.firstName} ${u.lastName}`}
-                        className="w-8 h-8 rounded-full bg-[#1A1A24] border-2 border-[#0A0A0A] flex items-center justify-center relative z-10 hover:z-20 transition-transform hover:scale-110 cursor-default"
+                        className="w-8 h-8 rounded-full bg-card border-2 border-base flex items-center justify-center relative z-10 hover:z-20 transition-transform hover:scale-110 cursor-default"
                       >
                         {u.avatarUrl ? (
                           <Image
@@ -490,16 +491,16 @@ function MainLayoutContent({ children }: { children: ReactNode }) {
                             referrerPolicy="no-referrer"
                           />
                         ) : (
-                          <span className="text-[10px] font-bold text-white">
+                          <span className="text-[10px] font-bold text-fg">
                             {u.firstName?.charAt(0)}
                             {u.lastName?.charAt(0)}
                           </span>
                         )}
-                        <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-[#0A0A0A]" />
+                        <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-success border-2 border-base" />
                       </div>
                     ))}
                     {onlineUsers.length > 4 && (
-                      <div className="w-8 h-8 rounded-full bg-white/5 border-2 border-[#0A0A0A] flex items-center justify-center text-[10px] font-bold text-white/50">
+                      <div className="w-8 h-8 rounded-full bg-fill-2 border-2 border-base flex items-center justify-center text-[10px] font-bold text-fg-muted">
                         +{onlineUsers.length - 4}
                       </div>
                     )}
@@ -508,26 +509,27 @@ function MainLayoutContent({ children }: { children: ReactNode }) {
               )}{" "}
               <button
                 onClick={() => setIsSearchOpen(true)}
-                className="flex items-center gap-2 px-2.5 py-1.5 text-white/40 hover:text-white transition-colors rounded-lg hover:bg-white/5"
+                className="flex items-center gap-2 px-2.5 py-1.5 text-fg-muted hover:text-fg transition-colors rounded-lg hover:bg-fill-2"
               >
                 <Search size={16} />
-                <kbd className="hidden sm:inline-flex text-[10px] font-sans font-medium px-1.5 py-0.5 bg-white/5 rounded text-white/30">
+                <kbd className="hidden sm:inline-flex text-[10px] font-sans font-medium px-1.5 py-0.5 bg-fill-2 rounded text-fg-muted">
                   ⌘K
                 </kbd>
               </button>
+              <ThemeToggle />
               <Link
                 href="/notifications"
-                className="relative p-2 text-white/40 hover:text-white transition-colors rounded-lg hover:bg-white/5"
+                className="relative p-2 text-fg-muted hover:text-fg transition-colors rounded-lg hover:bg-fill-2"
               >
                 <Bell size={16} />
                 {unreadCount > 0 && (
-                  <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500 border border-[#0A0A0A] shadow-[0_0_8px_rgba(239,68,68,0.6)]" />
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-danger border border-base" />
                 )}
               </Link>
             </div>
           </header>
 
-          <main className="flex-1 overflow-y-auto custom-scrollbar bg-[#0E0E14] flex flex-col">
+          <main className="flex-1 overflow-y-auto custom-scrollbar bg-base flex flex-col">
             <div
               className={cn(
                 "w-full flex-1 flex flex-col",

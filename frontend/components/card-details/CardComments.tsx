@@ -19,10 +19,10 @@ import { CommentsSkeleton } from "../skeletons/CardComments";
 
 const getAvatarColor = (name: string) => {
   const colors = [
-    "bg-blue-500/20 text-blue-400",
-    "bg-emerald-500/20 text-emerald-400",
-    "bg-rose-500/20 text-rose-400",
-    "bg-amber-500/20 text-amber-400",
+    "bg-info-dim text-info",
+    "bg-success-dim text-success",
+    "bg-danger-dim text-danger",
+    "bg-warning-dim text-warning",
   ];
   return colors[name.length % colors.length];
 };
@@ -109,14 +109,14 @@ export function CardComments({ cardId }: { cardId: string }) {
                       alt={comment.author.firstName}
                       width={32}
                       height={32}
-                      className="w-8 h-8 rounded-full object-cover border border-white/10"
+                      className="w-8 h-8 rounded-full object-cover border border-border-md"
                       unoptimized
                       referrerPolicy="no-referrer"
                     />
                   ) : (
                     <div
                       className={cn(
-                        "w-8 h-8 rounded-full border border-white/5 flex items-center justify-center text-[11px] font-bold",
+                        "w-8 h-8 rounded-full border border-border flex items-center justify-center text-[11px] font-bold",
                         getAvatarColor(comment.author.firstName),
                       )}
                     >
@@ -128,10 +128,10 @@ export function CardComments({ cardId }: { cardId: string }) {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-2 mb-1.5">
                     <div className="flex items-baseline gap-2">
-                      <span className="text-[14px] font-bold text-white/90">
+                      <span className="text-[14px] font-bold text-fg">
                         {comment.author.firstName} {comment.author.lastName}
                       </span>
-                      <span className="text-[11px] font-medium text-white/40">
+                      <span className="text-[11px] font-medium text-fg-muted">
                         {isOptimistic
                           ? "Posting..."
                           : formatDistanceToNow(new Date(comment.createdAt), {
@@ -139,7 +139,7 @@ export function CardComments({ cardId }: { cardId: string }) {
                             })}
                       </span>
                       {comment.isEdited && !isOptimistic && (
-                        <span className="text-[10px] text-white/30 font-medium">
+                        <span className="text-[10px] text-fg-muted font-medium">
                           (edited)
                         </span>
                       )}
@@ -153,7 +153,7 @@ export function CardComments({ cardId }: { cardId: string }) {
                               setEditingId(comment.id);
                               setEditValue(comment.content);
                             }}
-                            className="p-1.5 text-white/30 hover:text-white hover:bg-white/10 rounded-md transition-all"
+                            className="p-1.5 text-fg-muted hover:text-fg hover:bg-fill-3 rounded-md transition-all"
                             title="Edit comment"
                           >
                             <Pencil size={13} />
@@ -162,7 +162,7 @@ export function CardComments({ cardId }: { cardId: string }) {
                         {canDelete && (
                           <button
                             onClick={() => handleDeleteComment(comment.id)}
-                            className="p-1.5 text-white/30 hover:text-rose-400 hover:bg-rose-500/10 rounded-md transition-all"
+                            className="p-1.5 text-fg-muted hover:text-danger hover:bg-danger-dim rounded-md transition-all"
                             title="Delete comment"
                           >
                             <Trash2 size={13} />
@@ -173,7 +173,7 @@ export function CardComments({ cardId }: { cardId: string }) {
                   </div>
 
                   {isEditing ? (
-                    <div className="flex flex-col rounded-xl border border-[#7C6EF5]/50 bg-[#13131A] ring-1 ring-[#7C6EF5]/20 overflow-hidden mt-2">
+                    <div className="flex flex-col rounded-xl border border-accent/50 bg-surface ring-1 ring-accent/20 overflow-hidden mt-2">
                       <textarea
                         value={editValue}
                         onChange={(e) => setEditValue(e.target.value)}
@@ -183,11 +183,11 @@ export function CardComments({ cardId }: { cardId: string }) {
                           }
                           if (e.key === "Escape") setEditingId(null);
                         }}
-                        className="w-full bg-transparent p-3 text-[13px] text-white/90 placeholder:text-white/30 outline-none resize-none min-h-17.5 custom-scrollbar"
+                        className="w-full bg-transparent p-3 text-[13px] text-fg placeholder:text-fg-muted outline-none resize-none min-h-17.5 custom-scrollbar"
                         autoFocus
                       />
-                      <div className="bg-white/2 border-t border-white/5 p-2 flex justify-between items-center">
-                        <span className="text-[10px] text-white/30 ml-2 hidden sm:inline-block">
+                      <div className="bg-fill-1 border-t border-border p-2 flex justify-between items-center">
+                        <span className="text-[10px] text-fg-muted ml-2 hidden sm:inline-block">
                           <kbd className="font-sans">Ctrl</kbd> +{" "}
                           <kbd className="font-sans">Enter</kbd> to save
                         </span>
@@ -195,7 +195,7 @@ export function CardComments({ cardId }: { cardId: string }) {
                         <div className="flex gap-2 ml-auto">
                           <button
                             onClick={() => setEditingId(null)}
-                            className="px-3 py-1.5 text-white/40 hover:text-white hover:bg-white/5 text-[12px] font-semibold rounded-lg transition-colors"
+                            className="px-3 py-1.5 text-fg-muted hover:text-fg hover:bg-fill-2 text-[12px] font-semibold rounded-lg transition-colors"
                           >
                             Cancel
                           </button>
@@ -204,7 +204,7 @@ export function CardComments({ cardId }: { cardId: string }) {
                             disabled={
                               !editValue.trim() || editValue === comment.content
                             }
-                            className="px-3 py-1.5 bg-[#7C6EF5] hover:bg-[#6B5ED4] disabled:bg-[#7C6EF5]/30 disabled:text-white/30 text-white text-[12px] font-semibold rounded-lg transition-colors"
+                            className="px-3 py-1.5 bg-accent-solid hover:bg-accent-solid/90 disabled:bg-accent-solid/30 disabled:text-on-accent text-on-accent text-[12px] font-semibold rounded-lg transition-colors"
                           >
                             Save
                           </button>
@@ -212,7 +212,7 @@ export function CardComments({ cardId }: { cardId: string }) {
                       </div>
                     </div>
                   ) : (
-                    <div className="bg-[#13131A] border border-white/5 rounded-xl rounded-tl-none p-4 text-[13px] text-white/80 leading-relaxed whitespace-pre-wrap wrap-break-word">
+                    <div className="bg-surface border border-border rounded-xl rounded-tl-none p-4 text-[13px] text-fg leading-relaxed whitespace-pre-wrap wrap-break-word">
                       {comment.content}
                     </div>
                   )}
@@ -221,8 +221,8 @@ export function CardComments({ cardId }: { cardId: string }) {
             );
           })
         ) : (
-          <div className="py-10 text-center border-2 border-white/5 border-dashed rounded-xl bg-white/1">
-            <p className="text-[13px] text-white/40 font-medium">
+          <div className="py-10 text-center border-2 border-border border-dashed rounded-xl bg-fill-1">
+            <p className="text-[13px] text-fg-muted font-medium">
               No comments yet. Start the conversation!
             </p>
           </div>
@@ -237,14 +237,14 @@ export function CardComments({ cardId }: { cardId: string }) {
               alt="You"
               width={32}
               height={32}
-              className="w-8 h-8 rounded-full object-cover border border-white/10"
+              className="w-8 h-8 rounded-full object-cover border border-border-md"
               unoptimized
               referrerPolicy="no-referrer"
             />
           ) : (
             <div
               className={cn(
-                "w-8 h-8 rounded-full border border-white/5 flex items-center justify-center text-[11px] font-bold",
+                "w-8 h-8 rounded-full border border-border flex items-center justify-center text-[11px] font-bold",
                 getAvatarColor(currentUser?.firstName as string),
               )}
             >
@@ -254,7 +254,7 @@ export function CardComments({ cardId }: { cardId: string }) {
           )}
         </div>
 
-        <div className="flex-1 flex flex-col rounded-xl border border-white/10 bg-[#13131A] focus-within:border-[#7C6EF5]/50 focus-within:ring-1 focus-within:ring-[#7C6EF5]/20 transition-all overflow-hidden shadow-sm">
+        <div className="flex-1 flex flex-col rounded-xl border border-border-md bg-surface focus-within:border-accent/50 focus-within:ring-1 focus-within:ring-accent/20 transition-all overflow-hidden shadow-sm">
           <textarea
             value={commentValue}
             onChange={(e) => setCommentValue(e.target.value)}
@@ -264,17 +264,17 @@ export function CardComments({ cardId }: { cardId: string }) {
               }
             }}
             placeholder="Write a comment..."
-            className="w-full bg-transparent p-3 text-[13px] text-white/90 placeholder:text-white/30 outline-none resize-none min-h-20 custom-scrollbar"
+            className="w-full bg-transparent p-3 text-[13px] text-fg placeholder:text-fg-muted outline-none resize-none min-h-20 custom-scrollbar"
           />
           <div className="  p-2 flex justify-between items-center">
-            <span className="text-[10px] text-white/30 ml-2 hidden sm:inline-block">
+            <span className="text-[10px] text-fg-muted ml-2 hidden sm:inline-block">
               <kbd className="font-sans">Ctrl</kbd> +{" "}
               <kbd className="font-sans">Enter</kbd> to send
             </span>
             <button
               onClick={handleSubmit}
               disabled={!commentValue.trim() || isPending}
-              className="px-4 py-1.5 ml-auto bg-[#7C6EF5] hover:bg-[#6B5ED4] disabled:bg-[#7C6EF5]/30 disabled:text-white/30 disabled:cursor-not-allowed text-white text-[12px] font-semibold rounded-lg transition-colors"
+              className="px-4 py-1.5 ml-auto bg-accent-solid hover:bg-accent-solid/90 disabled:bg-accent-solid/30 disabled:text-on-accent disabled:cursor-not-allowed text-on-accent text-[12px] font-semibold rounded-lg transition-colors"
             >
               Comment
             </button>

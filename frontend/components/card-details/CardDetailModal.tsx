@@ -96,11 +96,11 @@ export function CardDetailModalInner({
   return (
     <Portal>
       <div
-        className="fixed inset-0 z-100 flex justify-end bg-black/60 backdrop-blur-sm transition-all"
+        className="fixed inset-0 z-100 flex justify-end bg-scrim backdrop-blur-sm transition-all"
         onClick={onClose}
       >
         <div
-          className="w-full max-w-215 h-full bg-[#0E0E14] shadow-2xl flex flex-col border-l border-white/5 animate-in slide-in-from-right duration-200"
+          className="w-full max-w-215 h-full bg-base shadow-2xl flex flex-col border-l border-border animate-in slide-in-from-right duration-200"
           onClick={(e) => e.stopPropagation()}
         >
           <CardHeader
@@ -113,7 +113,7 @@ export function CardDetailModalInner({
           />
 
           <div className="flex-1 overflow-hidden flex min-h-0">
-            <main className="flex-1 overflow-y-auto custom-scrollbar p-8 min-h-0 bg-[#0E0E14]">
+            <main className="flex-1 overflow-y-auto custom-scrollbar p-8 min-h-0 bg-base">
               <CardTitle
                 title={card.title}
                 priority={card.priority}
@@ -128,8 +128,8 @@ export function CardDetailModalInner({
 
                 <CardAttachments card={card} />
 
-                <section className="pt-4 border-t border-white/5">
-                  <div className="flex items-center gap-6 border-b border-white/5 mb-6">
+                <section className="pt-4 border-t border-border">
+                  <div className="flex items-center gap-6 border-b border-border mb-6">
                     {(["comments", "activity"] as const).map((tab) => (
                       <button
                         key={tab}
@@ -137,18 +137,18 @@ export function CardDetailModalInner({
                         className={cn(
                           "pb-3 text-[13px] font-semibold transition-colors relative flex items-center gap-2",
                           activeTab === tab
-                            ? "text-white"
-                            : "text-white/40 hover:text-white/70",
+                            ? "text-fg"
+                            : "text-fg-muted hover:text-fg-secondary",
                         )}
                       >
                         {tab.charAt(0).toUpperCase() + tab.slice(1)}
                         {tab === "comments" && (
-                          <span className="px-1.5 py-0.5 rounded-full bg-white/10 text-[10px] font-bold text-white/70">
+                          <span className="px-1.5 py-0.5 rounded-full bg-fill-3 text-[10px] font-bold text-fg-secondary">
                             {card.commentCount || 0}
                           </span>
                         )}
                         {activeTab === tab && (
-                          <span className="absolute -bottom-px left-0 right-0 h-0.5 bg-[#7C6EF5] rounded-t-full" />
+                          <span className="absolute -bottom-px left-0 right-0 h-0.5 bg-accent-solid rounded-t-full" />
                         )}
                       </button>
                     ))}

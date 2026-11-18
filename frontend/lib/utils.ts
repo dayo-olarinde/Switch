@@ -30,25 +30,25 @@ export const midpoint = (a: number, b: number) => (a + b) / 2;
 export const PRIORITY_CONFIG = {
   none: {
     label: "None",
-    className: "bg-[--overlay] text-[--text-muted] border border-[--border-md]",
+    className: "bg-overlay text-fg-muted border border-border-md",
   },
   low: {
     label: "Low",
     className:
-      "bg-[--success-dim] text-[--success] border border-[--success-dim]",
+      "bg-success-dim text-success border border-success",
   },
   medium: {
     label: "Medium",
     className:
-      "bg-[--warning-dim] text-[--warning] border border-[--warning-dim]",
+      "bg-warning-dim text-warning border border-warning",
   },
   high: {
     label: "High",
-    className: "bg-[--danger-dim] text-[--danger] border border-[--danger-dim]",
+    className: "bg-danger-dim text-danger border border-danger",
   },
   urgent: {
     label: "Urgent",
-    className: "bg-[--danger-dim] text-[--danger] border border-[--danger-dim]",
+    className: "bg-danger-dim text-danger border border-danger",
   },
 } as const;
 
@@ -70,22 +70,22 @@ export function slugify(text: string): string {
 }
 
 export const LABEL_COLORS = [
-  { hex: "#FF7070", classes: "bg-red-500/10 text-red-400 border-red-500/20" },
+  { hex: "#FF7070", classes: "bg-danger-dim text-danger border-danger" },
   {
     hex: "#4ABA85",
-    classes: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+    classes: "bg-success-dim text-success border-success",
   },
   {
     hex: "#7C6EF5",
-    classes: "bg-violet-500/10 text-violet-400 border-violet-500/20",
+    classes: "bg-accent-dim text-accent border-accent",
   },
   {
     hex: "#E5A23A",
-    classes: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+    classes: "bg-warning-dim text-warning border-warning",
   },
   {
     hex: "#60A5FA",
-    classes: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+    classes: "bg-info-dim text-info border-info",
   },
 ];
 
@@ -121,7 +121,7 @@ export const pickLabelColor = (
 
 export const getLabelClasses = (hex: string) =>
   LABEL_COLORS.find((c) => c.hex === hex)?.classes ??
-  "bg-zinc-500/10 text-zinc-400 border-zinc-500/20";
+  "bg-fill-2 text-fg-muted border-border";
 
 export const getInitials = (text: string) => {
   if (!text.trim()) return "SW";

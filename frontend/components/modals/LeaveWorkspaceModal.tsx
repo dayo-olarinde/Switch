@@ -42,17 +42,17 @@ export default function LeaveWorkspaceModal({
   return (
     <Portal>
       <div
-        className="fixed inset-0 z-9999 flex items-center justify-center bg-black/80 p-4 transition-all animate-in fade-in duration-200 backdrop-blur-sm"
+        className="fixed inset-0 z-9999 flex items-center justify-center bg-scrim p-4 transition-all animate-in fade-in duration-200 backdrop-blur-sm"
         onClick={!isPending ? onClose : undefined}
       >
         <div
-          className="w-full max-w-110 bg-[#111119] border border-white/5 rounded-2xl shadow-2xl flex flex-col p-6 animate-in zoom-in-95 duration-200 relative"
+          className="w-full max-w-110 bg-base border border-border rounded-2xl shadow-2xl flex flex-col p-6 animate-in zoom-in-95 duration-200 relative"
           onClick={(e) => e.stopPropagation()}
         >
           <button
             onClick={onClose}
             disabled={isPending}
-            className="absolute top-5 right-5 p-1.5 text-white/20 hover:text-white hover:bg-white/5 rounded-lg transition-colors disabled:opacity-50"
+            className="absolute top-5 right-5 p-1.5 text-fg-muted hover:text-fg hover:bg-fill-2 rounded-lg transition-colors disabled:opacity-50"
           >
             <X size={18} />
           </button>
@@ -61,8 +61,8 @@ export default function LeaveWorkspaceModal({
             className={cn(
               "w-12 h-12 rounded-xl border flex items-center justify-center mb-5 shrink-0",
               isDangerous
-                ? "bg-rose-500/10 border-rose-500/20 text-rose-500"
-                : "bg-[#7C6EF5]/10 border-[#7C6EF5]/20 text-[#7C6EF5]",
+                ? "bg-danger-dim border-danger text-danger"
+                : "bg-accent-solid/10 border-accent/20 text-accent",
             )}
           >
             {isDangerous ? (
@@ -72,10 +72,10 @@ export default function LeaveWorkspaceModal({
             )}
           </div>
 
-          <h2 className="text-xl font-bold text-white/90 tracking-tight mb-2">
+          <h2 className="text-xl font-bold text-fg tracking-tight mb-2">
             {title}
           </h2>
-          <p className="text-[13px] text-white/50 mb-8 leading-relaxed">
+          <p className="text-[13px] text-fg-muted mb-8 leading-relaxed">
             {description}
           </p>
 
@@ -83,7 +83,7 @@ export default function LeaveWorkspaceModal({
             <button
               onClick={onClose}
               disabled={isPending}
-              className="px-5 py-2.5 bg-[#16161D] hover:bg-[#1A1A24] border border-white/10 hover:border-white/20 text-[13px] font-semibold text-white/70 rounded-xl transition-all disabled:opacity-50"
+              className="px-5 py-2.5 bg-surface hover:bg-card border border-border-md hover:border-border-lg text-[13px] font-semibold text-fg-secondary rounded-xl transition-all disabled:opacity-50"
             >
               Cancel
             </button>
@@ -93,8 +93,8 @@ export default function LeaveWorkspaceModal({
               className={cn(
                 "px-5 py-2.5 text-[13px] font-bold rounded-xl transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed",
                 isDangerous
-                  ? "bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-400"
-                  : "bg-[#7C6EF5] hover:bg-[#6b5ee6] text-white shadow-[0_0_15px_rgba(124,110,245,0.2)]",
+                  ? "bg-danger-dim hover:bg-danger-dim border border-danger text-danger"
+                  : "bg-accent-solid hover:bg-accent-solid/90 text-on-accent shadow-[0_0_15px_rgba(124,110,245,0.2)]",
               )}
             >
               {isPending ? (

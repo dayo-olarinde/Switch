@@ -16,13 +16,13 @@ export const AuthInput = (
 ) => (
   <input
     {...props}
-    className="bg-[#0b0e14] border border-[#30363d] rounded-lg px-4 py-3 flex items-center gap-2 w-full placeholder:text-[#555] focus:bg-white/75 focus:outline-none focus:border-white/20 transition-all text-[14px]"
+    className="bg-base border border-border-md rounded-lg px-4 py-3 flex items-center gap-2 w-full placeholder:text-fg-muted focus:bg-fill-3 focus:outline-none focus:border-border-lg transition-all text-[14px]"
   />
 );
 
 export const AuthCard = ({ children }: { children: React.ReactNode }) => (
-  <div className="min-h-screen bg-[#0b0e14] flex items-center justify-center p-4">
-    <div className="w-full max-w-100 bg-[#11141a] border border-[#1e222b] rounded-lg p-6">
+  <div className="min-h-screen bg-base flex items-center justify-center p-4">
+    <div className="w-full max-w-100 bg-base border border-border rounded-lg p-6">
       <div className="w-full flex flex-col">{children}</div>
     </div>
   </div>
@@ -35,7 +35,7 @@ export const PrimaryButton = ({
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & { loading?: boolean }) => (
   <button
     {...props}
-    className="w-full h-11.5 bg-white text-black font-bold rounded-sm hover:bg-[#e1e1e1] transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-[15px] mt-2 active:scale-[0.98]"
+    className="w-full h-11.5 bg-card text-black font-bold rounded-sm hover:bg-fill-3 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-[15px] mt-2 active:scale-[0.98]"
   >
     {loading ? "Please wait..." : children}
   </button>
@@ -51,16 +51,16 @@ export const SocialButton = ({
     onClick={onClick}
     disabled={disabled}
     className={cn(
-      "w-full h-11.5 bg-black/20 hover:bg-[#1f1f1f]",
-      "border border-white/6 transition-all duration-200",
+      "w-full h-11.5 bg-scrim hover:bg-card",
+      "border border-border transition-all duration-200",
       "flex items-center px-4 mb-2.5 group active:scale-[0.98]",
       "disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100",
     )}
   >
     <div className="w-5 flex justify-center items-center">
-      <Icon className="w-4.5 h-4.5 text-white" />
+      <Icon className="w-4.5 h-4.5 text-fg" />
     </div>
-    <span className="flex-1 text-center font-semibold text-[14px] text-white">
+    <span className="flex-1 text-center font-semibold text-[14px] text-fg">
       {children}
     </span>
   </button>
@@ -68,21 +68,21 @@ export const SocialButton = ({
 
 export const AuthDivider = () => (
   <div className="flex items-center gap-4 w-full my-6">
-    <div className="h-px flex-1 bg-white/15" />
-    <span className="text-[12px] font-bold text-[#555] uppercase tracking-widest">
+    <div className="h-px flex-1 bg-fill-3" />
+    <span className="text-[12px] font-bold text-fg-muted uppercase tracking-widest">
       or use your email
     </span>
-    <div className="h-px flex-1 bg-white/15" />
+    <div className="h-px flex-1 bg-fill-3" />
   </div>
 );
 
 export const AuthFooter = () => (
   <div className="left-0 w-full h-16 flex items-center justify-center">
-    <p className="text-[15px] text-[#a7a7a7]">
+    <p className="text-[15px] text-fg-secondary">
       Already have an account?{" "}
       <Link
         href="/login"
-        className="font-bold text-white hover:underline ml-1 transition-colors"
+        className="font-bold text-fg hover:underline ml-1 transition-colors"
       >
         Log in
       </Link>
@@ -92,7 +92,7 @@ export const AuthFooter = () => (
 
 export const ServerError = ({ message }: { message: string }) => (
   <div>
-    <p className="text-xs text-red-400 text-center font-medium">*{message}</p>
+    <p className="text-xs text-danger text-center font-medium">*{message}</p>
   </div>
 );
 

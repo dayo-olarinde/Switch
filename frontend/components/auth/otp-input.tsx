@@ -60,8 +60,8 @@ export function OtpInput({ value, onChange, length = 6 }: OtpInputProps) {
             "flex-1 h-14 rounded-lg border bg-card text-center text-xl font-medium text-primary",
             "transition-colors duration-150 outline-none",
             value[i]
-              ? "border-[--border-lg] text-accent"
-              : "border-[--border-md]",
+              ? "border-border-lg text-accent"
+              : "border-border-md",
             "focus:border-accent",
           )}
         />
