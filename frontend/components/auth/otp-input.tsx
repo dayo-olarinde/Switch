@@ -1,67 +1,88 @@
 "use client";
 
-import { useRef } from "react";
 import { cn } from "@/lib/utils";
+import { useRef } from "react";
 
 interface OtpInputProps {
   value: string;
   onChange: (value: string) => void;
   length?: number;
+  invalid?: boolean;
+  autoFocus?: boolean;
+  onComplete?: (value: string) => void;
 }
 
-export function OtpInput({ value, onChange, length = 6 }: OtpInputProps) {
+export function OtpInput({
+  value,
+  onChange,
+  length = 6,
+  invalid = false,
+  autoFocus = false,
+  onComplete,
+}: OtpInputProps) {
   const inputs = useRef<(HTMLInputElement | null)[]>([]);
 
-  const handleChange = (index: number, char: string) => {
-    if (!/^\d*$/.test(char)) return; 
+  const commit = (next: string) => {
+    onChange(next);
+    if (next.length === length) onComplete?.(next);
+  };
 
-    const next = value.split("");
-    next[index] = char.slice(-1); 
-    const updated = next.join("").slice(0, length);
-    onChange(updated);
+  const handleChange = (index: number, char: string) => {
+    if (!/^\d*$/.test(char)) return;
+
+    const next = value.padEnd(length, " ").split("");
+    next[index] = char.slice(-1) || " ";
+    commit(next.join("").trimEnd());
 
     if (char && index < length - 1) {
       inputs.current[index + 1]?.focus();
     }
   };
 
-  const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
-    if (e.key === "Backspace" && !value[index] && index > 0) {
+  const handleKeyDown = (index: number, event: React.KeyboardEvent) => {
+    if (event.key === "Backspace" && !value[index] && index > 0) {
       inputs.current[index - 1]?.focus();
     }
   };
 
-  const handlePaste = (e: React.ClipboardEvent) => {
-    e.preventDefault();
-    const pasted = e.clipboardData
+  const handlePaste = (event: React.ClipboardEvent) => {
+    event.preventDefault();
+    const pasted = event.clipboardData
       .getData("text")
       .replace(/\D/g, "")
       .slice(0, length);
-    onChange(pasted);
+    if (!pasted) return;
+
+    commit(pasted);
     inputs.current[Math.min(pasted.length, length - 1)]?.focus();
   };
 
   return (
-    <div className="flex gap-3">
-      {Array.from({ length }).map((_, i) => (
+    <div className="flex gap-2">
+      {Array.from({ length }).map((_, index) => (
         <input
-          key={i}
-          ref={(el) => {
-            inputs.current[i] = el;
+          key={index}
+          ref={(element) => {
+            inputs.current[index] = element;
           }}
           type="text"
           inputMode="numeric"
+          autoComplete={index === 0 ? "one-time-code" : "off"}
+          autoFocus={autoFocus && index === 0}
           maxLength={1}
-          value={value[i] ?? ""}
-          onChange={(e) => handleChange(i, e.target.value)}
-          onKeyDown={(e) => handleKeyDown(i, e)}
+          value={value[index] ?? ""}
+          aria-label={`Digit ${index + 1}`}
+          aria-invalid={invalid || undefined}
+          onChange={(event) => handleChange(index, event.target.value)}
+          onKeyDown={(event) => handleKeyDown(index, event)}
           onPaste={handlePaste}
           className={cn(
-            "flex-1 h-14 rounded-lg border bg-card text-center text-xl font-medium text-primary",
-            "transition-colors duration-150 outline-none",
-            value[i]
-              ? "border-border-lg text-accent"
-              : "border-border-md",
+            "h-11 w-full rounded-lg border bg-fill-1 text-center text-lg font-semibold text-fg transition-colors outline-none",
+            invalid
+              ? "border-danger"
+              : value[index]
+                ? "border-accent"
+                : "border-border-md",
             "focus:border-accent",
           )}
         />

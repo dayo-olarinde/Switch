@@ -1,18 +1,28 @@
 "use client";
 
+import {
+  AuthField,
+  AuthProviderButton,
+  AuthSubmit,
+} from "@/components/auth/auth-fields";
+import {
+  AuthDivider,
+  AuthFooterLink,
+  AuthHeader,
+  AuthShell,
+  AuthSteps,
+} from "@/components/auth/auth-shell";
 import { GithubIcon, GoogleIcon } from "@/components/auth/auth-components";
 import { FullScreenLoader } from "@/components/ui/FullScreenLoader";
+import { FormAlert } from "@/components/ui/feedback";
 import { useInitialiseReg, useMe } from "@/hooks/useAuth";
-import { ArrowRight, Loader2 } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
+import { registerEmailSchema, type RegisterEmailValues } from "@/lib/schemas/auth";
+import { getErrorMessage } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ArrowRight } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-
-interface SignupInitiateRequest {
-  email: string;
-}
 
 function SignupContent() {
   const router = useRouter();
@@ -21,13 +31,17 @@ function SignupContent() {
   const inviteToken = searchParams.get("inviteToken");
 
   const [isRedirecting, setIsRedirecting] = useState(false);
+  const [serverError, setServerError] = useState("");
   const { mutate: sendOtp, isPending, isSuccess } = useInitialiseReg();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignupInitiateRequest>();
+  } = useForm<RegisterEmailValues>({
+    resolver: zodResolver(registerEmailSchema),
+    defaultValues: { email: "" },
+  });
 
   useEffect(() => {
     if (user) {
@@ -39,8 +53,12 @@ function SignupContent() {
     return <FullScreenLoader />;
   }
 
-  const handleSignup = async (data: SignupInitiateRequest) => {
-    sendOtp({ email: data.email, token: inviteToken || "" });
+  const handleSignup = (values: RegisterEmailValues) => {
+    setServerError("");
+    sendOtp(
+      { email: values.email, token: inviteToken || "" },
+      { onError: (error) => setServerError(getErrorMessage(error)) },
+    );
   };
 
   const handleSocialAuth = (provider: "google" | "github") => {
@@ -50,151 +68,69 @@ function SignupContent() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-base p-4 font-sans text-fg selection:bg-accent-dim">
-      <div className="flex items-center gap-3 mb-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <div className="w-10 h-10 rounded-xl bg-accent-solid flex items-center justify-center text-on-accent text-lg font-black shadow-lg shadow-accent">
-          <Image
-            src="/logo.svg"
-            alt="Switch Logo"
-            width={32}
-            height={32}
-            priority
-          />
-        </div>
-        <span className="text-2xl font-bold tracking-tight text-fg">
-          Switch
-        </span>
+    <AuthShell>
+      <AuthSteps current={1} />
+
+      <AuthHeader
+        title="Create your account"
+        description="Start with your work email address. We'll send a verification code."
+      />
+
+      <div className="space-y-2.5">
+        <AuthProviderButton
+          onClick={() => handleSocialAuth("google")}
+          disabled={isRedirecting || isPending || isSuccess}
+          icon={<GoogleIcon />}
+        >
+          Sign up with Google
+        </AuthProviderButton>
+
+        <AuthProviderButton
+          onClick={() => handleSocialAuth("github")}
+          disabled={isRedirecting || isPending || isSuccess}
+          icon={<GithubIcon />}
+        >
+          Sign up with GitHub
+        </AuthProviderButton>
       </div>
 
-      <div className="w-full max-w-105 bg-surface border border-border rounded-2xl p-8 shadow-2xl animate-in fade-in zoom-in-95 duration-500 ">
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-full bg-accent-solid flex items-center justify-center text-[11px] font-bold text-on-accent shadow-sm">
-              1
-            </div>
-            <span className="text-[12px] font-bold text-fg">Email</span>
-          </div>
+      <AuthDivider label="or use email" />
 
-          <div className="flex-1 h-px bg-fill-3 mx-3"></div>
+      <form className="space-y-4" onSubmit={handleSubmit(handleSignup)} noValidate>
+        <AuthField
+          {...register("email")}
+          label="Work email"
+          required
+          type="email"
+          autoComplete="email"
+          placeholder="you@company.com"
+          hint="We'll send a 6-digit code to verify this address."
+          error={errors.email?.message}
+        />
 
-          <div className="flex items-center gap-2 opacity-40">
-            <div className="w-6 h-6 rounded-full border border-border-lg flex items-center justify-center text-[11px] font-bold text-fg">
-              2
-            </div>
-            <span className="text-[12px] font-medium text-fg">Verify</span>
-          </div>
+        {serverError && <FormAlert tone="danger">{serverError}</FormAlert>}
 
-          <div className="flex-1 h-px bg-fill-3 mx-3"></div>
+        <AuthSubmit
+          loading={isPending || isSuccess || isRedirecting}
+          loadingLabel={
+            isRedirecting
+              ? "Redirecting..."
+              : isSuccess
+                ? "Redirecting..."
+                : "Sending code..."
+          }
+        >
+          Continue
+          <ArrowRight size={16} />
+        </AuthSubmit>
+      </form>
 
-          <div className="flex items-center gap-2 opacity-40">
-            <div className="w-6 h-6 rounded-full border border-border-lg flex items-center justify-center text-[11px] font-bold text-fg">
-              3
-            </div>
-            <span className="text-[12px] font-medium text-fg">Profile</span>
-          </div>
-        </div>
-
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-fg tracking-tight mb-2">
-            Create your account
-          </h1>
-          <p className="text-[13px] text-fg-muted leading-relaxed">
-            Start with your work email address. We'll send a verification code.
-          </p>
-        </div>
-
-        <div className="space-y-3 mb-6">
-          <button
-            onClick={() => handleSocialAuth("google")}
-            disabled={isRedirecting || isPending || isSuccess}
-            className="w-full h-11 flex items-center justify-center gap-3 bg-fill-2 hover:bg-fill-3 border border-border rounded-xl text-[14px] font-medium text-fg transition-all group"
-          >
-            <GoogleIcon />
-            Sign up with Google
-          </button>
-
-          <button
-            onClick={() => handleSocialAuth("github")}
-            disabled={isRedirecting || isPending || isSuccess}
-            className="w-full h-11 flex items-center justify-center gap-3 bg-fill-2 hover:bg-fill-3 border border-border rounded-xl text-[14px] font-medium text-fg transition-all group"
-          >
-            <GithubIcon />
-            Sign up with GitHub
-          </button>
-        </div>
-
-        <div className="flex items-center gap-3 mb-6">
-          <div className="flex-1 h-px bg-fill-2"></div>
-          <span className="text-[12px] font-medium text-fg-muted tracking-wide">
-            or use email
-          </span>
-          <div className="flex-1 h-px bg-fill-2"></div>
-        </div>
-
-        <form className="space-y-4" onSubmit={handleSubmit(handleSignup)}>
-          <div className="space-y-1.5">
-            <label className="text-[13px] font-medium text-fg-secondary pl-1 flex items-center gap-1">
-              Work email
-              <span className="text-accent text-lg leading-none">*</span>
-            </label>
-            <input
-              {...register("email", {
-                required: "Email is required",
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: "Invalid email address",
-                },
-              })}
-              type="email"
-              placeholder="you@company.com"
-              className="w-full h-11 bg-scrim border border-border-md rounded-xl px-4 text-[14px] text-fg placeholder:text-fg-muted focus:outline-none focus:border-accent/50 focus:ring-4 focus:ring-accent/10 transition-all shadow-inner"
-            />
-            {errors.email ? (
-              <p className="text-[11px] text-danger pl-1">
-                {errors.email.message}
-              </p>
-            ) : (
-              <p className="text-[11px] text-fg-muted pl-1 pt-0.5">
-                We'll send a 6-digit code to verify this address.
-              </p>
-            )}
-          </div>
-
-          <button
-            type="submit"
-            disabled={isPending || isSuccess}
-            className="w-full h-11 mt-4 bg-accent-solid hover:bg-accent-solid/90 disabled:bg-accent-solid/50 text-on-accent rounded-xl text-[14px] font-semibold transition-all shadow-lg shadow-accent active:scale-[0.98] flex items-center justify-center gap-2 group"
-          >
-            {isPending || isSuccess ? (
-              <>
-                <Loader2 size={16} className="animate-spin" />
-                {isSuccess ? "Redirecting..." : "Sending code..."}{" "}
-              </>
-            ) : (
-              <>
-                Continue
-                <ArrowRight
-                  size={16}
-                  className="transition-transform group-hover:translate-x-1"
-                />
-              </>
-            )}
-          </button>
-        </form>
-      </div>
-
-      <div className="mt-8 animate-in fade-in duration-500">
-        <p className="text-[13px] text-fg-muted">
-          Already have an account?{" "}
-          <Link
-            href="/login"
-            className="text-accent hover:text-accent font-medium transition-colors"
-          >
-            Sign in
-          </Link>
-        </p>
-      </div>
-    </div>
+      <AuthFooterLink
+        prompt="Already have an account?"
+        href="/login"
+        label="Sign in"
+      />
+    </AuthShell>
   );
 }
 

@@ -1,11 +1,12 @@
 "use client";
 
-import { useMe } from "@/hooks/useAuth";
+import { AuthShell, AuthStatus } from "@/components/auth/auth-shell";
+import { FullScreenLoader } from "@/components/ui/FullScreenLoader";
 import { useAcceptInvite, useVerifyInvite } from "@/hooks/useInvitations";
-import { ArrowRight, Loader2, MailOpen, AlertCircle } from "lucide-react";
-import Image from "next/image";
+import { getErrorMessage } from "@/lib/utils";
+import { AlertCircle, Loader2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, Suspense } from "react";
+import { Suspense, useEffect } from "react";
 
 function AcceptInviteContent() {
   const router = useRouter();
@@ -22,7 +23,7 @@ function AcceptInviteContent() {
   const { mutate: acceptInvite, isPending: isAccepting } = useAcceptInvite();
 
   useEffect(() => {
-    if (!token || !inviteDetails || isAccepting) return;
+    if (!token || !inviteDetails) return;
 
     acceptInvite(token, {
       onSuccess: (data) => {
@@ -39,7 +40,7 @@ function AcceptInviteContent() {
         }
       },
     });
-  }, [inviteDetails, token]);
+  }, [inviteDetails, token, acceptInvite, router]);
 
   useEffect(() => {
     if (!token) router.replace("/dashboard");
@@ -47,79 +48,62 @@ function AcceptInviteContent() {
 
   if (!token) return null;
 
-  return (
-    <>
-      <div className="flex items-center gap-3 mb-8">
-        <div className="w-10 h-10 rounded-xl bg-accent-solid flex items-center justify-center text-on-accent text-lg font-black shadow-lg shadow-accent">
-          <Image
-            src="/logo.svg"
-            alt="Switch Logo"
-            width={32}
-            height={32}
-            priority
-          />
-        </div>
-        <span className="text-2xl font-bold tracking-tight text-fg">
-          Switch
-        </span>
+  if (isVerifyError) {
+    return (
+      <AuthStatus
+        tone="danger"
+        icon={<AlertCircle size={24} />}
+        title="Invalid invitation"
+        description={getErrorMessage(verifyError)}
+      >
+        <button
+          type="button"
+          onClick={() => router.push("/login")}
+          className="text-sm font-medium text-accent transition-opacity hover:opacity-85"
+        >
+          Return to login
+        </button>
+      </AuthStatus>
+    );
+  }
+
+  if (isVerifying || !inviteDetails) {
+    return (
+      <div className="flex flex-col items-center py-4">
+        <Loader2 size={28} className="mb-4 animate-spin text-accent" />
+        <p className="text-sm font-medium text-fg-secondary">
+          Verifying invitation...
+        </p>
       </div>
+    );
+  }
 
-      {isVerifying && (
-        <div className="flex flex-col items-center animate-in fade-in duration-300">
-          <Loader2 size={32} className="animate-spin text-accent mb-4" />
-          <p className="text-fg-secondary text-sm font-medium">
-            Verifying invitation...
-          </p>
-        </div>
-      )}
-
-      {isVerifyError && (
-        <div className="w-full max-w-105 bg-surface border border-danger rounded-2xl p-8 text-center animate-in zoom-in-95 duration-300">
-          <AlertCircle size={40} className="text-danger mx-auto mb-4" />
-          <h1 className="text-xl font-bold text-fg mb-2">
-            Invalid Invitation
-          </h1>
-          <p className="text-[13px] text-fg-muted mb-6">
-            {(verifyError as any)?.response?.data?.message ||
-              "This invitation link is invalid or has expired."}
-          </p>
-          <button
-            onClick={() => router.push("/login")}
-            className="text-sm text-accent hover:text-fg transition-colors"
-          >
-            Return to login
-          </button>
-        </div>
-      )}
-
-      {!isVerifying && !isVerifyError && inviteDetails && (
-        <div className="w-full max-w-105 bg-surface border border-border rounded-2xl p-8 shadow-2xl animate-in fade-in zoom-in-95 duration-500">
-          <div className="mt-6 text-center">
-            <button
-              onClick={() => router.push("/dashboard")}
-              className="text-[13px] font-medium text-fg-muted hover:text-fg-secondary transition-colors"
-            >
-              Decline and return to dashboard
-            </button>
-          </div>
-        </div>
-      )}
-    </>
+  return (
+    <div className="flex flex-col items-center py-4 text-center">
+      <Loader2 size={20} className="mb-3 animate-spin text-accent" />
+      <p className="text-sm text-fg-secondary">
+        {isAccepting
+          ? `Joining ${inviteDetails.workspaceName}...`
+          : "Preparing your invitation..."}
+      </p>
+      <button
+        type="button"
+        disabled={isAccepting}
+        onClick={() => router.push("/dashboard")}
+        className="mt-6 text-sm font-medium text-fg-muted transition-colors hover:text-fg-secondary disabled:opacity-50"
+      >
+        Decline and return to dashboard
+      </button>
+    </div>
   );
 }
 
 export default function AcceptInvitePage() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-base p-4 font-sans text-fg selection:bg-accent-dim">
-      <Suspense
-        fallback={
-          <div className="flex items-center justify-center">
-            <Loader2 className="w-8 h-8 text-accent animate-spin" />
-          </div>
-        }
-      >
+    <AuthShell>
+      <Suspense fallback={<FullScreenLoader />}>
         <AcceptInviteContent />
       </Suspense>
-    </div>
+    </AuthShell>
   );
 }

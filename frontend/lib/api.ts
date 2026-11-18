@@ -31,7 +31,12 @@ const processQueue = (error: Error | null) => {
 
 api.interceptors.response.use(
   (response) => response.data?.data ?? response.data,
-  async (error: AxiosError<any>) => {
+  async (
+    error: AxiosError<{
+      message?: string;
+      errors?: Array<{ message?: string }>;
+    }>,
+  ) => {
     const originalRequest = error.config;
     const status = error.response?.status ?? 500;
     const data = error.response?.data;
@@ -58,7 +63,7 @@ api.interceptors.response.use(
       await api.post("/auth/refresh");
       processQueue(null);
       return api(originalRequest);
-    } catch (refreshError) {
+    } catch {
       const err = new Error("Session expired. Please sign in again.");
       processQueue(err);
 

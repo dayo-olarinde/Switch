@@ -1,5 +1,5 @@
-import { FormValues } from "@/app/(auth)/register/onboarding/page";
 import { api } from "@/lib/api";
+import type { FormValues } from "@/lib/schemas/auth";
 import { getErrorMessage } from "@/lib/utils";
 import { useAuthStore } from "@/store/auth.store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -41,18 +41,13 @@ export function useInitialiseReg() {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: ({ email, token }: { email: string; token?: string }) =>
+    mutationFn: ({ email }: { email: string; token?: string }) =>
       api.post("/auth/register/initialise", { email }),
 
     onSuccess: (res, { email, token }) => {
       router.push(
         `/register/verify?email=${encodeURIComponent(email)}&status=${res.status || "success"}${token ? `&inviteToken=${token}` : ""}`,
       );
-    },
-
-    onError: (err) => {
-      const message = getErrorMessage(err);
-      toast.error(message);
     },
   });
 }
@@ -69,11 +64,6 @@ export function useVerifyReg() {
       router.push(
         `/register/onboarding?email=${encodeURIComponent(variables.email)}${variables.token ? `&inviteToken=${variables.token}` : ""}`,
       );
-    },
-
-    onError: (err) => {
-      const message = getErrorMessage(err);
-      toast.error(message);
     },
   });
 }
@@ -101,11 +91,6 @@ export function useCompleteReg() {
       api.patch("/auth/register/onboarding", data),
     onSuccess: () => {
       router.push("/getting-you-started");
-    },
-
-    onError: (err) => {
-      const message = getErrorMessage(err);
-      toast.error(message);
     },
   });
 }
@@ -142,7 +127,7 @@ export function useLogin() {
           router.push(
             `/register/verify?email=${encodeURIComponent(variables.email)}`,
           );
-        } catch (resendErr) {
+        } catch {
           toast.error(
             "Failed to send verification code. Please try signing up again.",
           );
@@ -160,8 +145,6 @@ export function useLogin() {
 
         return;
       }
-
-      toast.error(message);
     },
   });
 }
@@ -206,11 +189,6 @@ export function useForgotPassword() {
       const message = data?.message;
       toast.success(message);
     },
-
-    onError: (err) => {
-      const message = getErrorMessage(err);
-      toast.error(message);
-    },
   });
 }
 
@@ -221,10 +199,6 @@ export function useResetPassword() {
 
     onSuccess: (data) => {
       toast.success(data.message || "Password reset successfully!");
-    },
-    onError: (err) => {
-      const message = getErrorMessage(err);
-      toast.error(message);
     },
   });
 }
