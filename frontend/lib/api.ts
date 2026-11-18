@@ -10,6 +10,20 @@ export const api = axios.create({
 let isRefreshing = false;
 let refreshQueue: Array<(err: Error | null) => void> = [];
 
+const PUBLIC_PAGES = [
+  "/",
+  "/login",
+  "/register",
+  "/forgot-password",
+  "/reset-password",
+  "/invite/accept",
+];
+
+const isPublicPage = (pathname: string) =>
+  PUBLIC_PAGES.some(
+    (page) => pathname === page || pathname.startsWith(`${page}/`),
+  );
+
 const processQueue = (error: Error | null) => {
   refreshQueue.forEach((callback) => callback(error));
   refreshQueue = [];
@@ -48,16 +62,9 @@ api.interceptors.response.use(
       const err = new Error("Session expired. Please sign in again.");
       processQueue(err);
 
-      const authPages = [
-        "/login",
-        "/register",
-        "/forgot-password",
-        "/reset-password",
-      ];
-
       if (
         typeof window !== "undefined" &&
-        !authPages.some((page) => window.location.pathname.startsWith(page))
+        !isPublicPage(window.location.pathname)
       ) {
         window.location.href = "/login";
       }
