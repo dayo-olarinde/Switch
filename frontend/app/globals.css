@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=Geist:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=Geist:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -358,6 +358,27 @@
   --color-foreground: var(--foreground);
   --color-background: var(--background);
 
+  /* marketing surface — resolved from .landing scope */
+  --color-landing-bg: var(--l-bg);
+  --color-landing-inset: var(--l-inset);
+  --color-landing-surface: var(--l-surface);
+  --color-landing-elevated: var(--l-elevated);
+  --color-landing-line: var(--l-line);
+  --color-landing-line-strong: var(--l-line-strong);
+  --color-landing-fg: var(--l-fg);
+  --color-landing-fg-secondary: var(--l-fg-secondary);
+  --color-landing-fg-muted: var(--l-fg-muted);
+  --color-landing-accent: var(--l-accent);
+  --color-landing-accent-soft: var(--l-accent-soft);
+  --color-landing-on-accent: var(--l-on-accent);
+  --color-landing-success: var(--l-success);
+  --color-landing-warning: var(--l-warning);
+  --color-landing-info: var(--l-info);
+
+  --shadow-landing-1: var(--l-shadow-1);
+  --shadow-landing-2: var(--l-shadow-2);
+  --shadow-landing-3: var(--l-shadow-3);
+
   --radius-sm: 8px;
   --radius-md: 10px;
   --radius-lg: 12px;
@@ -390,4 +411,143 @@
 .custom-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
+}
+
+/* ==========================================================
+   MARKETING SURFACE — landing page only
+   Scoped to .landing so the app palette is untouched.
+   Theme switches via [data-landing] on <html>.
+========================================================= */
+
+@layer base {
+  /* browser canvas + native controls follow the landing palette, but only
+     while the landing page is mounted, so app routes stay untouched */
+  html[data-landing="dark"]:has(.landing) {
+    --l-bg: #0b0b0f;
+    background-color: var(--l-bg);
+    color-scheme: dark;
+  }
+
+  html[data-landing="light"]:has(.landing) {
+    --l-bg: #f2f2f5;
+    background-color: var(--l-bg);
+    color-scheme: light;
+  }
+
+  .landing {
+    --l-bg: #0b0b0f;
+    --l-inset: #0e0e14;
+    --l-surface: #13131a;
+    --l-elevated: #1a1a24;
+
+    --l-line: rgba(255, 255, 255, 0.07);
+    --l-line-strong: rgba(255, 255, 255, 0.14);
+
+    --l-fg: #ededf2;
+    --l-fg-secondary: #a0a0b2;
+    --l-fg-muted: #82829a;
+
+    --l-accent: #8f82f9;
+    --l-accent-soft: rgba(143, 130, 249, 0.14);
+    --l-on-accent: #0b0b0f;
+
+    --l-success: #4aba85;
+    --l-warning: #e5a23a;
+    --l-info: #5ba4cf;
+
+    --l-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --l-shadow-2: 0 8px 24px -8px rgba(0, 0, 0, 0.6);
+    --l-shadow-3: 0 24px 64px -16px rgba(0, 0, 0, 0.75);
+
+    --l-grid: rgba(255, 255, 255, 0.035);
+
+    background-color: var(--l-bg);
+    color: var(--l-fg);
+    color-scheme: dark;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  html[data-landing="light"] .landing {
+    --l-bg: #f2f2f5;
+    --l-inset: #fafafc;
+    --l-surface: #ffffff;
+    --l-elevated: #ffffff;
+
+    --l-line: rgba(0, 0, 0, 0.07);
+    --l-line-strong: rgba(0, 0, 0, 0.13);
+
+    --l-fg: #16161a;
+    --l-fg-secondary: #5b5b66;
+    --l-fg-muted: #6b6b76;
+
+    --l-accent: #5b4ee9;
+    --l-accent-soft: rgba(91, 78, 233, 0.1);
+    --l-on-accent: #ffffff;
+
+    --l-success: #18744c;
+    --l-warning: #8a5a09;
+    --l-info: #2a66c4;
+
+    --l-shadow-1:
+      0 1px 3px rgba(16, 16, 24, 0.06), 0 1px 2px rgba(16, 16, 24, 0.04);
+    --l-shadow-2:
+      0 4px 12px -2px rgba(16, 16, 24, 0.08), 0 1px 3px rgba(16, 16, 24, 0.04);
+    --l-shadow-3:
+      0 24px 48px -12px rgba(16, 16, 24, 0.16),
+      0 4px 12px -2px rgba(16, 16, 24, 0.06);
+
+    --l-grid: rgba(0, 0, 0, 0.04);
+
+    color-scheme: light;
+  }
+
+  .landing ::selection {
+    background-color: var(--l-accent-soft);
+    color: var(--l-fg);
+  }
+
+  /* theme icon swap in pure CSS: no hydration mismatch, no state */
+  .landing .theme-icon-sun {
+    display: none;
+  }
+
+  html[data-landing="light"] .landing .theme-icon-sun {
+    display: block;
+  }
+
+  html[data-landing="light"] .landing .theme-icon-moon {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .landing *,
+    .landing *::before,
+    .landing *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer utilities {
+  .landing-grid {
+    background-image:
+      linear-gradient(to right, var(--l-grid) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--l-grid) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  .landing-fade-bottom {
+    mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+  }
+
+  .landing-text-balance {
+    text-wrap: balance;
+  }
+
+  .landing-text-pretty {
+    text-wrap: pretty;
+  }
 }

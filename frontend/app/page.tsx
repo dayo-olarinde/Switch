@@ -1,124 +1,163 @@
 "use client";
 
+import { BoardPreview } from "@/components/landing/BoardPreview";
+import { Features } from "@/components/landing/Features";
+import {
+  LandingThemeScript,
+  ThemeToggle,
+} from "@/components/landing/ThemeToggle";
 import { useMe } from "@/hooks/useAuth";
-import { ArrowRight, LayoutGrid } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+
+const FOCUS_RING =
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-landing-accent focus-visible:ring-offset-2 focus-visible:ring-offset-landing-bg";
 
 export default function MarketingPage() {
   const { data: user, isLoading } = useMe();
 
-  return (
-    <div className="min-h-screen bg-[#0A0A0A] text-white selection:bg-[#7C6EF5]/30 font-sans flex flex-col">
-      <nav className="border-b border-white/5 bg-[#0A0A0A]/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-3">
-              <Image
-                src="/logo.svg"
-                alt="Switch Logo"
-                width={32}
-                height={32}
-                priority
-              />
-              <span className="text-xl font-bold text-white tracking-tight">
-                Switch
-              </span>
-            </div>
+  const primaryHref = user ? "/dashboard" : "/register";
+  const primaryLabel = user ? "Open dashboard" : "Start for free";
 
-            <div className="flex items-center gap-6">
-              {isLoading ? (
-                <div className="w-28 h-9 bg-white/5 rounded-lg animate-pulse" />
-              ) : user ? (
+  return (
+    <div className="landing min-h-screen font-sans">
+      <LandingThemeScript />
+
+      <header className="sticky top-0 z-50 border-b border-landing-line bg-landing-bg/80 backdrop-blur-xl">
+        <div className="mx-auto flex h-16 w-full max-w-6xl items-center gap-4 px-6">
+          <Link href="/" className="flex items-center gap-2.5">
+            <Image
+              src="/logo.svg"
+              alt="Switch"
+              width={28}
+              height={28}
+              priority
+            />
+            <span className="text-base font-semibold tracking-tight text-landing-fg">
+              Switch
+            </span>
+          </Link>
+
+          <nav className="ml-6 hidden items-center gap-6 md:flex">
+            <a
+              href="#features"
+              className="text-sm font-medium text-landing-fg-secondary transition-colors duration-150 hover:text-landing-fg"
+            >
+              Features
+            </a>
+            <a
+              href="#board"
+              className="text-sm font-medium text-landing-fg-secondary transition-colors duration-150 hover:text-landing-fg"
+            >
+              The board
+            </a>
+          </nav>
+
+          <div className="ml-auto flex items-center gap-2">
+            <ThemeToggle />
+
+            {isLoading ? (
+              <div className="h-10 w-28 animate-pulse rounded-sm bg-landing-surface" />
+            ) : user ? (
+              <Link
+                href="/dashboard"
+                className={`inline-flex h-10 items-center gap-1.5 rounded-sm bg-landing-accent px-4 text-sm font-semibold text-landing-on-accent transition-opacity duration-150 hover:opacity-90 ${FOCUS_RING}`}
+              >
+                Dashboard
+                <ArrowRight size={14} />
+              </Link>
+            ) : (
+              <>
                 <Link
-                  href="/dashboard"
-                  className="text-[13px] font-semibold bg-[#7C6EF5] text-white px-4 py-2 rounded-lg hover:bg-[#6B5ED4] transition-all shadow-lg shadow-[#7C6EF5]/20 active:scale-[0.98]"
+                  href="/login"
+                  className={`hidden h-10 items-center rounded-sm px-3 text-sm font-medium text-landing-fg-secondary transition-colors duration-150 hover:text-landing-fg sm:inline-flex ${FOCUS_RING}`}
                 >
-                  Go to Dashboard
+                  Sign in
                 </Link>
-              ) : (
-                <>
-                  <Link
-                    href="/login"
-                    className="text-[13px] font-medium text-white/60 hover:text-white transition-colors"
-                  >
-                    Sign in
-                  </Link>
-                  <Link
-                    href="/register"
-                    className="text-[13px] font-semibold bg-[#7C6EF5] text-white px-4 py-2 rounded-lg hover:bg-[#6B5ED4] transition-all shadow-lg shadow-[#7C6EF5]/20 active:scale-[0.98]"
-                  >
-                    Get Started
-                  </Link>
-                </>
-              )}
-            </div>
+                <Link
+                  href="/register"
+                  className={`inline-flex h-10 items-center gap-1.5 rounded-sm bg-landing-accent px-4 text-sm font-semibold text-landing-on-accent transition-opacity duration-150 hover:opacity-90 ${FOCUS_RING}`}
+                >
+                  Get started
+                  <ArrowRight size={14} />
+                </Link>
+              </>
+            )}
           </div>
         </div>
-      </nav>
+      </header>
 
-      <main className="flex-1 flex flex-col items-center justify-center px-6 text-center max-w-4xl mx-auto w-full animate-in fade-in slide-in-from-bottom-8 duration-700">
-        <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-8 mx-auto shadow-inner">
-          <LayoutGrid size={28} className="text-[#7C6EF5]" />
-        </div>
+      <main>
+        <section className="relative overflow-hidden">
+          <div className="landing-grid pointer-events-none absolute inset-0" />
 
-        <h1 className="text-5xl sm:text-7xl font-extrabold text-white/90 tracking-tight mb-6">
-          Kanban, without <br className="hidden sm:block" />
-          <span className="text-white/40">the clutter.</span>
-        </h1>
+          <div className="relative mx-auto w-full max-w-6xl px-6 pt-20 pb-16 sm:pt-28">
+            <div className="mx-auto max-w-2xl text-center">
+              <span className="inline-flex items-center gap-2 rounded-full border border-landing-line bg-landing-surface px-3 py-1 text-xs font-medium text-landing-fg-secondary">
+                <span className="relative flex size-1.5">
+                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-landing-success opacity-75" />
+                  <span className="relative inline-flex size-1.5 rounded-full bg-landing-success" />
+                </span>
+                Real-time collaboration
+              </span>
 
-        <p className="text-[15px] sm:text-[17px] text-white/40 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
-          A beautifully minimalist project management tool designed for
-          developers who want to focus on writing code, not managing tickets.
-          Keep it simple, keep it moving.
-        </p>
+              <h1 className="landing-text-balance mt-6 text-4xl font-semibold tracking-tight text-landing-fg sm:text-5xl lg:text-6xl lg:leading-[1.05]">
+                Kanban, without the clutter.
+              </h1>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
-          {isLoading ? (
-            <>
-              <div className="w-full sm:w-55 h-14 bg-white/5 rounded-xl animate-pulse" />
-              <div className="w-full sm:w-47.5 h-14 bg-white/5 rounded-xl animate-pulse" />
-            </>
-          ) : user ? (
-            <Link
-              href="/dashboard"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 text-[14px] font-bold rounded-xl text-white bg-[#7C6EF5] hover:bg-[#6B5ED4] transition-all shadow-lg shadow-[#7C6EF5]/20 active:scale-[0.98] group"
-            >
-              Open Dashboard
-              <ArrowRight
-                size={16}
-                className="transition-transform group-hover:translate-x-1"
-              />
-            </Link>
-          ) : (
-            <>
-              <Link
-                href="/register"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 text-[14px] font-bold rounded-xl text-white bg-[#7C6EF5] hover:bg-[#6B5ED4] transition-all shadow-lg shadow-[#7C6EF5]/20 active:scale-[0.98] group"
-              >
-                Start building for free
-                <ArrowRight
-                  size={16}
-                  className="transition-transform group-hover:translate-x-1"
-                />
-              </Link>
+              <p className="landing-text-pretty mx-auto mt-5 max-w-xl text-base leading-relaxed text-landing-fg-secondary sm:text-lg">
+                A deliberately small project management tool for developers who
+                would rather ship than administrate. One board, live presence,
+                and nothing you did not ask for.
+              </p>
 
-              <Link
-                href="/login"
-                className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-[14px] font-bold rounded-xl text-white/70 bg-[#13131A] border border-white/5 hover:bg-white/5 hover:text-white transition-all active:scale-[0.98]"
-              >
-                Sign in to workspace
-              </Link>
-            </>
-          )}
-        </div>
+              <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <Link
+                  href={primaryHref}
+                  className={`group inline-flex h-11 w-full items-center justify-center gap-2 rounded-sm bg-landing-accent px-6 text-sm font-semibold text-landing-on-accent transition-opacity duration-150 hover:opacity-90 sm:w-auto ${FOCUS_RING}`}
+                >
+                  {primaryLabel}
+                  <ArrowRight
+                    size={15}
+                    className="transition-transform duration-200 group-hover:translate-x-0.5"
+                  />
+                </Link>
+
+                {!user && !isLoading && (
+                  <Link
+                    href="/login"
+                    className={`inline-flex h-11 w-full items-center justify-center rounded-sm border border-landing-line bg-landing-surface px-6 text-sm font-semibold text-landing-fg transition-colors duration-150 hover:border-landing-line-strong sm:w-auto ${FOCUS_RING}`}
+                  >
+                    Sign in to workspace
+                  </Link>
+                )}
+              </div>
+
+              <p className="mt-4 text-xs font-medium text-landing-fg-muted">
+                Free while in beta · No credit card
+              </p>
+            </div>
+
+            <div id="board" className="mt-16 sm:mt-20">
+              <BoardPreview />
+            </div>
+          </div>
+        </section>
+
+        <Features />
       </main>
 
-      <footer className="border-t border-white/5 py-8 mt-auto">
-        <div className="max-w-7xl mx-auto px-6 text-center flex items-center justify-center gap-2 text-[12px] text-white/30 font-medium">
-          <span>Designed with simplicity in mind.</span>
-          <span className="w-1 h-1 rounded-full bg-white/20" />
-          <span>Switch © 2026</span>
+      <footer className="border-t border-landing-line">
+        <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-3 px-6 py-8 sm:flex-row">
+          <div className="flex items-center gap-2.5">
+            <Image src="/logo.svg" alt="" width={20} height={20} />
+            <span className="text-sm font-semibold text-landing-fg">Switch</span>
+          </div>
+
+          <p className="text-xs font-medium text-landing-fg-muted">
+            Designed with simplicity in mind · Switch © 2026
+          </p>
         </div>
       </footer>
     </div>
