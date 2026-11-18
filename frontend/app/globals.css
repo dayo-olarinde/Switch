@@ -338,10 +338,6 @@
     color: var(--accent);
   }
 
-  .bg-accent {
-    background: var(--accent-solid);
-  }
-
   .bg-accent-dim {
     background: var(--accent-dim);
   }

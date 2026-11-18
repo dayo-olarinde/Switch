@@ -57,7 +57,7 @@ export default function MarketingPage() {
             ) : user ? (
               <Link
                 href="/dashboard"
-                className={`inline-flex h-10 items-center gap-1.5 rounded-sm bg-accent px-4 text-sm font-semibold text-on-accent transition-opacity duration-150 hover:opacity-90 ${FOCUS_RING}`}
+                className={`inline-flex h-10 items-center gap-1.5 rounded-sm bg-accent-solid px-4 text-sm font-semibold text-on-accent transition-opacity duration-150 hover:opacity-90 ${FOCUS_RING}`}
               >
                 Dashboard
                 <ArrowRight size={14} />
@@ -72,7 +72,7 @@ export default function MarketingPage() {
                 </Link>
                 <Link
                   href="/register"
-                  className={`inline-flex h-10 items-center gap-1.5 rounded-sm bg-accent px-4 text-sm font-semibold text-on-accent transition-opacity duration-150 hover:opacity-90 ${FOCUS_RING}`}
+                  className={`inline-flex h-10 items-center gap-1.5 rounded-sm bg-accent-solid px-4 text-sm font-semibold text-on-accent transition-opacity duration-150 hover:opacity-90 ${FOCUS_RING}`}
                 >
                   Get started
                   <ArrowRight size={14} />
@@ -89,15 +89,7 @@ export default function MarketingPage() {
 
           <div className="relative mx-auto w-full max-w-6xl px-6 pt-20 pb-16 sm:pt-28">
             <div className="mx-auto max-w-2xl text-center">
-              <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-fg-secondary">
-                <span className="relative flex size-1.5">
-                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-success opacity-75" />
-                  <span className="relative inline-flex size-1.5 rounded-full bg-success" />
-                </span>
-                Real-time collaboration
-              </span>
-
-              <h1 className="landing-text-balance mt-6 text-4xl font-semibold tracking-tight text-fg sm:text-5xl lg:text-6xl lg:leading-[1.05]">
+              <h1 className="landing-text-balance text-4xl font-semibold tracking-tight text-fg sm:text-5xl lg:text-6xl lg:leading-[1.05]">
                 Kanban, without the clutter.
               </h1>
 
@@ -110,7 +102,7 @@ export default function MarketingPage() {
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <Link
                   href={primaryHref}
-                  className={`group inline-flex h-11 w-full items-center justify-center gap-2 rounded-sm bg-accent px-6 text-sm font-semibold text-on-accent transition-opacity duration-150 hover:opacity-90 sm:w-auto ${FOCUS_RING}`}
+                  className={`group inline-flex h-11 w-full items-center justify-center gap-2 rounded-sm bg-accent-solid px-6 text-sm font-semibold text-on-accent transition-opacity duration-150 hover:opacity-90 sm:w-auto ${FOCUS_RING}`}
                 >
                   {primaryLabel}
                   <ArrowRight

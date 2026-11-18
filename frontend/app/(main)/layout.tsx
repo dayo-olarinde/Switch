@@ -227,7 +227,7 @@ function MainLayoutContent({ children }: { children: ReactNode }) {
                 className={cn(
                   "w-8 h-8 shrink-0 rounded-lg flex items-center justify-center text-fg text-[11px] font-black transition-colors",
                   !hasWorkspaces &&
-                    "bg-accent-solid/10 text-accent group-hover:bg-accent-solid/90/20",
+                    "bg-accent-solid/10 text-accent group-hover:bg-accent-dim",
                 )}
                 style={
                   hasWorkspaces && activeWorkspace

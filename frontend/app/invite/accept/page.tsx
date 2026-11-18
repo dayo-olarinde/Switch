@@ -110,7 +110,7 @@ function AcceptInviteContent() {
 
 export default function AcceptInvitePage() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-base p-4 font-sans text-on-accent selection:bg-accent-solid/30">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-base p-4 font-sans text-fg selection:bg-accent-dim">
       <Suspense
         fallback={
           <div className="flex items-center justify-center">

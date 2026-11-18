@@ -143,7 +143,7 @@ function Card({
         <div className="mt-3">
           <div className="h-1 w-full overflow-hidden rounded-full bg-border">
             <div
-              className="h-full rounded-full bg-accent"
+              className="h-full rounded-full bg-accent-solid"
               style={{ width: `${(done / total) * 100}%` }}
             />
           </div>
@@ -192,7 +192,7 @@ export function BoardPreview() {
       <div className="flex">
         <aside className="hidden w-40 shrink-0 border-r border-border bg-card p-3 sm:block">
           <div className="mb-4 flex items-center gap-2 px-1">
-            <span className="flex size-5 items-center justify-center rounded-sm bg-accent text-xs font-bold text-on-accent">
+            <span className="flex size-5 items-center justify-center rounded-sm bg-accent-solid text-xs font-bold text-on-accent">
               A
             </span>
             <span className="text-xs font-semibold text-fg">Atlas</span>
@@ -231,7 +231,7 @@ export function BoardPreview() {
                 <span
                   className={cn(
                     "size-1.5 rounded-full",
-                    i === 0 ? "bg-accent" : "bg-border-md",
+                    i === 0 ? "bg-accent-solid" : "bg-border-md",
                   )}
                 />
                 {sprint}

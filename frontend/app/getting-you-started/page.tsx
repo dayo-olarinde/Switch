@@ -29,7 +29,7 @@ export default function GettingStartedPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center bg-base font-sans text-on-accent selection:bg-accent-solid/30">
+    <div className="min-h-screen flex flex-col items-center bg-base font-sans text-fg selection:bg-accent-dim">
       <header className="w-full h-14 border-b border-border flex items-center justify-between px-8 bg-base/80 backdrop-blur-md">
         <div className="flex items-center gap-3">
           <div className="w-6 h-6 rounded-md bg-accent-solid/80 flex items-center justify-center text-on-accent text-[11px] font-black shadow-[0_0_10px_rgba(124,110,245,0.4)]">

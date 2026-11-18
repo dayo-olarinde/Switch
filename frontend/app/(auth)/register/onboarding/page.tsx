@@ -85,7 +85,7 @@ function RegisterContent() {
   if (!email) return null;
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-base p-4 font-sans text-on-accent selection:bg-accent-solid/30">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-base p-4 font-sans text-fg selection:bg-accent-dim">
       <div className="flex items-center gap-3 mb-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
         <div className="w-10 h-10 rounded-xl bg-accent-solid flex items-center justify-center text-on-accent text-lg font-black shadow-lg shadow-accent">
           <Image
