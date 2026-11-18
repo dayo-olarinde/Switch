@@ -1,6 +1,6 @@
 "use client";
 
-import { Portal } from "@/components/ui/Portal";
+import { DialogShell } from "@/components/ui/dialog-shell";
 import {
   useClearColumncards,
   useDeleteColumn,
@@ -10,7 +10,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useBoardStore } from "@/store/board.store";
 import { BoardColumn } from "@/types/board.types";
-import { ChevronDown, Loader2, PanelRightClose, X } from "lucide-react";
+import { ChevronDown, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -37,36 +37,26 @@ export default function DeleteColumnModal({
     useDeleteColumn();
   const { mutateAsync: clearCards, isPending: isDeletingCards } =
     useClearColumncards();
-  const { data: apiColumn, isLoading } = useGetColumn(column.id);
+  const { data: apiColumn } = useGetColumn(column.id);
 
   const availableColumns = board?.columns.filter(
     (c) => c.id !== column?.id,
   ) as BoardColumn[];
 
-  useEffect(() => {
-    if (availableColumns.length > 0 && !targetColumnId) {
-      setTargetColumnId(availableColumns[0].id);
-    }
-  }, [availableColumns, targetColumnId]);
+  const resolvedTargetId =
+    targetColumnId || availableColumns?.[0]?.id || "";
 
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-      setTimeout(() => setAction("move"), 200);
+    if (!isOpen) {
+      const timer = setTimeout(() => setAction("move"), 200);
+      return () => clearTimeout(timer);
     }
-    return () => {
-      document.body.style.overflow = "unset";
-    };
   }, [isOpen]);
-
-  if (!isOpen) return null;
 
   const handleConfirm = async () => {
     try {
       if (action === "move") {
-        await moveCards({ columnId: column.id, targetColumnId });
+        await moveCards({ columnId: column.id, targetColumnId: resolvedTargetId });
       } else if (action === "delete") {
         await clearCards(column.id);
       }
@@ -80,184 +70,174 @@ export default function DeleteColumnModal({
       );
 
       onClose();
-    } catch (error: any) {
+    } catch {
       toast.error("Failed to perform this action. Please try again.");
     }
   };
 
+  const isBusy = isDeletingCards || isDeletingCol || isMovingCards;
+
   return (
-    <Portal>
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-base/80 backdrop-blur-sm px-4 animate-in fade-in duration-200">
-        <div className="relative flex w-full max-w-110 flex-col rounded-2xl border border-border bg-surface shadow-2xl animate-in zoom-in-95 duration-200">
+    <DialogShell
+      open={isOpen}
+      onClose={onClose}
+      title="Delete column"
+      description="Choose what happens to the cards in this column before deleting."
+      footer={
+        <>
           <button
+            type="button"
             onClick={onClose}
-            disabled={isDeletingCards || isDeletingCol || isMovingCards}
-            className="absolute top-4 right-4 text-fg-muted hover:text-fg transition-colors disabled:opacity-50"
+            disabled={isBusy}
+            className="h-10 rounded-lg border border-border-md px-4 text-sm font-medium text-fg transition-colors hover:bg-fill-2 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none disabled:opacity-50"
           >
-            <X size={18} />
+            Cancel
           </button>
-
-          <div className="p-6">
-            <div className="w-10 h-10 rounded-xl bg-danger-dim border border-danger text-danger flex items-center justify-center mb-5">
-              <PanelRightClose size={20} />
-            </div>
-
-            <h2 className="text-xl font-bold text-fg mb-1.5 tracking-tight">
-              Delete column
-            </h2>
-            <p className="text-[13px] text-fg-muted leading-relaxed mb-6">
-              Choose what happens to the cards in this column before deleting.
-            </p>
-
-            <div className="flex items-center gap-3 p-3.5 rounded-xl border border-border bg-fill-1 mb-6">
-              <div className="flex flex-col">
-                <span className="text-[13px] font-semibold text-fg">
-                  {column.name}
-                </span>
-                <span className="text-[12px] text-fg-muted font-medium">
-                  {apiColumn?.cardCount}{" "}
-                  {apiColumn?.cardCount === 1 ? "card" : "cards"} inside
-                </span>
-              </div>
-            </div>
-
-            <div className="space-y-3 mb-6">
-              <label className="text-[12px] font-bold text-fg-muted">
-                What should happen to the cards?
-              </label>
-
-              <button
-                type="button"
-                onClick={() => setAction("move")}
-                className={cn(
-                  "w-full flex items-start gap-3 p-4 rounded-xl border text-left transition-colors",
-                  action === "move"
-                    ? "bg-fill-2 border-border-md"
-                    : "bg-transparent border-border hover:bg-fill-1",
-                )}
-              >
-                <div
-                  className={cn(
-                    "mt-0.5 w-4 h-4 shrink-0 rounded-full border-2 flex items-center justify-center transition-colors",
-                    action === "move" ? "border-border-lg" : "border-border-lg",
-                  )}
-                >
-                  {action === "move" && (
-                    <div className="w-2 h-2 rounded-full bg-card" />
-                  )}
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-[14px] font-semibold text-fg mb-0.5">
-                    Move cards to another column
-                  </span>
-                  <span className="text-[13px] text-fg-muted">
-                    Cards will be preserved and moved to your chosen column.
-                  </span>
-                </div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setAction("delete")}
-                className={cn(
-                  "w-full flex items-start gap-3 p-4 rounded-xl border text-left transition-colors",
-                  action === "delete"
-                    ? "bg-danger-dim border-danger"
-                    : "bg-transparent border-border hover:bg-fill-1",
-                )}
-              >
-                <div
-                  className={cn(
-                    "mt-0.5 w-4 h-4 shrink-0 rounded-full border-2 flex items-center justify-center transition-colors",
-                    action === "delete" ? "border-danger" : "border-border-lg",
-                  )}
-                >
-                  {action === "delete" && (
-                    <div className="w-2 h-2 rounded-full bg-danger" />
-                  )}
-                </div>
-                <div className="flex flex-col">
-                  <span
-                    className={cn(
-                      "text-[14px] font-semibold mb-0.5 transition-colors",
-                      action === "delete" ? "text-danger" : "text-fg",
-                    )}
-                  >
-                    Delete all cards
-                  </span>
-                  <span className="text-[13px] text-fg-muted">
-                    All {apiColumn?.cardCount} cards and their data will be
-                    permanently deleted.
-                  </span>
-                </div>
-              </button>
-            </div>
-
-            {action === "move" && availableColumns.length > 0 && (
-              <div className="space-y-2 mb-2 animate-in fade-in slide-in-from-top-2 duration-200">
-                <label className="text-[12px] font-bold text-fg-muted">
-                  Move to
-                </label>
-                <div className="relative">
-                  <select
-                    value={targetColumnId}
-                    onChange={(e) => setTargetColumnId(e.target.value)}
-                    className="w-full h-11 bg-scrim border border-border-md rounded-xl pl-4 pr-10 text-[13px] font-medium text-fg appearance-none cursor-pointer focus:outline-none focus:border-accent/50 transition-colors shadow-inner"
-                  >
-                    {availableColumns.map((col) => (
-                      <option
-                        key={col.id}
-                        value={col.id}
-                        className="bg-surface"
-                      >
-                        {col.name}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown
-                    size={16}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-fg-muted pointer-events-none"
-                  />
-                </div>
-              </div>
+          <button
+            type="button"
+            onClick={handleConfirm}
+            disabled={
+              isBusy || (action === "move" && availableColumns.length === 0)
+            }
+            className="flex h-10 items-center gap-2 rounded-lg border border-danger bg-danger-dim px-4 text-sm font-semibold text-danger transition-colors hover:bg-danger/25 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none disabled:opacity-50"
+          >
+            {isDeletingCol ? (
+              <>
+                <Loader2 size={14} className="animate-spin" />
+                Deleting...
+              </>
+            ) : (
+              "Delete column"
             )}
-
-            {action === "move" && availableColumns.length === 0 && (
-              <div className="p-3 mb-2 rounded-lg bg-danger-dim border border-danger text-[12px] text-danger font-medium">
-                No other columns available. You must delete the cards or create
-                a new column first.
-              </div>
-            )}
-
-            <div className="mt-8 flex items-center justify-end gap-3">
-              <button
-                onClick={onClose}
-                disabled={isMovingCards || isDeletingCol}
-                className="px-5 h-10 rounded-xl text-[13px] font-semibold text-fg-secondary bg-transparent border border-border-md hover:bg-fill-2 transition-colors disabled:opacity-50"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleConfirm}
-                disabled={
-                  isMovingCards ||
-                  (action === "move" && availableColumns.length === 0)
-                }
-                className="px-5 h-10 rounded-xl text-[13px] font-semibold text-danger bg-danger-dim border border-danger hover:bg-danger-dim transition-colors disabled:opacity-50 flex items-center gap-2"
-              >
-                {isDeletingCol ? (
-                  <>
-                    <Loader2 size={14} className="animate-spin" />
-                    Deleting...
-                  </>
-                ) : (
-                  "Delete column"
-                )}
-              </button>
-            </div>
-          </div>
+          </button>
+        </>
+      }
+    >
+      <div className="mb-5 flex items-center gap-3 rounded-xl border border-border bg-fill-1 p-3.5">
+        <div className="flex flex-col">
+          <span className="text-[13px] font-semibold text-fg">
+            {column.name}
+          </span>
+          <span className="text-[12px] font-medium text-fg-muted">
+            {apiColumn?.cardCount}{" "}
+            {apiColumn?.cardCount === 1 ? "card" : "cards"} inside
+          </span>
         </div>
       </div>
-    </Portal>
+
+      <div className="mb-5 space-y-2">
+        <span className="text-[12px] font-semibold text-fg-muted">
+          What should happen to the cards?
+        </span>
+
+        <button
+          type="button"
+          onClick={() => setAction("move")}
+          aria-pressed={action === "move"}
+          className={cn(
+            "flex w-full items-start gap-3 rounded-xl border p-4 text-left transition-colors focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none",
+            action === "move"
+              ? "border-border-lg bg-fill-2"
+              : "border-border bg-transparent hover:bg-fill-1",
+          )}
+        >
+          <div
+            className={cn(
+              "mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full border-2",
+              action === "move" ? "border-accent" : "border-border-lg",
+            )}
+          >
+            {action === "move" && (
+              <div className="size-2 rounded-full bg-accent" />
+            )}
+          </div>
+          <div className="flex flex-col">
+            <span className="mb-0.5 text-[14px] font-semibold text-fg">
+              Move cards to another column
+            </span>
+            <span className="text-[13px] text-fg-muted">
+              Cards will be preserved and moved to your chosen column.
+            </span>
+          </div>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setAction("delete")}
+          aria-pressed={action === "delete"}
+          className={cn(
+            "flex w-full items-start gap-3 rounded-xl border p-4 text-left transition-colors focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none",
+            action === "delete"
+              ? "border-danger bg-danger-dim"
+              : "border-border bg-transparent hover:bg-fill-1",
+          )}
+        >
+          <div
+            className={cn(
+              "mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full border-2",
+              action === "delete" ? "border-danger" : "border-border-lg",
+            )}
+          >
+            {action === "delete" && (
+              <div className="size-2 rounded-full bg-danger" />
+            )}
+          </div>
+          <div className="flex flex-col">
+            <span
+              className={cn(
+                "mb-0.5 text-[14px] font-semibold",
+                action === "delete" ? "text-danger" : "text-fg",
+              )}
+            >
+              Delete all cards
+            </span>
+            <span className="text-[13px] text-fg-muted">
+              All {apiColumn?.cardCount} cards and their data will be
+              permanently deleted.
+            </span>
+          </div>
+        </button>
+      </div>
+
+      {action === "move" && availableColumns.length > 0 && (
+        <div className="space-y-2">
+          <label
+            htmlFor="delete-column-target"
+            className="text-[12px] font-semibold text-fg-muted"
+          >
+            Move to
+          </label>
+          <div className="relative">
+            <select
+              id="delete-column-target"
+              value={resolvedTargetId}
+              onChange={(event) => setTargetColumnId(event.target.value)}
+              className="h-10 w-full cursor-pointer appearance-none rounded-lg border border-border-md bg-fill-1 pr-10 pl-3 text-[13px] font-medium text-fg transition-colors outline-none focus:border-accent"
+            >
+              {availableColumns.map((columnOption) => (
+                <option
+                  key={columnOption.id}
+                  value={columnOption.id}
+                  className="bg-surface"
+                >
+                  {columnOption.name}
+                </option>
+              ))}
+            </select>
+            <ChevronDown
+              size={16}
+              className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-fg-muted"
+            />
+          </div>
+        </div>
+      )}
+
+      {action === "move" && availableColumns.length === 0 && (
+        <div className="rounded-lg border border-danger bg-danger-dim p-3 text-[12px] font-medium text-danger">
+          No other columns available. You must delete the cards or create a new
+          column first.
+        </div>
+      )}
+    </DialogShell>
   );
 }

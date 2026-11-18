@@ -1,50 +1,43 @@
 "use client";
 
-import { useState } from "react";
-import { Columns, X, Check, AlertCircle, Loader2 } from "lucide-react";
+import { DialogShell } from "@/components/ui/dialog-shell";
 import { useCreateColumn } from "@/hooks/useColumns";
-import { Portal } from "../ui/Portal";
+import { cn } from "@/lib/utils";
+import { Check, Loader2 } from "lucide-react";
+import { useState } from "react";
 
 type StatusEnum = "BACKLOG" | "TODO" | "IN_PROGRESS" | "DONE" | "CANCELED";
 
-interface StatusOption {
+const STATUS_OPTIONS: {
   value: StatusEnum;
   label: string;
   description: string;
-  colorHex: string;
   fullWidth?: boolean;
-}
-
-const STATUS_OPTIONS: StatusOption[] = [
+}[] = [
   {
     value: "BACKLOG",
-    label: "BACKLOG",
+    label: "Backlog",
     description: "Not yet started",
-    colorHex: "#8585a0",
   },
   {
     value: "TODO",
-    label: "TODO",
+    label: "To do",
     description: "Ready to pick up",
-    colorHex: "#5ba4cf",
   },
   {
     value: "IN_PROGRESS",
-    label: "IN_PROGRESS",
+    label: "In progress",
     description: "Actively being worked on",
-    colorHex: "#7c6ef5",
   },
   {
     value: "DONE",
-    label: "DONE",
+    label: "Done",
     description: "Completed work",
-    colorHex: "#4aba85",
   },
   {
     value: "CANCELED",
-    label: "CANCELED",
+    label: "Canceled",
     description: "Work that won't be completed — excluded from tracking",
-    colorHex: "#ff7070",
     fullWidth: true,
   },
 ];
@@ -63,7 +56,7 @@ export default function CreateColumnModal({
 
   const { mutate: createCol, isPending } = useCreateColumn(boardId);
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (!name.trim() || !mappedStatus || !boardId) return;
     createCol({ name, mappedStatus });
     onClose();
@@ -71,155 +64,112 @@ export default function CreateColumnModal({
     setMappedStatus("IN_PROGRESS");
   };
 
-  if (!isOpen) return null;
-
-  const activeOption = STATUS_OPTIONS.find(
-    (opt) => opt.value === mappedStatus,
-  )!;
-
   return (
-    <Portal>
-      <div
-        className="fixed inset-0 z-50 flex items-center justify-center bg-base/80 backdrop-blur-sm px-4 animate-in fade-in duration-200"
-        onClick={onClose}
-      >
-        <div
-          className="w-full max-w-lg bg-surface border border-md rounded-xl shadow-soft relative flex flex-col animate-in zoom-in-95 duration-200"
-          onClick={(e) => e.stopPropagation()}
-        >
+    <DialogShell
+      open={isOpen}
+      onClose={onClose}
+      title="Add a column"
+      description="Columns organise your board into stages. Give it a name and map it to a status."
+      footer={
+        <>
           <button
+            type="button"
             onClick={onClose}
-            className="absolute top-5 right-5 text-muted hover:text-primary transition-colors p-1 focus-ring rounded-sm"
+            className="h-10 rounded-lg border border-border-md px-4 text-sm font-medium text-fg transition-colors hover:bg-fill-2 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
           >
-            <X size={18} strokeWidth={1.5} />
+            Cancel
           </button>
+          <button
+            type="button"
+            onClick={handleSubmit}
+            disabled={!name.trim() || isPending}
+            className="flex h-10 items-center gap-2 rounded-lg bg-accent-solid px-4 text-sm font-semibold text-on-accent transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {isPending ? (
+              <>
+                <Loader2 size={16} className="animate-spin" />
+                Creating...
+              </>
+            ) : (
+              "Create column"
+            )}
+          </button>
+        </>
+      }
+    >
+      <div className="space-y-5">
+        <div className="flex flex-col gap-1.5">
+          <label
+            htmlFor="column-name"
+            className="flex gap-1 text-sm font-semibold text-fg"
+          >
+            Column name <span className="text-accent">*</span>
+          </label>
+          <input
+            id="column-name"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+            placeholder="e.g. In Progress"
+            autoFocus
+            className="h-10 w-full rounded-lg border border-border-md bg-fill-1 px-3 text-sm text-fg transition-colors outline-none placeholder:text-fg-muted focus:border-accent"
+          />
+          <span className="text-xs text-fg-muted">
+            Shown as the column header on your board.
+          </span>
+        </div>
 
-          <div className="pt-6 px-6 pb-2 flex flex-col items-start">
-            <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-4 bg-accent-dim text-accent border border-md">
-              <Columns size={18} strokeWidth={1.5} />
-            </div>
-            <h1 className="heading-md text-primary mb-1.5">Add a column</h1>
-            <p className="text-sm text-secondary leading-relaxed pr-6">
-              Columns organise your board into stages. Give it a name and map it
-              to a status.
-            </p>
-          </div>
+        <div className="flex flex-col gap-1.5">
+          <span className="text-sm font-semibold text-fg">Status *</span>
+          <span className="mb-1 text-xs text-fg-muted">
+            Maps this column to a standard workflow stage used across reports and
+            filters.
+          </span>
 
-          <div className="p-6 space-y-6">
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-semibold text-primary flex gap-1">
-                Column name <span className="text-accent">*</span>
-              </label>
-              <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="e.g. In Progress"
-                autoFocus
-                className="input-premium w-full h-10 px-3 text-sm focus-ring"
-              />
-              <span className="text-xs text-muted mt-0.5">
-                Shown as the column header on your board.
-              </span>
-            </div>
+          <div className="grid grid-cols-2 gap-2">
+            {STATUS_OPTIONS.map((option) => {
+              const isActive = mappedStatus === option.value;
 
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-semibold text-primary flex gap-1">
-                Status <span className="text-accent">*</span>
-              </label>
-              <span className="text-xs text-muted mb-2">
-                Maps this column to a standard workflow stage used across
-                reports and filters.
-              </span>
-
-              <div className="grid grid-cols-2 gap-3">
-                {STATUS_OPTIONS.map((opt) => {
-                  const isActive = mappedStatus === opt.value;
-
-                  return (
-                    <button
-                      key={opt.value}
-                      onClick={() => setMappedStatus(opt.value)}
-                      type="button"
-                      className={`flex items-start gap-3 p-3 rounded-lg border text-left transition-all duration-200 focus-ring ${
-                        !isActive && "border-md bg-card hover:bg-overlay"
-                      } ${opt.fullWidth ? "col-span-2" : "col-span-1"}`}
-                      style={
-                        isActive
-                          ? {
-                              borderColor: opt.colorHex,
-                              backgroundColor: `${opt.colorHex}24`,
-                            }
-                          : {}
-                      }
-                    >
-                      <div
-                        className="w-2.5 h-2.5 rounded-full mt-1.5 shrink-0"
-                        style={{ backgroundColor: opt.colorHex }}
-                      />
-
-                      <div className="flex-1 min-w-0">
-                        <div
-                          className={`text-sm font-bold tracking-wide mb-0.5 ${
-                            !isActive ? "text-primary" : ""
-                          }`}
-                          style={isActive ? { color: opt.colorHex } : {}}
-                        >
-                          {opt.label}
-                        </div>
-                        <div
-                          className={`text-xs leading-snug ${
-                            !isActive ? "text-secondary" : ""
-                          }`}
-                          style={
-                            isActive
-                              ? { color: opt.colorHex, opacity: 0.8 }
-                              : {}
-                          }
-                        >
-                          {opt.description}
-                        </div>
-                      </div>
-
-                      {isActive && (
-                        <Check
-                          size={16}
-                          strokeWidth={2.5}
-                          className="shrink-0 mt-0.5"
-                          style={{ color: opt.colorHex }}
-                        />
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => setMappedStatus(option.value)}
+                  aria-pressed={isActive}
+                  className={cn(
+                    "flex items-start gap-3 rounded-lg border p-3 text-left transition-colors focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none",
+                    option.fullWidth && "col-span-2",
+                    isActive
+                      ? "border-accent bg-accent-dim"
+                      : "border-border bg-fill-1 hover:bg-fill-2",
+                  )}
+                >
+                  <div className="min-w-0 flex-1">
+                    <div
+                      className={cn(
+                        "mb-0.5 text-sm font-semibold",
+                        isActive ? "text-accent" : "text-fg",
                       )}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
+                    >
+                      {option.label}
+                    </div>
+                    <div className="text-xs leading-snug text-fg-secondary">
+                      {option.description}
+                    </div>
+                  </div>
 
-          <div className="px-6 py-4 flex justify-end gap-3 bg-surface border-t border-md rounded-b-xl">
-            <button
-              onClick={onClose}
-              className="btn-ghost h-9 px-4 text-sm font-medium focus-ring"
-            >
-              Cancel
-            </button>
-
-            <button
-              onClick={handleSubmit}
-              disabled={!name.trim() || isPending}
-              className="btn-primary h-9 px-4 text-sm font-semibold flex items-center gap-2 focus-ring disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isPending ? (
-                <>
-                  <Loader2 size={16} strokeWidth={2} className="animate-spin" />
-                  Creating...
-                </>
-              ) : (
-                <>+ Create column</>
-              )}
-            </button>
+                  {isActive && (
+                    <Check
+                      size={16}
+                      strokeWidth={2.5}
+                      className="mt-0.5 shrink-0 text-accent"
+                    />
+                  )}
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>
-    </Portal>
+    </DialogShell>
   );
 }

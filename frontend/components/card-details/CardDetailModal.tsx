@@ -5,15 +5,15 @@ import { CardHeader } from "@/components/card-details/CardHeader";
 import { CardSidebar } from "@/components/card-details/CardSidebar";
 import { CardTitle } from "@/components/card-details/CardTitle";
 import { DeleteCardModal } from "@/components/modals/DeleteCardModal";
-import { Portal } from "@/components/ui/Portal";
+import { SidePanel } from "@/components/ui/side-panel";
+import { Tabs } from "@/components/ui/tabs";
 import { useMe } from "@/hooks/useAuth";
-import { useGetProjectBySlug } from "@/hooks/useProjects";
 import { useDeleteCard, useUpdateCard } from "@/hooks/useCards";
+import { useGetProjectBySlug } from "@/hooks/useProjects";
 import { useWorkspaceRole } from "@/hooks/useWorkspace";
-import { cn } from "@/lib/utils";
 import { useBoardStore } from "@/store/board.store";
 import { BoardCard, BoardColumn } from "@/types/board.types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ActivityTab } from "./ActivityTab";
 import { CardAttachments } from "./CardAttachments";
 import { CardComments } from "./CardComments";
@@ -66,25 +66,6 @@ export function CardDetailModalInner({
   const canDeleteCard =
     currentUser?.id === card.creator?.id || canManageWorkspace;
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isOpen) {
-        const activeNode = document.activeElement;
-        if (
-          activeNode &&
-          (activeNode.tagName === "INPUT" || activeNode.tagName === "TEXTAREA")
-        ) {
-          return;
-        }
-        onClose();
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose]);
-
-  if (!isOpen) return null;
-
   const handleTitleSave = (newTitle: string) => {
     updateCard({ title: newTitle });
   };
@@ -94,15 +75,22 @@ export function CardDetailModalInner({
   };
 
   return (
-    <Portal>
-      <div
-        className="fixed inset-0 z-100 flex justify-end bg-scrim backdrop-blur-sm transition-all"
-        onClick={onClose}
+    <>
+      <SidePanel
+        open={isOpen}
+        onClose={onClose}
+        width="xl"
+        headerless
+        bodyClassName="p-0"
+        shouldCloseOnEscape={() => {
+          const activeNode = document.activeElement;
+          return !(
+            activeNode &&
+            (activeNode.tagName === "INPUT" || activeNode.tagName === "TEXTAREA")
+          );
+        }}
       >
-        <div
-          className="w-full max-w-215 h-full bg-base shadow-2xl flex flex-col border-l border-border animate-in slide-in-from-right duration-200"
-          onClick={(e) => e.stopPropagation()}
-        >
+        <div className="flex min-h-0 flex-1 flex-col">
           <CardHeader
             projectName={project?.name ?? ""}
             columnName={currentColumn?.name ?? ""}
@@ -112,8 +100,8 @@ export function CardDetailModalInner({
             onClose={onClose}
           />
 
-          <div className="flex-1 overflow-hidden flex min-h-0">
-            <main className="flex-1 overflow-y-auto custom-scrollbar p-8 min-h-0 bg-base">
+          <div className="flex min-h-0 flex-1 overflow-hidden">
+            <main className="min-h-0 flex-1 overflow-y-auto bg-base p-8">
               <CardTitle
                 title={card.title}
                 priority={card.priority}
@@ -128,31 +116,20 @@ export function CardDetailModalInner({
 
                 <CardAttachments card={card} />
 
-                <section className="pt-4 border-t border-border">
-                  <div className="flex items-center gap-6 border-b border-border mb-6">
-                    {(["comments", "activity"] as const).map((tab) => (
-                      <button
-                        key={tab}
-                        onClick={() => setActiveTab(tab)}
-                        className={cn(
-                          "pb-3 text-[13px] font-semibold transition-colors relative flex items-center gap-2",
-                          activeTab === tab
-                            ? "text-fg"
-                            : "text-fg-muted hover:text-fg-secondary",
-                        )}
-                      >
-                        {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                        {tab === "comments" && (
-                          <span className="px-1.5 py-0.5 rounded-full bg-fill-3 text-[10px] font-bold text-fg-secondary">
-                            {card.commentCount || 0}
-                          </span>
-                        )}
-                        {activeTab === tab && (
-                          <span className="absolute -bottom-px left-0 right-0 h-0.5 bg-accent-solid rounded-t-full" />
-                        )}
-                      </button>
-                    ))}
-                  </div>
+                <section className="border-t border-border pt-4">
+                  <Tabs
+                    className="mb-6"
+                    value={activeTab}
+                    onChange={setActiveTab}
+                    items={[
+                      {
+                        value: "comments",
+                        label: "Comments",
+                        count: card.commentCount || 0,
+                      },
+                      { value: "activity", label: "Activity" },
+                    ]}
+                  />
 
                   <div className="pb-10">
                     {activeTab === "comments" ? (
@@ -173,7 +150,7 @@ export function CardDetailModalInner({
             />
           </div>
         </div>
-      </div>
+      </SidePanel>
 
       <DeleteCardModal
         isOpen={isDeleteModalOpen}
@@ -186,6 +163,6 @@ export function CardDetailModalInner({
         columnName={currentColumn?.name || "Unknown"}
         projectName={project?.name ?? ""}
       />
-    </Portal>
+    </>
   );
 }

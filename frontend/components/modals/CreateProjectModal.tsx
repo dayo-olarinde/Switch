@@ -1,67 +1,13 @@
 "use client";
-import { Portal } from "@/components/ui/Portal";
 
-import {
-  Project,
-  useCreateProject,
-  useUpdateProject,
-} from "@/hooks/useProjects";
+import { DialogShell } from "@/components/ui/dialog-shell";
+import { Project, useCreateProject, useUpdateProject } from "@/hooks/useProjects";
 import { useWorkspaceStore } from "@/store/workspace.store";
-import {
-  AlignLeft,
-  BarChart3,
-  Briefcase,
-  Check,
-  Code2,
-  Database,
-  FileText,
-  Layers3,
-  Loader2,
-  Megaphone,
-  Palette,
-  PenTool,
-  Plus,
-  Rocket,
-  Settings,
-  Smartphone,
-  X,
-  type LucideIcon,
-} from "lucide-react";
-import { useRef, useState } from "react";
+import { Check, Loader2, Plus } from "lucide-react";
+import { useState } from "react";
+import { ProjectIconPicker } from "./project-icon-picker";
 
-export const PROJECT_ICONS: {
-  value: string;
-  label: string;
-  Icon: LucideIcon;
-}[] = [
-  { value: "Palette", label: "Design", Icon: Palette },
-  { value: "Code2", label: "Development", Icon: Code2 },
-  { value: "Database", label: "Backend", Icon: Database },
-  { value: "Smartphone", label: "Mobile", Icon: Smartphone },
-  { value: "PenTool", label: "Creative", Icon: PenTool },
-  { value: "FileText", label: "Docs", Icon: FileText },
-  { value: "Briefcase", label: "Business", Icon: Briefcase },
-  { value: "Rocket", label: "Launch", Icon: Rocket },
-  { value: "Layers3", label: "Product", Icon: Layers3 },
-  { value: "Megaphone", label: "Marketing", Icon: Megaphone },
-  { value: "BarChart3", label: "Analytics", Icon: BarChart3 },
-  { value: "Settings", label: "Ops", Icon: Settings },
-];
-
-export const PROJECT_ICON_MAP: Record<string, LucideIcon> = {
-  Palette,
-  Code2,
-  Database,
-  Smartphone,
-  PenTool,
-  FileText,
-  Briefcase,
-  Rocket,
-  Layers3,
-  Megaphone,
-  BarChart3,
-  Settings,
-};
+export { PROJECT_ICON_MAP, PROJECT_ICONS } from "./project-icons";
 
 export default function CreateProjectModal({
   isOpen,
@@ -76,9 +22,6 @@ export default function CreateProjectModal({
   const [description, setDescription] = useState("");
   const [icon, setIcon] = useState("Palette");
   const [showIconPicker, setShowIconPicker] = useState(false);
-  const [manualWorkspaceId, setManualWorkspaceId] = useState<string | null>(
-    null,
-  );
 
   const [prevProjectId, setPrevProjectId] = useState(project?.id);
   const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
@@ -94,46 +37,37 @@ export default function CreateProjectModal({
     }
   }
 
-  const iconPickerRef = useRef<HTMLDivElement>(null);
-
   const { mutate: createProject, isPending: creatingProject } =
     useCreateProject();
   const { mutate: updateProject, isPending: updatingProject } =
     useUpdateProject();
 
-  const isEditMode = !!project;
   const isPending = creatingProject || updatingProject;
 
   const activeWorkspace = useWorkspaceStore((s) => s.activeWorkspace);
 
-  const selectedIcon =
-    PROJECT_ICONS.find((item) => item.value === icon) || PROJECT_ICONS[0];
-  const CurrentIcon = selectedIcon.Icon;
+  const handleCloseModal = () => {
+    onClose();
+    setShowIconPicker(false);
+  };
 
   const handleSubmit = () => {
     if (!name || !activeWorkspace || !icon) return;
 
-    const payload = {
-      name,
-      description,
-      icon,
-    };
+    const payload = { name, description, icon };
 
-    if (isEditMode) {
-      const updatePayload = {
-        ...payload,
-        projectId: project.id,
-        workspaceId: activeWorkspace.id,
-        workspaceSlug: activeWorkspace.slug,
-      };
+    if (project) {
       updateProject(
         {
           projectSlug: project.slug,
-          data: updatePayload,
+          data: {
+            ...payload,
+            projectId: project.id,
+            workspaceId: activeWorkspace.id,
+            workspaceSlug: activeWorkspace.slug,
+          },
         },
-        {
-          onSuccess: () => handleCloseModal(),
-        },
+        { onSuccess: () => handleCloseModal() },
       );
     } else {
       createProject(
@@ -142,177 +76,103 @@ export default function CreateProjectModal({
           workspaceId: activeWorkspace.id,
           workspaceSlug: activeWorkspace.slug,
         },
-        {
-          onSuccess: () => handleCloseModal(),
-        },
+        { onSuccess: () => handleCloseModal() },
       );
     }
   };
 
-  const handleCloseModal = () => {
-    onClose();
-    setShowIconPicker(false);
-  };
-
-  if (!isOpen) return null;
-
   return (
-    <Portal>
-      <div
-        className="fixed inset-0 z-50 flex items-center justify-center bg-base/80 backdrop-blur-sm px-4 animate-in fade-in duration-200"
-        onClick={(e) => {
-          e.stopPropagation();
-          handleCloseModal();
-        }}
-      >
-        <div
-          className="relative flex w-112.5 max-w-lg flex-col rounded-xl border border-md bg-surface shadow-soft animate-in zoom-in-95 duration-200"
-          onClick={(e) => e.stopPropagation()}
-        >
+    <DialogShell
+      open={isOpen}
+      onClose={handleCloseModal}
+      title={project ? "Edit project" : "New project"}
+      description={
+        project
+          ? undefined
+          : "Projects contain boards, columns, and cards for your team's work."
+      }
+      footer={
+        <>
           <button
-            onClick={onClose}
-            className="absolute top-5 right-5 text-muted transition-colors hover:text-primary focus-ring rounded-sm p-1"
+            type="button"
+            onClick={handleCloseModal}
+            className="h-10 rounded-lg border border-border-md px-4 text-sm font-medium text-fg transition-colors hover:bg-fill-2 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
           >
-            <X size={18} strokeWidth={1.5} />
+            Cancel
           </button>
+          <button
+            type="button"
+            onClick={handleSubmit}
+            disabled={!name.trim() || isPending}
+            className="flex h-10 min-w-36 items-center justify-center gap-2 rounded-lg bg-accent-solid px-4 text-sm font-semibold text-on-accent transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {isPending ? (
+              <>
+                <Loader2 size={14} className="animate-spin" />
+                {project ? "Saving..." : "Creating..."}
+              </>
+            ) : project ? (
+              <>
+                <Check size={14} />
+                Save changes
+              </>
+            ) : (
+              <>
+                <Plus size={14} />
+                Create project
+              </>
+            )}
+          </button>
+        </>
+      }
+    >
+      <div className="space-y-5">
+        <div className="flex items-start gap-4">
+          <ProjectIconPicker
+            value={icon}
+            onChange={(next) => {
+              setIcon(next);
+              setShowIconPicker(false);
+            }}
+            open={showIconPicker}
+            onToggle={() => setShowIconPicker((prev) => !prev)}
+          />
 
-          <div className="p-6">
-            <div className="mb-6 flex flex-col items-start">
-              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg border border-md bg-accent-dim text-accent">
-                <AlignLeft size={18} strokeWidth={1.5} />
-              </div>
-
-              <h1 className="heading-md mb-1.5 text-primary">
-                {project ? "Edit Project" : "New Project"}
-              </h1>
-
-              {!project && (
-                <p className="text-sm leading-relaxed text-secondary pr-6">
-                  Projects contain boards, columns, and cards for your
-                  team&apos;s work.
-                </p>
-              )}
-            </div>
-
-            <div className="space-y-5">
-              <div className="flex items-start gap-4">
-                <div className="relative" ref={iconPickerRef}>
-                  <div className="mb-1.5 flex gap-1 text-sm font-semibold text-primary">
-                    Icon
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => setShowIconPicker((prev) => !prev)}
-                    className="input-premium flex h-10 w-10 items-center justify-center focus-ring hover:bg-overlay"
-                  >
-                    <CurrentIcon size={18} strokeWidth={1.8} />
-                  </button>
-
-                  {showIconPicker && (
-                    <div className="absolute left-0 top-13 z-50 w-56 rounded-xl border border-md bg-surface p-2 shadow-soft animate-in fade-in zoom-in-95 duration-150">
-                      <div className="grid grid-cols-4 gap-2">
-                        {PROJECT_ICONS.map((item) => {
-                          const ActiveIcon = item.Icon;
-                          const active = icon === item.value;
-
-                          return (
-                            <button
-                              key={item.value}
-                              type="button"
-                              title={item.label}
-                              onClick={() => {
-                                setIcon(item.value);
-                                setShowIconPicker(false);
-                              }}
-                              className={`relative flex h-10 w-10 items-center justify-center rounded-lg border transition-colors focus-ring ${
-                                active
-                                  ? "border-accent bg-accent-dim text-accent"
-                                  : "border-md bg-card text-muted hover:border-lg hover:text-primary hover:bg-overlay"
-                              }`}
-                            >
-                              <ActiveIcon size={18} strokeWidth={1.8} />
-
-                              {active && (
-                                <Check
-                                  size={11}
-                                  strokeWidth={3}
-                                  className="absolute right-1 top-1 text-accent"
-                                />
-                              )}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex-1">
-                  <div className="mb-1.5 flex gap-1 text-sm font-semibold text-primary">
-                    Project name
-                    <span className="text-danger">*</span>
-                  </div>
-
-                  <input
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="e.g. Design System"
-                    autoFocus
-                    className="input-premium h-10 w-full px-3 text-sm focus-ring"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <div className="mb-1.5 flex gap-1 text-sm font-semibold text-primary">
-                  Description
-                </div>
-
-                <textarea
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  rows={3}
-                  placeholder="What is this project about?"
-                  className="input-premium w-full resize-none p-3 text-sm focus-ring"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="flex justify-end gap-3 border-t border-md bg-surface px-6 py-4 rounded-b-xl">
-            <button
-              onClick={handleCloseModal}
-              className="btn-ghost h-9 px-4 text-sm font-medium focus-ring"
+          <div className="flex-1">
+            <label
+              htmlFor="project-name"
+              className="mb-1.5 flex gap-1 text-sm font-semibold text-fg"
             >
-              Cancel
-            </button>
-
-            <button
-              onClick={handleSubmit}
-              disabled={!name.trim() || isPending}
-              className="btn-primary flex h-9 min-w-36 justify-center items-center gap-2 px-4 text-sm font-semibold focus-ring disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {isPending ? (
-                <>
-                  <Loader2 size={14} strokeWidth={2} className="animate-spin" />
-                  {project ? "Saving..." : "Creating..."}
-                </>
-              ) : project ? (
-                <>
-                  <Check size={14} strokeWidth={2} />
-                  Save changes
-                </>
-              ) : (
-                <>
-                  <Plus size={14} strokeWidth={2} />
-                  Create project
-                </>
-              )}
-            </button>
+              Project name <span className="text-danger">*</span>
+            </label>
+            <input
+              id="project-name"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              placeholder="e.g. Design System"
+              autoFocus
+              className="h-10 w-full rounded-lg border border-border-md bg-fill-1 px-3 text-sm text-fg transition-colors outline-none placeholder:text-fg-muted focus:border-accent"
+            />
           </div>
         </div>
+
+        <div>
+          <label
+            htmlFor="project-description"
+            className="mb-1.5 flex text-sm font-semibold text-fg"
+          >
+            Description
+          </label>
+          <textarea
+            id="project-description"
+            value={description}
+            onChange={(event) => setDescription(event.target.value)}
+            rows={3}
+            placeholder="What is this project about?"
+            className="w-full resize-none rounded-lg border border-border-md bg-fill-1 p-3 text-sm text-fg transition-colors outline-none placeholder:text-fg-muted focus:border-accent"
+          />
+        </div>
       </div>
-    </Portal>
+    </DialogShell>
   );
 }
