@@ -70,22 +70,30 @@ export function slugify(text: string): string {
 }
 
 export const LABEL_COLORS = [
-  { hex: "#FF7070", classes: "bg-danger-dim text-danger border-danger" },
+  {
+    hex: "#FF7070",
+    classes: "bg-danger-dim text-danger border-danger",
+    dot: "bg-danger",
+  },
   {
     hex: "#4ABA85",
     classes: "bg-success-dim text-success border-success",
+    dot: "bg-success",
   },
   {
     hex: "#7C6EF5",
     classes: "bg-accent-dim text-accent border-accent",
+    dot: "bg-accent",
   },
   {
     hex: "#E5A23A",
     classes: "bg-warning-dim text-warning border-warning",
+    dot: "bg-warning",
   },
   {
     hex: "#60A5FA",
     classes: "bg-info-dim text-info border-info",
+    dot: "bg-info",
   },
 ];
 
@@ -122,6 +130,20 @@ export const pickLabelColor = (
 export const getLabelClasses = (hex: string) =>
   LABEL_COLORS.find((c) => c.hex === hex)?.classes ??
   "bg-fill-2 text-fg-muted border-border";
+
+/**
+ * Borderless variant for label chips sitting inside a bordered card, so the
+ * tile keeps one outline instead of one per chip.
+ */
+export const getLabelChipClasses = (hex: string) =>
+  getLabelClasses(hex)
+    .split(" ")
+    .filter((token) => !token.startsWith("border-"))
+    .join(" ");
+
+/** Solid dot colour for a label, for compact row indicators. */
+export const getLabelDot = (hex: string) =>
+  LABEL_COLORS.find((c) => c.hex === hex)?.dot ?? "bg-fg-muted";
 
 export const getInitials = (text: string) => {
   if (!text.trim()) return "SW";

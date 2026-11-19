@@ -48,7 +48,7 @@ export function ColumnHeader({
     <header
       {...dragAttributes}
       {...dragListeners}
-      className="group/lane flex h-12 shrink-0 cursor-grab items-center gap-2 border-b border-border px-3 active:cursor-grabbing"
+      className="group/lane flex h-11 shrink-0 cursor-grab items-center gap-2 border-b border-border px-3 active:cursor-grabbing"
     >
       <span
         aria-hidden
@@ -79,7 +79,7 @@ export function ColumnHeader({
         </h2>
       )}
 
-      <span className="shrink-0 rounded-md bg-fill-2 px-1.5 py-0.5 text-2xs font-semibold text-fg-muted">
+      <span className="shrink-0 rounded-md bg-fill-2 px-1.5 py-0.5 text-2xs font-semibold text-fg-muted tabular-nums">
         {column.cards.length}
       </span>
 

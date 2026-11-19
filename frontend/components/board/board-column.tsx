@@ -135,8 +135,10 @@ export function BoardColumnLane({
       }}
       aria-label={`${column.name} column`}
       className={cn(
-        "flex w-80 shrink-0 flex-col overflow-hidden rounded-xl border bg-fill-1 transition-colors",
-        isDropTarget ? "border-accent/60" : "border-border",
+        "flex w-80 shrink-0 flex-col overflow-hidden rounded-xl border bg-well transition-[border-color,box-shadow] duration-150",
+        isDropTarget
+          ? "card-elevated border-accent/50"
+          : "border-border",
         isDragging && "opacity-40",
       )}
     >
@@ -169,12 +171,11 @@ export function BoardColumnLane({
         onDelete={handleDelete}
       />
 
-      <div className="custom-scrollbar flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto p-2">
+      <div className="custom-scrollbar flex min-h-0 flex-1 flex-col gap-1.5 overflow-y-auto px-2 pt-2 pb-1">
         {column.cards.length === 0 ? (
-          <div className="flex flex-1 flex-col items-center justify-center rounded-lg border border-dashed border-border px-4 py-8 text-center">
-            <p className="text-2xs leading-relaxed text-fg-muted">
-              No cards yet
-            </p>
+          <div className="flex flex-1 flex-col items-center justify-center gap-1 rounded-lg border border-dashed border-border px-4 py-10 text-center">
+            <p className="text-2xs font-medium text-fg-muted">No cards yet</p>
+            <p className="text-2xs text-fg-muted">Drop a card here or add one below</p>
           </div>
         ) : (
           <SortableContext items={cardIds} strategy={verticalListSortingStrategy}>
@@ -190,13 +191,13 @@ export function BoardColumnLane({
         )}
       </div>
 
-      <div className="shrink-0 border-t border-border p-2">
+      <div className="shrink-0 p-1.5">
         <button
           type="button"
           onClick={() => setIsAddOpen(true)}
-          className="flex h-8 w-full items-center gap-2 rounded-md px-2 text-body font-medium text-fg-muted transition-colors hover:bg-fill-2 hover:text-fg focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+          className="flex h-8 w-full items-center gap-1.5 rounded-md px-2 text-2xs font-semibold text-fg-muted transition-colors hover:bg-fill-2 hover:text-fg focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
         >
-          <Plus size={14} aria-hidden />
+          <Plus size={13} aria-hidden />
           Add card
         </button>
       </div>

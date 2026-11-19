@@ -1,13 +1,15 @@
 "use client";
 
 import { AvatarGroup } from "@/components/ui/avatar";
-import { cn, formatDateShort, getLabelClasses } from "@/lib/utils";
+import { cn, formatDateShort, getLabelDot } from "@/lib/utils";
 import { BoardCard } from "@/types/board.types";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Clock, MessageSquare, Paperclip } from "lucide-react";
+import { CalendarDays, MessageSquare, Paperclip } from "lucide-react";
 import { KeyboardEvent, memo, useRef } from "react";
 import { PRIORITY_META, dueDateClass } from "./board-utils";
+
+const MAX_LABELS = 3;
 
 interface CardTileProps {
   card: BoardCard;
@@ -26,95 +28,131 @@ export const CardTile = memo(function CardTile({
   const comments = card.commentCount ?? 0;
   const attachments = card.attachments?.length ?? 0;
 
+  // Only loud priorities earn a chip; the rest stay as the edge bar so the
+  // tile reads as content first, metadata second.
+  const showPriorityChip =
+    card.priority === "urgent" || card.priority === "high";
+
+  const visibleLabels = labels.slice(0, MAX_LABELS);
+  const hiddenLabels = labels.length - visibleLabels.length;
+
+  const hasMeta = Boolean(card.dueDate) || comments > 0 || attachments > 0;
+
   return (
     <div
       className={cn(
-        "relative flex flex-col gap-2.5 rounded-xl border bg-card p-3 transition-[border-color,box-shadow,background-color]",
+        "group/card relative overflow-hidden rounded-xl border bg-card",
+        "transition-[border-color,box-shadow] duration-150",
         preview
-          ? "border-accent/50 shadow-accent"
-          : "border-border hover:border-border-md hover:shadow-sm",
-        done && !preview && "bg-fill-1",
+          ? "card-lifted border-accent/45"
+          : "card-elevated border-border hover:border-border-lg hover:card-elevated-hover",
+        done && !preview && "bg-well",
       )}
     >
       {card.priority !== "none" && (
         <span
           aria-hidden
           className={cn(
-            "absolute inset-y-3 left-0 rounded-full",
+            "absolute inset-y-0 left-0",
             card.priority === "urgent" ? "w-1" : "w-0.5",
             priority.bar,
           )}
         />
       )}
 
-      <div className="flex items-start gap-2">
-        <p
-          className={cn(
-            "min-w-0 flex-1 pl-1 text-body leading-snug font-medium",
-            done ? "text-fg-secondary line-through" : "text-fg",
-          )}
-        >
-          {card.title}
-        </p>
+      <div className="flex flex-col gap-2.5 px-3 py-2.5">
+        {visibleLabels.length > 0 && (
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            {visibleLabels.map((label) => (
+              <span
+                key={label.id}
+                className="flex items-center gap-1.5"
+                title={label.name}
+              >
+                <span
+                  aria-hidden
+                  className={cn(
+                    "size-1.5 shrink-0 rounded-full",
+                    getLabelDot(label.colour),
+                  )}
+                />
+                <span className="max-w-24 truncate text-2xs font-medium text-fg-secondary">
+                  {label.name}
+                </span>
+              </span>
+            ))}
 
-        {card.priority !== "none" && (
-          <span
+            {hiddenLabels > 0 && (
+              <span className="text-2xs font-medium text-fg-muted">
+                +{hiddenLabels}
+              </span>
+            )}
+          </div>
+        )}
+
+        <div className="flex items-start gap-2">
+          <p
             className={cn(
-              "shrink-0 rounded-md border px-1.5 py-px text-2xs font-semibold tracking-wide uppercase",
-              priority.chip,
+              "min-w-0 flex-1 text-body leading-snug font-medium",
+              done ? "text-fg-muted line-through" : "text-fg",
             )}
           >
-            {priority.label}
-          </span>
+            {card.title}
+          </p>
+
+          {showPriorityChip && (
+            <span
+              className={cn(
+                "mt-px shrink-0 rounded border px-1 py-px text-2xs font-semibold uppercase",
+                priority.chip,
+              )}
+            >
+              {priority.label}
+            </span>
+          )}
+        </div>
+
+        {(hasMeta || assignees.length > 0) && (
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex min-w-0 items-center gap-2.5">
+              {card.dueDate && (
+                <span
+                  className={cn(
+                    "flex items-center gap-1 text-2xs font-medium tabular-nums",
+                    dueDateClass(card.dueDate),
+                  )}
+                >
+                  <CalendarDays size={11} aria-hidden />
+                  {formatDateShort(card.dueDate)}
+                </span>
+              )}
+
+              {comments > 0 && (
+                <span
+                  className="flex items-center gap-1 text-2xs font-medium text-fg-muted"
+                  title={`${comments} comments`}
+                >
+                  <MessageSquare size={11} aria-hidden />
+                  <span className="tabular-nums">{comments}</span>
+                </span>
+              )}
+
+              {attachments > 0 && (
+                <span
+                  className="flex items-center gap-1 text-2xs font-medium text-fg-muted"
+                  title={`${attachments} attachments`}
+                >
+                  <Paperclip size={11} aria-hidden />
+                  <span className="tabular-nums">{attachments}</span>
+                </span>
+              )}
+            </div>
+
+            {assignees.length > 0 && (
+              <AvatarGroup users={assignees} max={3} size="sm" />
+            )}
+          </div>
         )}
-      </div>
-
-      {labels.length > 0 && (
-        <div className="flex flex-wrap items-center gap-1 pl-1">
-          {labels.map((label) => (
-            <span
-              key={label.id}
-              className={cn(
-                "rounded-md border px-1.5 py-0.5 text-2xs font-semibold",
-                getLabelClasses(label.colour),
-              )}
-            >
-              {label.name}
-            </span>
-          ))}
-        </div>
-      )}
-
-      <div className="flex items-center justify-between gap-2 pl-1">
-        <div className="flex min-w-0 items-center gap-2">
-          {card.dueDate && (
-            <span
-              className={cn(
-                "flex items-center gap-1 rounded-md border px-1.5 py-0.5 text-2xs font-medium",
-                dueDateClass(card.dueDate),
-              )}
-            >
-              <Clock size={11} aria-hidden />
-              {formatDateShort(card.dueDate)}
-            </span>
-          )}
-
-          {comments > 0 && (
-            <span className="flex items-center gap-1 text-2xs font-medium text-fg-muted">
-              <MessageSquare size={11} aria-hidden />
-              {comments}
-            </span>
-          )}
-
-          {attachments > 0 && (
-            <span className="flex items-center gap-1 text-2xs font-medium text-fg-muted">
-              <Paperclip size={11} aria-hidden />
-              {attachments}
-            </span>
-          )}
-        </div>
-
-        {assignees.length > 0 && <AvatarGroup users={assignees} max={3} />}
       </div>
     </div>
   );
@@ -156,7 +194,7 @@ export const SortableCard = memo(function SortableCard({
       style={{
         transform: CSS.Translate.toString(transform),
         transition,
-        opacity: isDragging ? 0.35 : 1,
+        opacity: isDragging ? 0.3 : 1,
       }}
       {...attributes}
       {...listeners}
@@ -180,7 +218,7 @@ export const SortableCard = memo(function SortableCard({
       }}
       onKeyDown={handleKeyDown}
       aria-label={`Open card ${card.title}`}
-      className="cursor-grab rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface active:cursor-grabbing"
+      className="cursor-grab rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-base active:cursor-grabbing"
     >
       <CardTile card={card} done={done} />
     </div>

@@ -18,6 +18,8 @@
     --surface: #15151c;
     --card: #1a1a23;
     --overlay: #21212c;
+    /* recessed wells (kanban lanes, inset panels) */
+    --well: rgba(255, 255, 255, 0.022);
 
     /* translucent fills for ghost/hover states */
     --fill-1: rgba(255, 255, 255, 0.04);
@@ -53,6 +55,16 @@
 
     /* radius */
     --radius: 12px;
+
+    /* elevation */
+    --elevation-card:
+      inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 1px 2px rgba(0, 0, 0, 0.4),
+      0 6px 16px -8px rgba(0, 0, 0, 0.5);
+    --elevation-card-hover:
+      inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 1px 2px rgba(0, 0, 0, 0.45),
+      0 10px 24px -10px rgba(0, 0, 0, 0.65);
+    --elevation-lift:
+      0 18px 42px -14px rgba(0, 0, 0, 0.75), 0 2px 8px rgba(0, 0, 0, 0.45);
 
     color-scheme: dark;
 
@@ -104,6 +116,7 @@
     --surface: #ffffff;
     --card: #ffffff;
     --overlay: #f8f8fb;
+    --well: rgba(17, 17, 28, 0.025);
 
     --fill-1: rgba(17, 17, 28, 0.03);
     --fill-2: rgba(17, 17, 28, 0.055);
@@ -133,6 +146,15 @@
     --info-dim: rgba(42, 102, 196, 0.1);
 
     color-scheme: light;
+
+    --elevation-card:
+      inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 1px 2px rgba(17, 17, 28, 0.05),
+      0 4px 12px -5px rgba(17, 17, 28, 0.1);
+    --elevation-card-hover:
+      inset 0 1px 0 rgba(255, 255, 255, 0.95), 0 1px 2px rgba(17, 17, 28, 0.07),
+      0 8px 20px -8px rgba(17, 17, 28, 0.16);
+    --elevation-lift:
+      0 18px 40px -14px rgba(17, 17, 28, 0.28), 0 2px 8px rgba(17, 17, 28, 0.08);
 
     --chart-1: #5b4ee9;
     --chart-2: #18744c;
@@ -363,6 +385,20 @@
   }
 }
 
+/* card elevation: the inset highlight keeps dark cards from reading flat.
+   Declared as utilities so hover:/group-hover: variants actually compile. */
+@utility card-elevated {
+  box-shadow: var(--elevation-card);
+}
+
+@utility card-elevated-hover {
+  box-shadow: var(--elevation-card-hover);
+}
+
+@utility card-lifted {
+  box-shadow: var(--elevation-lift);
+}
+
 /* ==========================================================
    SHADCN THEME BRIDGE
 ========================================================== */
@@ -404,6 +440,7 @@
   --color-base: var(--base);
   --color-surface: var(--surface);
   --color-overlay: var(--overlay);
+  --color-well: var(--well);
   --color-fill-1: var(--fill-1);
   --color-fill-2: var(--fill-2);
   --color-fill-3: var(--fill-3);

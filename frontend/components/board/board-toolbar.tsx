@@ -27,48 +27,53 @@ export function BoardToolbar({
         : sum,
     0,
   );
-  const progress = totalCards > 0 ? Math.round((doneCards / totalCards) * 100) : 0;
+  const progress =
+    totalCards > 0 ? Math.round((doneCards / totalCards) * 100) : 0;
 
   return (
-    <div className="flex shrink-0 flex-wrap items-center gap-x-5 gap-y-3 border-b border-border bg-base/60 px-6 py-3 backdrop-blur-sm">
+    <div className="flex shrink-0 flex-wrap items-center gap-x-6 gap-y-3 border-b border-border bg-base/80 px-6 py-3.5 backdrop-blur-md">
       <div className="flex min-w-0 items-center gap-3">
-        <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-accent-dim text-accent">
-          <LayoutGrid size={15} />
+        <span className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-border-md bg-fill-1 text-accent">
+          <LayoutGrid size={15} aria-hidden />
         </span>
 
         <div className="min-w-0">
-          <h1 className="truncate text-sm font-semibold text-fg">
+          <h1 className="truncate text-body leading-tight font-semibold tracking-tight text-fg">
             {projectName ?? "Board"}
           </h1>
-          <p className="truncate text-2xs text-fg-muted">
+          <p className="mt-0.5 truncate text-2xs text-fg-muted">
             {projectDescription || `${columns.length} columns`}
           </p>
         </div>
       </div>
 
-      <div className="ml-auto flex items-center gap-4">
-        <span className="flex items-center gap-1.5 text-2xs font-medium text-fg-muted">
-          <LayoutGrid size={12} />
-          {columns.length} {columns.length === 1 ? "column" : "columns"}
+      <div className="ml-auto flex items-center gap-2">
+        <span className="hidden items-center gap-1.5 rounded-lg border border-border bg-fill-1 px-2 py-1 text-2xs font-medium text-fg-muted sm:flex">
+          <LayoutGrid size={11} aria-hidden />
+          <span className="tabular-nums">{columns.length}</span>
+          {columns.length === 1 ? "column" : "columns"}
         </span>
 
-        <span className="flex items-center gap-1.5 text-2xs font-medium text-fg-muted">
-          <CheckCircle2 size={12} />
-          {doneCards}/{totalCards} done
+        <span className="hidden items-center gap-1.5 rounded-lg border border-border bg-fill-1 px-2 py-1 text-2xs font-medium text-fg-muted sm:flex">
+          <CheckCircle2 size={11} aria-hidden />
+          <span className="tabular-nums">
+            {doneCards}/{totalCards}
+          </span>
+          done
         </span>
 
-        <div className="hidden items-center gap-2 sm:flex">
+        <div className="flex items-center gap-2.5 rounded-lg border border-border bg-fill-1 px-2.5 py-1.5">
           <div
             role="progressbar"
             aria-valuenow={progress}
             aria-valuemin={0}
             aria-valuemax={100}
             aria-label="Board completion"
-            className="h-1.5 w-28 overflow-hidden rounded-full bg-fill-2"
+            className="h-1.5 w-24 overflow-hidden rounded-full bg-fill-3"
           >
             <div
               className={cn(
-                "h-full rounded-full transition-[width] duration-500",
+                "h-full rounded-full transition-[width] duration-500 ease-out",
                 progress === 100 ? "bg-success" : "bg-accent-solid",
               )}
               style={{ width: `${progress}%` }}

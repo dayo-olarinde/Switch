@@ -76,7 +76,7 @@ export default function KanbanBoardPage() {
 
       <main className="custom-scrollbar min-h-0 flex-1 overflow-auto">
         {isLoading || !board ? (
-          <div className="h-full p-4">
+          <div className="h-full p-5">
             <KanbanBoardSkeleton />
           </div>
         ) : columns.length === 0 ? (
@@ -104,7 +104,7 @@ export default function KanbanBoardPage() {
             measuring={{ droppable: { strategy: MeasuringStrategy.Always } }}
           >
             <SortableContext items={columnIds} strategy={horizontalListSortingStrategy}>
-              <div className="flex h-full min-h-0 items-stretch gap-3 p-4">
+              <div className="flex h-full min-h-0 items-stretch gap-3 p-5">
                 {columns.map((column) => (
                   <BoardColumnLane
                     key={column.id}
