@@ -23,21 +23,23 @@ export function PresenceStack({ users }: PresenceStackProps) {
         <span
           key={user.userId ?? index}
           title={`${user.firstName ?? ""} ${user.lastName ?? ""}`.trim()}
-          className="relative flex size-7 items-center justify-center overflow-hidden rounded-full border-2 border-base bg-fill-3 text-2xs font-semibold text-fg"
+          className="relative size-7 rounded-full border-2 border-base bg-fill-3"
         >
-          {user.avatarUrl ? (
-            <Image
-              src={user.avatarUrl}
-              alt=""
-              width={28}
-              height={28}
-              className="size-full object-cover"
-              unoptimized
-              referrerPolicy="no-referrer"
-            />
-          ) : (
-            initials(user.firstName ?? "?", user.lastName)
-          )}
+          <span className="flex size-full items-center justify-center overflow-hidden rounded-full text-2xs font-semibold text-fg">
+            {user.avatarUrl ? (
+              <Image
+                src={user.avatarUrl}
+                alt=""
+                width={28}
+                height={28}
+                className="size-full object-cover"
+                unoptimized
+                referrerPolicy="no-referrer"
+              />
+            ) : (
+              initials(user.firstName ?? "?", user.lastName)
+            )}
+          </span>
           <span className="absolute right-0 bottom-0 size-1.5 rounded-full bg-success ring-2 ring-base" />
         </span>
       ))}

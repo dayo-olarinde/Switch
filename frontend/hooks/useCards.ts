@@ -149,6 +149,7 @@ export function useToggleAssignee(cardId: string) {
       } else {
         store.assignUserToCard(cardId, {
           id: member.userId,
+          userId: member.userId,
           firstName: member.firstName,
           lastName: member.lastName,
           avatarUrl: member.avatarUrl ?? null,
@@ -163,7 +164,13 @@ export function useToggleAssignee(cardId: string) {
       const store = useBoardStore.getState();
       if (context) {
         if (context.previousIsAttached) {
-          store.assignUserToCard(cardId, context.member);
+          store.assignUserToCard(cardId, {
+            id: context.member.userId,
+            userId: context.member.userId,
+            firstName: context.member.firstName,
+            lastName: context.member.lastName,
+            avatarUrl: context.member.avatarUrl ?? null,
+          });
         } else {
           store.removeUserFromCard(cardId, context.member.userId);
         }

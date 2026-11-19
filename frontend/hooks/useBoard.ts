@@ -25,7 +25,7 @@ export const useBoard = (projectSlug: string, workspaceSlug: string) => {
   }, [query.data, setBoard]);
 
   useEffect(() => {
-    if (labels?.length) setWorkspaceLabels(labels);
+    if (labels) setWorkspaceLabels(labels);
   }, [setWorkspaceLabels, labels, workspaceSlug]);
 
   return query;

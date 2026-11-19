@@ -14,7 +14,7 @@ export const WorkspaceCard = ({
     <button
       type="button"
       onClick={handleRedirectWorkspace}
-      className="group flex h-full flex-col rounded-xl border border-border bg-surface p-4 text-left transition-all hover:border-border-md focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none card-elevated hover:card-elevated-hover"
+      className="group flex h-full cursor-pointer flex-col rounded-xl border border-border bg-surface p-4 text-left transition-all hover:border-border-md focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none card-elevated hover:card-elevated-hover"
     >
       <div className="mb-3 flex items-start justify-between gap-2">
         <span

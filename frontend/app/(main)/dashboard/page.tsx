@@ -2,7 +2,7 @@
 
 import CreateWorkspaceModal from "@/components/modals/CreateWorkspaceModal";
 import { Button } from "@/components/ui/button";
-import { Card, PageHeader, SectionHeader, Stat } from "@/components/ui/page";
+import { PageHeader, SectionHeader, Stat } from "@/components/ui/page";
 import EmptyWorkspaceState from "@/components/workspace/EmptyWorkspace";
 import { WorkspaceCard } from "@/components/workspace/WorkspaceCard";
 import { useMe, useTeammates } from "@/hooks/useAuth";
@@ -10,14 +10,7 @@ import { useOpenCards } from "@/hooks/useCards";
 import { useActiveProjectsCount } from "@/hooks/useProjects";
 import { useGetWorkspaces, Workspace } from "@/hooks/useWorkspace";
 import { useWorkspaceStore } from "@/store/workspace.store";
-import {
-  ArrowRight,
-  FolderKanban,
-  LayoutGrid,
-  ListTodo,
-  Plus,
-  Users,
-} from "lucide-react";
+import { FolderKanban, LayoutGrid, ListTodo, Plus, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -163,27 +156,6 @@ export default function DashboardPage() {
             </button>
           </div>
         </section>
-
-        <Card className="mt-8 flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <p className="text-body font-semibold text-fg">
-              Jump into a project
-            </p>
-            <p className="mt-1 text-body text-fg-muted">
-              Open a workspace to pick a board, or search across everything.
-            </p>
-          </div>
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() =>
-              window.dispatchEvent(new Event("open-search"))
-            }
-          >
-            Search everything
-            <ArrowRight size={14} />
-          </Button>
-        </Card>
       </div>
 
       <CreateWorkspaceModal

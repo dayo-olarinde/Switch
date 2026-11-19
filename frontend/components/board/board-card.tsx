@@ -1,7 +1,7 @@
 "use client";
 
 import { AvatarGroup } from "@/components/ui/avatar";
-import { cn, formatDateShort, getLabelDot } from "@/lib/utils";
+import { cn, formatDateShort, getLabelChipClasses } from "@/lib/utils";
 import { BoardCard } from "@/types/board.types";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -53,8 +53,8 @@ export const CardTile = memo(function CardTile({
         <span
           aria-hidden
           className={cn(
-            "absolute inset-y-0 left-0",
-            card.priority === "urgent" ? "w-1" : "w-0.5",
+            "absolute inset-x-0 top-0",
+            card.priority === "urgent" ? "h-1" : "h-0.5",
             priority.bar,
           )}
         />
@@ -62,23 +62,17 @@ export const CardTile = memo(function CardTile({
 
       <div className="flex flex-col gap-2.5 px-3 py-2.5">
         {visibleLabels.length > 0 && (
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+          <div className="flex flex-wrap items-center gap-1">
             {visibleLabels.map((label) => (
               <span
                 key={label.id}
-                className="flex items-center gap-1.5"
                 title={label.name}
+                className={cn(
+                  "max-w-28 truncate rounded px-1.5 py-0.5 text-2xs font-medium",
+                  getLabelChipClasses(label.colour),
+                )}
               >
-                <span
-                  aria-hidden
-                  className={cn(
-                    "size-1.5 shrink-0 rounded-full",
-                    getLabelDot(label.colour),
-                  )}
-                />
-                <span className="max-w-24 truncate text-2xs font-medium text-fg-secondary">
-                  {label.name}
-                </span>
+                {label.name}
               </span>
             ))}
 
@@ -115,6 +109,16 @@ export const CardTile = memo(function CardTile({
         {(hasMeta || assignees.length > 0) && (
           <div className="flex items-center justify-between gap-2">
             <div className="flex min-w-0 items-center gap-2.5">
+              {comments > 0 && (
+                <span
+                  className="flex items-center gap-1 text-2xs font-medium text-fg-muted"
+                  title={`${comments} comments`}
+                >
+                  <MessageSquare size={11} aria-hidden />
+                  <span className="tabular-nums">{comments}</span>
+                </span>
+              )}
+
               {card.dueDate && (
                 <span
                   className={cn(
@@ -124,16 +128,6 @@ export const CardTile = memo(function CardTile({
                 >
                   <CalendarDays size={11} aria-hidden />
                   {formatDateShort(card.dueDate)}
-                </span>
-              )}
-
-              {comments > 0 && (
-                <span
-                  className="flex items-center gap-1 text-2xs font-medium text-fg-muted"
-                  title={`${comments} comments`}
-                >
-                  <MessageSquare size={11} aria-hidden />
-                  <span className="tabular-nums">{comments}</span>
                 </span>
               )}
 

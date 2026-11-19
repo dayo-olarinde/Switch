@@ -24,12 +24,8 @@ export const useCreateLabel = (workspaceSlug: string) => {
       return await api.post(`/workspaces/${workspaceSlug}/labels`, data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["workspaceLabels", workspaceSlug],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["cards"],
-      });
+      queryClient.invalidateQueries({ queryKey: ["labels"] });
+      queryClient.invalidateQueries({ queryKey: ["board"] });
 
       toast.success("Workspace label created");
     },
@@ -54,12 +50,9 @@ export const useDeleteLabel = (workspaceSlug: string) => {
       );
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["workspaceLabels", workspaceSlug],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["card"],
-      });
+      queryClient.invalidateQueries({ queryKey: ["labels"] });
+      queryClient.invalidateQueries({ queryKey: ["card"] });
+      queryClient.invalidateQueries({ queryKey: ["board"] });
 
       toast.success("Workspace label deleted");
     },
@@ -121,6 +114,7 @@ export const useToggleLabel = (card: BoardCard) => {
 
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["card", card.id] });
+      queryClient.invalidateQueries({ queryKey: ["board"] });
       queryClient.invalidateQueries({ queryKey: ["activities", card.id] });
     },
   });

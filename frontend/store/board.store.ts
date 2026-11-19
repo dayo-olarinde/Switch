@@ -306,14 +306,21 @@ export const useBoardStore = create<BoardStore>((set) => ({
               if (card.id !== cardId) return card;
 
               const alreadyAssigned = card.assignees.some(
-                (a) => a.id === assignee.userId,
+                (a) => a.userId === (assignee.userId ?? assignee.id),
               );
 
               if (alreadyAssigned) return card;
 
               return {
                 ...card,
-                assignees: [...card.assignees, assignee as BoardAssignee],
+                assignees: [
+                  ...card.assignees,
+                  {
+                    ...(assignee as BoardAssignee),
+                    id: assignee.id ?? assignee.userId!,
+                    userId: assignee.userId ?? assignee.id!,
+                  },
+                ],
               };
             }),
           })),
@@ -333,7 +340,9 @@ export const useBoardStore = create<BoardStore>((set) => ({
               card.id === cardId
                 ? {
                     ...card,
-                    assignees: card.assignees.filter((a) => a.id !== userId),
+                    assignees: card.assignees.filter(
+                      (a) => a.userId !== userId && a.id !== userId,
+                    ),
                   }
                 : card,
             ),
