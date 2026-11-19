@@ -1,9 +1,9 @@
 import QueryProvider from "@/components/QueryProviders";
+import { AppToaster } from "@/components/AppToaster";
 import { ThemeScript } from "@/components/ThemeToggle";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
-import { Toaster } from "sonner";
 import "./globals.css";
 import { MobileBlocker } from "@/components/ui/MobileBlocker";
 
@@ -33,7 +33,7 @@ export default function RootLayout({
         <MobileBlocker>
           <QueryProvider>{children}</QueryProvider>
         </MobileBlocker>
-        <Toaster richColors theme="system" />
+        <AppToaster />
       </body>
     </html>
   );

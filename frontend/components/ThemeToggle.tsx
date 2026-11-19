@@ -47,12 +47,12 @@ export function ThemeScript() {
   return <script dangerouslySetInnerHTML={{ __html: script }} />;
 }
 
+export function useThemeMode(): ThemeMode {
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+}
+
 export function ThemeToggle({ className }: { className?: string }) {
-  const mode = useSyncExternalStore(
-    subscribe,
-    getSnapshot,
-    getServerSnapshot,
-  );
+  const mode = useThemeMode();
 
   const toggle = useCallback(() => {
     applyTheme(mode === "dark" ? "light" : "dark");

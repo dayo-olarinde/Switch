@@ -57,7 +57,7 @@ export function CardTitle({ title, priority, onSave }: CardTitleProps) {
             event.currentTarget.blur();
           }
         }}
-        className="-ml-2 mb-3 w-full resize-none overflow-hidden rounded-lg border border-transparent bg-transparent px-2 py-1.5 text-2xl leading-tight font-semibold text-fg transition-colors outline-none hover:border-border focus:border-accent focus:bg-fill-1"
+        className="-ml-2 mb-3 w-full resize-none overflow-hidden rounded-lg border border-transparent bg-transparent px-2 py-1.5 text-headline leading-tight font-semibold text-fg transition-colors outline-none hover:border-border focus:border-accent focus:bg-fill-1"
       />
 
       {priority && priority !== "none" && (
