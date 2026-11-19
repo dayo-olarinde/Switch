@@ -3,6 +3,7 @@
 import CreateProjectModal from "@/components/modals/CreateProjectModal";
 import DeleteWorkspaceModal from "@/components/modals/DeleteWorkspaceModal";
 import { Badge } from "@/components/ui/badge";
+import { LoadError } from "@/components/ui/feedback";
 import { Tabs } from "@/components/ui/tabs";
 import { MembersTab } from "@/components/workspace/MembersTab";
 import { ProjectsTab } from "@/components/workspace/ProjectsTab";
@@ -42,10 +43,18 @@ function WorkspaceContent() {
       : "projects"
   ) as WorkspaceTab;
 
-  const { data: members = [], isLoading: membersLoading } =
-    useGetMembers(workspaceSlug);
-  const { data: projects = [], isLoading: projectsLoading } =
-    useWorkspaceProjects(activeWorkspace?.slug);
+  const {
+    data: members = [],
+    isLoading: membersLoading,
+    isError: membersError,
+    refetch: refetchMembers,
+  } = useGetMembers(workspaceSlug);
+  const {
+    data: projects = [],
+    isLoading: projectsLoading,
+    isError: projectsError,
+    refetch: refetchProjects,
+  } = useWorkspaceProjects(activeWorkspace?.slug);
 
   if (!activeWorkspace) return null;
 
@@ -95,23 +104,37 @@ function WorkspaceContent() {
         className="mb-6"
       />
 
-      {activeTab === "projects" && (
-        <ProjectsTab
-          workspaceSlug={activeWorkspace.slug}
-          workspace={activeWorkspace}
-          projects={projects}
-          projectsLoading={projectsLoading}
-          onOpenProjectModal={() => setIsProjectModalOpen(true)}
-        />
-      )}
+      {activeTab === "projects" &&
+        (projectsError ? (
+          <LoadError
+            title="Couldn't load projects"
+            message="We couldn't fetch this workspace's projects."
+            onRetry={() => refetchProjects()}
+          />
+        ) : (
+          <ProjectsTab
+            workspaceSlug={activeWorkspace.slug}
+            workspace={activeWorkspace}
+            projects={projects}
+            projectsLoading={projectsLoading}
+            onOpenProjectModal={() => setIsProjectModalOpen(true)}
+          />
+        ))}
 
-      {activeTab === "members" && (
-        <MembersTab
-          members={members}
-          membersLoading={membersLoading}
-          activeWorkspace={activeWorkspace}
-        />
-      )}
+      {activeTab === "members" &&
+        (membersError ? (
+          <LoadError
+            title="Couldn't load members"
+            message="We couldn't fetch this workspace's members."
+            onRetry={() => refetchMembers()}
+          />
+        ) : (
+          <MembersTab
+            members={members}
+            membersLoading={membersLoading}
+            activeWorkspace={activeWorkspace}
+          />
+        ))}
 
       {activeTab === "settings" && canManageWorkspace && (
         <SettingsTab

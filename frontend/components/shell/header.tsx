@@ -6,6 +6,13 @@ import { initials } from "@/lib/utils";
 import { Bell, ChevronRight, Search } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useSyncExternalStore } from "react";
+
+const subscribeToNothing = () => () => {};
+
+function isApplePlatform() {
+  return /Mac|iPhone|iPad|iPod/i.test(navigator.platform);
+}
 
 interface PresenceStackProps {
   users: PresenceUser[];
@@ -70,6 +77,14 @@ export function AppHeader({
   showPresence,
   onOpenSearch,
 }: AppHeaderProps) {
+  const shortcut = useSyncExternalStore(
+    subscribeToNothing,
+    isApplePlatform,
+    () => false,
+  )
+    ? "⌘K"
+    : "Ctrl K";
+
   return (
     <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center gap-3 border-b border-border bg-base/80 px-6 backdrop-blur-md">
       {workspaceName && (
@@ -92,7 +107,7 @@ export function AppHeader({
           <Search size={14} />
           <span className="hidden text-body font-medium sm:inline">Search</span>
           <kbd className="ml-1 hidden items-center rounded border border-border bg-base px-1.5 py-0.5 font-sans text-2xs font-semibold text-fg-muted sm:inline-flex">
-            ⌘K
+            {shortcut}
           </kbd>
         </button>
 

@@ -2,6 +2,7 @@
 
 import CreateColumnModal from "@/components/modals/CreateColumnModal";
 import { KanbanBoardSkeleton } from "@/components/skeletons/BoardPage";
+import { LoadError } from "@/components/ui/feedback";
 import { EmptyState } from "@/components/ui/page";
 import { useBoard } from "@/hooks/useBoard";
 import { useBoardSocket } from "@/hooks/useBoardSocket";
@@ -36,7 +37,11 @@ export default function KanbanBoardPage() {
   const [isColumnModalOpen, setIsColumnModalOpen] = useState(false);
 
   const { data: project } = useGetProjectBySlug(workspaceSlug, projectSlug);
-  const { isLoading } = useBoard(projectSlug, workspaceSlug);
+  const {
+    isLoading,
+    isError: boardError,
+    refetch: refetchBoard,
+  } = useBoard(projectSlug, workspaceSlug);
   const { data: workspaceMembers = [], isLoading: membersLoading } =
     useGetMembers(workspaceSlug);
 
@@ -75,7 +80,15 @@ export default function KanbanBoardPage() {
       />
 
       <main className="custom-scrollbar min-h-0 flex-1 overflow-auto">
-        {isLoading || !board ? (
+        {boardError ? (
+          <div className="p-6">
+            <LoadError
+              title="Couldn't load this board"
+              message="The board failed to load. Check your connection and try again."
+              onRetry={() => refetchBoard()}
+            />
+          </div>
+        ) : isLoading || !board ? (
           <div className="h-full p-5">
             <KanbanBoardSkeleton />
           </div>

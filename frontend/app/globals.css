@@ -206,9 +206,32 @@
     opacity: 0.85;
   }
 
+  /* Preflight resets buttons to the default arrow; restore the affordance for
+     every clickable control, including the hand-rolled ones. */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  summary {
+    cursor: pointer;
+  }
+
   :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
@@ -393,4 +416,24 @@
 
 @utility landing-text-pretty {
   text-wrap: pretty;
+}
+
+/* ----------------------------------------------------------
+   ROTATE PROMPT
+   Portrait phones and small tablets are asked to rotate;
+   landscape phones, tablets and desktops render the app.
+---------------------------------------------------------- */
+
+[data-rotate-blocker] {
+  display: none;
+}
+
+@media (orientation: portrait) and (max-width: 1023px) {
+  [data-rotate-blocker] {
+    display: flex;
+  }
+
+  [data-rotate-content] {
+    display: none;
+  }
 }

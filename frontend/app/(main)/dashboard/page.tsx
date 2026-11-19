@@ -3,6 +3,7 @@
 import CreateWorkspaceModal from "@/components/modals/CreateWorkspaceModal";
 import { Button } from "@/components/ui/button";
 import { PageHeader, SectionHeader, Stat } from "@/components/ui/page";
+import { LoadError } from "@/components/ui/feedback";
 import EmptyWorkspaceState from "@/components/workspace/EmptyWorkspace";
 import { WorkspaceCard } from "@/components/workspace/WorkspaceCard";
 import { useMe, useTeammates } from "@/hooks/useAuth";
@@ -59,12 +60,29 @@ export default function DashboardPage() {
   const { data: cards } = useOpenCards();
   const { data: teammates } = useTeammates();
   const { data: projects, isLoading: countLoading } = useActiveProjectsCount();
-  const { data: workspaces = [], isFetched } = useGetWorkspaces();
+  const {
+    data: workspaces = [],
+    isFetched,
+    isError,
+    refetch,
+  } = useGetWorkspaces();
 
   const handleRedirectWorkspace = (ws: Workspace) => {
     setActiveWorkspace(ws);
     router.push(`/${ws.slug}`);
   };
+
+  if (isError) {
+    return (
+      <div className="w-full pt-6">
+        <LoadError
+          title="Couldn't load your dashboard"
+          message="We couldn't fetch your workspaces. Check your connection and try again."
+          onRetry={() => refetch()}
+        />
+      </div>
+    );
+  }
 
   if (!isFetched || countLoading) return <DashboardSkeleton />;
 

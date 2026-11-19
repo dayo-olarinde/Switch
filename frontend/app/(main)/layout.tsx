@@ -10,6 +10,7 @@ import {
   LayoutSkeleton,
 } from "@/components/skeletons/LayoutPage";
 import { SocketProvider } from "@/components/SocketProvider";
+import { LoadError } from "@/components/ui/feedback";
 import { FullScreenLoader } from "@/components/ui/FullScreenLoader";
 import { useLogout, useMe } from "@/hooks/useAuth";
 import { useWorkspaceProjects } from "@/hooks/useProjects";
@@ -63,6 +64,8 @@ function MainLayoutContent({ children }: { children: ReactNode }) {
     data: workspaces = [],
     isLoading: workspacesLoading,
     isFetching,
+    isError: workspacesError,
+    refetch: refetchWorkspaces,
   } = useGetWorkspaces();
 
   const { data: projects = [], isLoading: projectsLoading } =
@@ -76,7 +79,7 @@ function MainLayoutContent({ children }: { children: ReactNode }) {
   }, [user, userLoading]);
 
   useEffect(() => {
-    if (userLoading || !user) return;
+    if (userLoading || !user || workspacesError) return;
 
     if (!workspacesLoading && !isFetching && workspaces.length === 0) {
       router.replace("/getting-you-started");
@@ -84,6 +87,7 @@ function MainLayoutContent({ children }: { children: ReactNode }) {
   }, [
     user,
     userLoading,
+    workspacesError,
     workspacesLoading,
     isFetching,
     workspaces.length,
@@ -124,6 +128,19 @@ function MainLayoutContent({ children }: { children: ReactNode }) {
   if (userLoading || workspacesLoading) {
     if (workspaces.length > 0) return <LayoutSkeleton />;
     return <FullScreenLoader />;
+  }
+
+  if (workspacesError) {
+    return (
+      <div className="flex h-dvh items-center justify-center bg-base px-6">
+        <LoadError
+          title="Couldn't load your workspaces"
+          message="We couldn't reach the server. Check your connection and try again."
+          onRetry={() => refetchWorkspaces()}
+          className="w-full max-w-md"
+        />
+      </div>
+    );
   }
 
   if (!workspaces.length) return <FullScreenLoader />;

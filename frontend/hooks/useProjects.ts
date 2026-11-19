@@ -135,7 +135,7 @@ export function useDeleteProject() {
       projectSlug: string;
     }) => api.delete(`/workspaces/${workspaceSlug}/projects/${projectSlug}`),
 
-    onSuccess: (data, variables) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["projects"] });
       queryClient.invalidateQueries({ queryKey: ["workspaces"] });
     },
