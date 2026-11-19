@@ -132,7 +132,7 @@ export const renderActivityText = (activity: CardActivity) => {
         <>
           moved this card from{" "}
           <span className="font-semibold text-fg">{meta.from}</span> to{" "}
-          <span className="inline-flex px-2 py-0.5 rounded bg-info-dim text-info font-medium text-xs border border-info">
+          <span className="inline-flex rounded border border-info/30 bg-info-dim px-1.5 py-0.5 text-2xs font-medium text-info">
             {meta.to}
           </span>
         </>
@@ -169,7 +169,7 @@ export const renderActivityText = (activity: CardActivity) => {
       return (
         <>
           attached a label:{" "}
-          <span className="inline-flex items-center px-1.5 py-0.5 rounded text-md font-bold  tracking-wider bg-fill-3 text-fg">
+          <span className="inline-flex items-center rounded bg-fill-3 px-1.5 py-0.5 text-2xs font-semibold text-fg">
             {meta.labelName || "label"}
           </span>{" "}
         </>
@@ -178,7 +178,7 @@ export const renderActivityText = (activity: CardActivity) => {
       return (
         <>
           removed a label:{" "}
-          <span className="inline-flex items-center px-1.5 py-0.5 rounded text-md font-bold  tracking-wider bg-fill-3 text-fg">
+          <span className="inline-flex items-center rounded bg-fill-3 px-1.5 py-0.5 text-2xs font-semibold text-fg">
             {meta.labelName || "label"}
           </span>{" "}
         </>

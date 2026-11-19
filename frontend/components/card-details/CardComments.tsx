@@ -1,5 +1,7 @@
 "use client";
 
+import { Avatar } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { useMe } from "@/hooks/useAuth";
 import {
   useCreateComment,
@@ -8,24 +10,11 @@ import {
   useGetComments,
 } from "@/hooks/useComments";
 import { useGetMembers, useWorkspaceRole } from "@/hooks/useWorkspace";
-import { cn } from "@/lib/utils";
 import { useWorkspaceStore } from "@/store/workspace.store";
-import { formatDistanceToNow } from "date-fns";
-import { Pencil, Trash2 } from "lucide-react";
-import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import { CommentsSkeleton } from "../skeletons/CardComments";
-
-const getAvatarColor = (name: string) => {
-  const colors = [
-    "bg-info-dim text-info",
-    "bg-success-dim text-success",
-    "bg-danger-dim text-danger",
-    "bg-warning-dim text-warning",
-  ];
-  return colors[name.length % colors.length];
-};
+import { CommentItem } from "./comment-item";
 
 export function CardComments({ cardId }: { cardId: string }) {
   const params = useParams();
@@ -41,9 +30,6 @@ export function CardComments({ cardId }: { cardId: string }) {
   const { mutate: editComment } = useEditComment(cardId);
   const { mutate: deleteComment } = useDeleteComment(cardId);
 
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [editValue, setEditValue] = useState("");
-
   const { canManageWorkspace } = useWorkspaceRole();
 
   const handleSubmit = () => {
@@ -52,232 +38,81 @@ export function CardComments({ cardId }: { cardId: string }) {
     setCommentValue("");
   };
 
-  const handleSaveEdit = (commentId: string) => {
-    if (!editValue.trim()) return;
-    editComment({ commentId, content: editValue });
-    setEditingId(null);
-  };
-
-  const handleDeleteComment = (commentId: string) => {
-    if (!commentId) return;
-    deleteComment(commentId);
-  };
-
   if (isLoading || !members) {
     return <CommentsSkeleton />;
   }
-  const currentMember = members?.find((m) => m.userId === currentUser?.id);
+
+  const currentMember = members.find((m) => m.userId === currentUser?.id);
 
   return (
-    <div className="space-y-8 pb-4">
-      <div className="space-y-6">
-        {comments.length > 0 ? (
-          comments.map((comment) => {
-            const initials =
-              `${comment.author.firstName?.[0] || ""}${comment.author.lastName?.[0] || ""}`.toUpperCase();
-            const isOptimistic = comment.id.startsWith("temp-");
-            const isEditing = editingId === comment.id;
-
+    <div className="space-y-6 pb-4">
+      {comments.length > 0 ? (
+        <ul className="space-y-6">
+          {comments.map((comment) => {
             const isAuthor = currentUser?.id === comment.author.id;
-            const authorMember = members?.find(
+            const authorMember = members.find(
               (m) => m.userId === comment.author.id,
             );
             const isAuthorOwner =
               authorMember?.role?.toLowerCase() === "owner" ||
               activeWorkspace?.ownerId === comment.author.id;
 
-            const canEdit = isAuthor;
-
-            const canDelete =
-              isAuthor || (canManageWorkspace && !isAuthorOwner);
-
-            const showActions =
-              (canEdit || canDelete) && !isOptimistic && !isEditing;
-
             return (
-              <div
+              <CommentItem
                 key={comment.id}
-                className={cn(
-                  "flex gap-4 group transition-opacity",
-                  isOptimistic && "opacity-50 pointer-events-none",
-                )}
-              >
-                <div className="shrink-0 mt-0.5">
-                  {comment.author.avatarUrl ? (
-                    <Image
-                      src={comment.author.avatarUrl}
-                      alt={comment.author.firstName}
-                      width={32}
-                      height={32}
-                      className="w-8 h-8 rounded-full object-cover border border-border-md"
-                      unoptimized
-                      referrerPolicy="no-referrer"
-                    />
-                  ) : (
-                    <div
-                      className={cn(
-                        "w-8 h-8 rounded-full border border-border flex items-center justify-center text-[11px] font-bold",
-                        getAvatarColor(comment.author.firstName),
-                      )}
-                    >
-                      {initials || "?"}
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-2 mb-1.5">
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-[14px] font-bold text-fg">
-                        {comment.author.firstName} {comment.author.lastName}
-                      </span>
-                      <span className="text-[11px] font-medium text-fg-muted">
-                        {isOptimistic
-                          ? "Posting..."
-                          : formatDistanceToNow(new Date(comment.createdAt), {
-                              addSuffix: true,
-                            })}
-                      </span>
-                      {comment.isEdited && !isOptimistic && (
-                        <span className="text-[10px] text-fg-muted font-medium">
-                          (edited)
-                        </span>
-                      )}
-                    </div>
-
-                    {showActions && (
-                      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        {canEdit && (
-                          <button
-                            onClick={() => {
-                              setEditingId(comment.id);
-                              setEditValue(comment.content);
-                            }}
-                            className="p-1.5 text-fg-muted hover:text-fg hover:bg-fill-3 rounded-md transition-all"
-                            title="Edit comment"
-                          >
-                            <Pencil size={13} />
-                          </button>
-                        )}
-                        {canDelete && (
-                          <button
-                            onClick={() => handleDeleteComment(comment.id)}
-                            className="p-1.5 text-fg-muted hover:text-danger hover:bg-danger-dim rounded-md transition-all"
-                            title="Delete comment"
-                          >
-                            <Trash2 size={13} />
-                          </button>
-                        )}
-                      </div>
-                    )}
-                  </div>
-
-                  {isEditing ? (
-                    <div className="flex flex-col rounded-xl border border-accent/50 bg-surface ring-1 ring-accent/20 overflow-hidden mt-2">
-                      <textarea
-                        value={editValue}
-                        onChange={(e) => setEditValue(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
-                            handleSaveEdit(comment.id);
-                          }
-                          if (e.key === "Escape") setEditingId(null);
-                        }}
-                        className="w-full bg-transparent p-3 text-[13px] text-fg placeholder:text-fg-muted outline-none resize-none min-h-17.5 custom-scrollbar"
-                        autoFocus
-                      />
-                      <div className="bg-fill-1 border-t border-border p-2 flex justify-between items-center">
-                        <span className="text-[10px] text-fg-muted ml-2 hidden sm:inline-block">
-                          <kbd className="font-sans">Ctrl</kbd> +{" "}
-                          <kbd className="font-sans">Enter</kbd> to save
-                        </span>
-
-                        <div className="flex gap-2 ml-auto">
-                          <button
-                            onClick={() => setEditingId(null)}
-                            className="px-3 py-1.5 text-fg-muted hover:text-fg hover:bg-fill-2 text-[12px] font-semibold rounded-lg transition-colors"
-                          >
-                            Cancel
-                          </button>
-                          <button
-                            onClick={() => handleSaveEdit(comment.id)}
-                            disabled={
-                              !editValue.trim() || editValue === comment.content
-                            }
-                            className="px-3 py-1.5 bg-accent-solid hover:bg-accent-solid/90 disabled:bg-accent-solid/30 disabled:text-on-accent text-on-accent text-[12px] font-semibold rounded-lg transition-colors"
-                          >
-                            Save
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="bg-surface border border-border rounded-xl rounded-tl-none p-4 text-[13px] text-fg leading-relaxed whitespace-pre-wrap wrap-break-word">
-                      {comment.content}
-                    </div>
-                  )}
-                </div>
-              </div>
+                comment={comment}
+                canEdit={isAuthor}
+                canDelete={isAuthor || (canManageWorkspace && !isAuthorOwner)}
+                onSave={(commentId, content) =>
+                  editComment({ commentId, content })
+                }
+                onDelete={(commentId) => deleteComment(commentId)}
+              />
             );
-          })
-        ) : (
-          <div className="py-10 text-center border-2 border-border border-dashed rounded-xl bg-fill-1">
-            <p className="text-[13px] text-fg-muted font-medium">
-              No comments yet. Start the conversation!
-            </p>
-          </div>
-        )}
-      </div>
-
-      <div className="flex gap-4">
-        <div className="shrink-0 mt-1">
-          {currentMember?.avatarUrl ? (
-            <Image
-              src={currentMember.avatarUrl}
-              alt="You"
-              width={32}
-              height={32}
-              className="w-8 h-8 rounded-full object-cover border border-border-md"
-              unoptimized
-              referrerPolicy="no-referrer"
-            />
-          ) : (
-            <div
-              className={cn(
-                "w-8 h-8 rounded-full border border-border flex items-center justify-center text-[11px] font-bold",
-                getAvatarColor(currentUser?.firstName as string),
-              )}
-            >
-              {currentUser?.firstName?.charAt(0)?.toUpperCase()}
-              {currentUser?.lastName?.charAt(0)?.toUpperCase()}
-            </div>
-          )}
+          })}
+        </ul>
+      ) : (
+        <div className="rounded-xl border border-dashed border-border bg-fill-1 py-10 text-center">
+          <p className="text-body font-medium text-fg-muted">
+            No comments yet. Start the conversation.
+          </p>
         </div>
+      )}
 
-        <div className="flex-1 flex flex-col rounded-xl border border-border-md bg-surface focus-within:border-accent/50 focus-within:ring-1 focus-within:ring-accent/20 transition-all overflow-hidden shadow-sm">
+      <div className="flex gap-3">
+        <Avatar
+          firstName={currentUser?.firstName ?? ""}
+          lastName={currentUser?.lastName}
+          avatarUrl={currentMember?.avatarUrl}
+          size="md"
+          className="mt-1"
+        />
+
+        <div className="flex flex-1 flex-col overflow-hidden rounded-xl border border-border-md bg-surface transition-colors focus-within:border-accent focus-within:ring-1 focus-within:ring-accent-dim">
           <textarea
             value={commentValue}
             onChange={(e) => setCommentValue(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
-                handleSubmit();
-              }
+              if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) handleSubmit();
             }}
             placeholder="Write a comment..."
-            className="w-full bg-transparent p-3 text-[13px] text-fg placeholder:text-fg-muted outline-none resize-none min-h-20 custom-scrollbar"
+            aria-label="Write a comment"
+            className="custom-scrollbar min-h-20 w-full resize-none bg-transparent p-3 text-body text-fg outline-none placeholder:text-fg-muted"
           />
-          <div className="  p-2 flex justify-between items-center">
-            <span className="text-[10px] text-fg-muted ml-2 hidden sm:inline-block">
+          <div className="flex items-center justify-between p-2">
+            <span className="ml-1 hidden items-center gap-1 text-2xs text-fg-muted sm:flex">
               <kbd className="font-sans">Ctrl</kbd> +{" "}
               <kbd className="font-sans">Enter</kbd> to send
             </span>
-            <button
+            <Button
+              size="sm"
               onClick={handleSubmit}
-              disabled={!commentValue.trim() || isPending}
-              className="px-4 py-1.5 ml-auto bg-accent-solid hover:bg-accent-solid/90 disabled:bg-accent-solid/30 disabled:text-on-accent disabled:cursor-not-allowed text-on-accent text-[12px] font-semibold rounded-lg transition-colors"
+              loading={isPending}
+              disabled={!commentValue.trim()}
+              className="ml-auto"
             >
               Comment
-            </button>
+            </Button>
           </div>
         </div>
       </div>

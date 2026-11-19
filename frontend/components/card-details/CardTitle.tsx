@@ -1,15 +1,8 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { PRIORITY_META } from "../board/board-utils";
 import { useEffect, useRef, useState } from "react";
-
-const PRIORITY_STYLES: Record<string, string> = {
-  urgent: "bg-danger-dim text-danger border-danger",
-  high: "bg-accent-dim text-accent border-accent",
-  medium: "bg-warning-dim text-warning border-warning",
-  low: "bg-success-dim text-success border-success",
-  none: "bg-fill-2 text-fg-muted border-border-md",
-};
 
 interface CardTitleProps {
   title: string;
@@ -19,8 +12,8 @@ interface CardTitleProps {
 
 export function CardTitle({ title, priority, onSave }: CardTitleProps) {
   const [value, setValue] = useState(title);
-
   const [prevTitle, setPrevTitle] = useState(title);
+
   if (title !== prevTitle) {
     setPrevTitle(title);
     setValue(title);
@@ -29,10 +22,9 @@ export function CardTitle({ title, priority, onSave }: CardTitleProps) {
   const ref = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    if (ref.current) {
-      ref.current.style.height = "auto";
-      ref.current.style.height = `${ref.current.scrollHeight}px`;
-    }
+    if (!ref.current) return;
+    ref.current.style.height = "auto";
+    ref.current.style.height = `${ref.current.scrollHeight}px`;
   }, [value]);
 
   const handleSave = () => {
@@ -43,39 +35,41 @@ export function CardTitle({ title, priority, onSave }: CardTitleProps) {
     if (value !== title) onSave(value);
   };
 
-  const p = priority?.toLowerCase() || "none";
-  const pStyle = PRIORITY_STYLES[p] ?? PRIORITY_STYLES.none;
+  const key = (priority?.toLowerCase() ?? "none") as keyof typeof PRIORITY_META;
+  const meta = PRIORITY_META[key] ?? PRIORITY_META.none;
 
   return (
-    <div className="mb-8">
+    <div className="mb-6">
       <textarea
         ref={ref}
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        rows={1}
+        aria-label="Card title"
+        onChange={(event) => setValue(event.target.value)}
         onBlur={handleSave}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            e.currentTarget.blur();
+        onKeyDown={(event) => {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            event.currentTarget.blur();
           }
-          if (e.key === "Escape") {
+          if (event.key === "Escape") {
             setValue(title);
-            e.currentTarget.blur();
+            event.currentTarget.blur();
           }
         }}
-        className="w-full bg-transparent text-[24px] font-bold text-fg border border-transparent hover:border-border focus:border-accent/50 focus:bg-fill-1 rounded-lg px-3 py-1.5 -ml-3 outline-none transition-colors resize-none overflow-hidden leading-tight mb-3"
-        rows={1}
+        className="-ml-2 mb-3 w-full resize-none overflow-hidden rounded-lg border border-transparent bg-transparent px-2 py-1.5 text-2xl leading-tight font-semibold text-fg transition-colors outline-none hover:border-border focus:border-accent focus:bg-fill-1"
       />
+
       {priority && priority !== "none" && (
-        <div
+        <span
           className={cn(
-            "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider border",
-            pStyle,
+            "inline-flex items-center gap-1.5 rounded-md border px-2 py-0.5 text-2xs font-semibold tracking-wide uppercase",
+            meta.chip,
           )}
         >
-          <div className="w-1.5 h-1.5 rounded-full bg-current opacity-80" />
-          {priority}
-        </div>
+          <span aria-hidden className={cn("size-1.5 rounded-full", meta.bar)} />
+          {meta.label}
+        </span>
       )}
     </div>
   );

@@ -81,7 +81,7 @@ export function CardDetailModalInner({
         onClose={onClose}
         width="xl"
         headerless
-        bodyClassName="p-0"
+        bodyClassName="overflow-hidden p-0"
         shouldCloseOnEscape={() => {
           const activeNode = document.activeElement;
           return !(
@@ -90,7 +90,7 @@ export function CardDetailModalInner({
           );
         }}
       >
-        <div className="flex min-h-0 flex-1 flex-col">
+        <div className="flex h-full min-h-0 flex-col">
           <CardHeader
             projectName={project?.name ?? ""}
             columnName={currentColumn?.name ?? ""}
@@ -101,44 +101,46 @@ export function CardDetailModalInner({
           />
 
           <div className="flex min-h-0 flex-1 overflow-hidden">
-            <main className="min-h-0 flex-1 overflow-y-auto bg-base p-8">
-              <CardTitle
-                title={card.title}
-                priority={card.priority}
-                onSave={handleTitleSave}
-              />
-
-              <div className="space-y-10">
-                <CardDescription
-                  description={card.description || ""}
-                  onSave={handleDescSave}
+            <main className="custom-scrollbar min-h-0 flex-1 overflow-y-auto bg-base">
+              <div className="mx-auto w-full max-w-3xl px-8 py-7">
+                <CardTitle
+                  title={card.title}
+                  priority={card.priority}
+                  onSave={handleTitleSave}
                 />
 
-                <CardAttachments card={card} />
-
-                <section className="border-t border-border pt-4">
-                  <Tabs
-                    className="mb-6"
-                    value={activeTab}
-                    onChange={setActiveTab}
-                    items={[
-                      {
-                        value: "comments",
-                        label: "Comments",
-                        count: card.commentCount || 0,
-                      },
-                      { value: "activity", label: "Activity" },
-                    ]}
+                <div className="space-y-8">
+                  <CardDescription
+                    description={card.description || ""}
+                    onSave={handleDescSave}
                   />
 
-                  <div className="pb-10">
-                    {activeTab === "comments" ? (
-                      <CardComments cardId={card.id} />
-                    ) : (
-                      <ActivityTab cardId={card.id} />
-                    )}
-                  </div>
-                </section>
+                  <CardAttachments card={card} />
+
+                  <section className="border-t border-border pt-5">
+                    <Tabs
+                      className="mb-5"
+                      value={activeTab}
+                      onChange={setActiveTab}
+                      items={[
+                        {
+                          value: "comments",
+                          label: "Comments",
+                          count: card.commentCount || 0,
+                        },
+                        { value: "activity", label: "Activity" },
+                      ]}
+                    />
+
+                    <div className="pb-8">
+                      {activeTab === "comments" ? (
+                        <CardComments cardId={card.id} />
+                      ) : (
+                        <ActivityTab cardId={card.id} />
+                      )}
+                    </div>
+                  </section>
+                </div>
               </div>
             </main>
 

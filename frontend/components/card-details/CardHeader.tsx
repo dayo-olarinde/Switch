@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { ChevronRight, Trash2, X } from "lucide-react";
 
 interface CardHeaderProps {
@@ -20,35 +21,39 @@ export function CardHeader({
   onClose,
 }: CardHeaderProps) {
   return (
-    <header className="h-14 px-6 flex items-center justify-between border-b border-border shrink-0 bg-base">
-      <div className="flex items-center gap-2 text-[13px] font-medium text-fg-muted">
-        <span className="hover:text-fg cursor-pointer transition-colors">
-          {projectName}
-        </span>
-        <ChevronRight size={14} className="opacity-50" />
-        <span className="hover:text-fg cursor-pointer transition-colors">
-          {columnName}
-        </span>
-        <ChevronRight size={14} className="opacity-50" />
-        <span className="text-fg truncate max-w-50">{cardTitle}</span>
-      </div>
+    <header className="flex h-14 shrink-0 items-center gap-3 border-b border-border bg-base px-4">
+      <nav
+        aria-label="Card location"
+        className="flex min-w-0 items-center gap-1.5 text-body text-fg-muted"
+      >
+        <span className="truncate">{projectName}</span>
+        <ChevronRight size={13} aria-hidden className="shrink-0 opacity-60" />
+        <span className="truncate">{columnName}</span>
+        <ChevronRight size={13} aria-hidden className="shrink-0 opacity-60" />
+        <span className="truncate font-medium text-fg">{cardTitle}</span>
+      </nav>
 
-      <div className="flex items-center gap-1">
+      <div className="ml-auto flex shrink-0 items-center gap-1">
         {canDelete && (
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={onDelete}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-[12px] font-medium text-fg-muted hover:text-danger hover:bg-danger-dim rounded-lg transition-colors"
+            icon={<Trash2 size={13} aria-hidden />}
+            className="text-fg-muted hover:bg-danger-dim hover:text-danger"
           >
-            <Trash2 size={13} /> Delete
-          </button>
+            Delete
+          </Button>
         )}
-        <div className="w-px h-4 bg-fill-3 mx-1" />
-        <button
+
+        <Button
+          variant="ghost"
+          size="sm"
           onClick={onClose}
-          className="p-1.5 text-fg-muted hover:text-fg hover:bg-fill-3 rounded-lg transition-colors ml-1"
-        >
-          <X size={16} />
-        </button>
+          aria-label="Close card"
+          icon={<X size={16} aria-hidden />}
+          className="size-8 px-0 text-fg-muted"
+        />
       </div>
     </header>
   );

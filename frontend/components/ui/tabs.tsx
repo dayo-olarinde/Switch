@@ -41,7 +41,7 @@ export function Tabs<T extends string = string>({
             aria-selected={isActive}
             onClick={() => onChange(item.value)}
             className={cn(
-              "relative -mb-px flex items-center gap-2 border-b-2 px-3 py-2.5 text-[13px] font-medium transition-colors focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none",
+              "relative -mb-px flex items-center gap-2 border-b-2 px-3 py-2.5 text-body font-medium transition-colors focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none",
               isActive
                 ? "border-accent text-fg"
                 : "border-transparent text-fg-muted hover:border-border-md hover:text-fg",
@@ -52,7 +52,7 @@ export function Tabs<T extends string = string>({
             {typeof item.count === "number" && (
               <span
                 className={cn(
-                  "rounded-full px-1.5 py-0.5 text-[10px] font-bold",
+                  "rounded-full px-1.5 py-0.5 text-2xs font-bold tabular-nums",
                   isActive
                     ? "bg-accent-dim text-accent"
                     : "bg-fill-2 text-fg-muted",

@@ -1,9 +1,10 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { DialogShell } from "@/components/ui/dialog-shell";
 import { BoardCard } from "@/types/board.types";
-import { AlertTriangle, ChevronRight, Loader2, Trash2 } from "lucide-react";
+import { AlertTriangle, ChevronRight, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -19,9 +20,8 @@ interface DeleteCardModalProps {
 function priorityTone(priority: string) {
   switch (priority?.toLowerCase()) {
     case "urgent":
-      return "danger" as const;
     case "high":
-      return "accent" as const;
+      return "danger" as const;
     case "medium":
       return "warning" as const;
     case "low":
@@ -63,54 +63,47 @@ export function DeleteCardModal({
       description="This card and all its data will be permanently removed."
       footer={
         <>
-          <button
-            type="button"
-            onClick={onClose}
-            disabled={isDeleting}
-            className="h-10 rounded-lg border border-border-md px-4 text-sm font-medium text-fg transition-colors hover:bg-fill-2 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none disabled:opacity-50"
-          >
+          <Button variant="secondary" onClick={onClose} disabled={isDeleting}>
             Cancel
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
+            variant="danger"
             onClick={handleDelete}
-            disabled={isDeleting}
-            className="flex h-10 items-center gap-2 rounded-lg border border-danger bg-danger-dim px-4 text-sm font-semibold text-danger transition-colors hover:bg-danger/25 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none disabled:opacity-50"
+            loading={isDeleting}
           >
-            {isDeleting ? (
-              <>
-                <Loader2 size={14} className="animate-spin" />
-                Deleting...
-              </>
-            ) : (
-              "Delete card"
-            )}
-          </button>
+            Delete card
+          </Button>
         </>
       }
     >
       <div className="flex items-start gap-3 rounded-xl border border-border bg-fill-1 p-4">
-        <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-danger bg-danger-dim text-danger">
-          <Trash2 size={16} />
-        </div>
+        <span className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-danger/40 bg-danger-dim text-danger">
+          <Trash2 size={16} aria-hidden />
+        </span>
         <div className="min-w-0 flex-1">
-          <h3 className="truncate text-sm font-semibold text-fg">
+          <h3 className="truncate text-body font-semibold text-fg">
             {card.title}
           </h3>
           <div className="mt-2 flex items-center gap-2">
-            {card.priority && (
+            {card.priority && card.priority !== "none" && (
               <Badge tone={priorityTone(card.priority)}>{card.priority}</Badge>
             )}
-            <span className="flex items-center gap-0.5 truncate text-[12px] text-fg-muted">
-              {projectName} <ChevronRight size={14} /> {columnName}
+            <span className="flex min-w-0 items-center gap-0.5 truncate text-2xs text-fg-muted">
+              {projectName}
+              <ChevronRight size={12} aria-hidden className="shrink-0" />
+              {columnName}
             </span>
           </div>
         </div>
       </div>
 
-      <div className="mt-4 flex items-start gap-3 rounded-xl border border-danger bg-danger-dim p-4">
-        <AlertTriangle size={16} className="mt-0.5 shrink-0 text-danger" />
-        <p className="text-[13px] leading-relaxed text-danger">
+      <div className="mt-4 flex items-start gap-3 rounded-xl border border-danger/40 bg-danger-dim p-4">
+        <AlertTriangle
+          size={16}
+          aria-hidden
+          className="mt-0.5 shrink-0 text-danger"
+        />
+        <p className="text-body leading-relaxed text-danger">
           All comments, attachments, and activity on this card will be
           permanently deleted.
         </p>

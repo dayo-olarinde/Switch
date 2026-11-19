@@ -2,10 +2,15 @@ import Image from "next/image";
 import { initials, cn } from "@/lib/utils";
 
 const sizes = {
-  sm: "w-6 h-6 text-[10px]",
-  md: "w-8 h-8 text-xs",
-  lg: "w-10 h-10 text-sm",
+  sm: "size-6 text-2xs",
+  md: "size-8 text-xs",
+  lg: "size-10 text-sm",
 };
+
+const TONES = {
+  accent: "bg-accent-dim text-accent",
+  neutral: "bg-fill-2 text-fg-secondary",
+} as const;
 
 interface AvatarProps {
   firstName: string;
@@ -13,6 +18,7 @@ interface AvatarProps {
   avatarUrl?: string | null;
   size?: keyof typeof sizes;
   className?: string;
+  tone?: keyof typeof TONES;
 }
 
 export function Avatar({
@@ -21,6 +27,7 @@ export function Avatar({
   avatarUrl,
   size = "md",
   className,
+  tone = "accent",
 }: AvatarProps) {
   const label = initials(firstName, lastName);
 
@@ -28,8 +35,8 @@ export function Avatar({
     <div
       title={`${firstName} ${lastName ?? ""}`.trim()}
       className={cn(
-        "relative rounded-full flex items-center justify-center shrink-0",
-        "bg-accent-dim text-accent font-medium border border-border-md",
+        "relative flex shrink-0 items-center justify-center rounded-full border border-border-md font-medium",
+        TONES[tone],
         sizes[size],
         className,
       )}
@@ -39,6 +46,7 @@ export function Avatar({
           src={avatarUrl}
           alt={label}
           fill
+          sizes="40px"
           className="rounded-full object-cover"
         />
       ) : (
@@ -72,15 +80,15 @@ export function AvatarGroup({ users, max = 3, size = "sm" }: AvatarGroupProps) {
           lastName={user.lastName}
           avatarUrl={user.avatarUrl}
           size={size}
-          className={cn(i !== 0 && "-ml-1.5")}
+          className={cn(i !== 0 && "-ml-1.5 ring-2 ring-surface")}
         />
       ))}
 
       {overflow > 0 && (
         <div
           className={cn(
-            "-ml-1.5 rounded-full flex items-center justify-center shrink-0",
-            "bg-overlay text-muted font-medium border border-border-md text-[10px]",
+            "-ml-1.5 flex shrink-0 items-center justify-center rounded-full",
+            "border border-border-md bg-overlay font-medium text-fg-muted ring-2 ring-surface",
             sizes[size],
           )}
         >

@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { useEffect, useRef, useState } from "react";
 
 interface CardDescriptionProps {
@@ -7,7 +8,10 @@ interface CardDescriptionProps {
   onSave: (value: string) => void;
 }
 
-export function CardDescription({ description, onSave }: CardDescriptionProps) {
+export function CardDescription({
+  description,
+  onSave,
+}: CardDescriptionProps) {
   const ref = useRef<HTMLTextAreaElement>(null);
 
   const [isEditing, setIsEditing] = useState(false);
@@ -16,18 +20,22 @@ export function CardDescription({ description, onSave }: CardDescriptionProps) {
 
   if (description !== prevDescription) {
     setPrevDescription(description);
-    if (!isEditing) {
-      setValue(description || "");
-    }
+    if (!isEditing) setValue(description || "");
   }
 
   useEffect(() => {
-    if (isEditing && ref.current) {
-      ref.current.focus();
-      ref.current.style.height = "auto";
-      ref.current.style.height = `${ref.current.scrollHeight}px`;
-    }
+    if (!isEditing || !ref.current) return;
+    const node = ref.current;
+    node.focus();
+    node.style.height = "auto";
+    node.style.height = `${node.scrollHeight}px`;
+    node.setSelectionRange(node.value.length, node.value.length);
   }, [isEditing]);
+
+  const autosize = (node: HTMLTextAreaElement) => {
+    node.style.height = "auto";
+    node.style.height = `${node.scrollHeight}px`;
+  };
 
   const handleSave = () => {
     setIsEditing(false);
@@ -41,44 +49,47 @@ export function CardDescription({ description, onSave }: CardDescriptionProps) {
 
   return (
     <section>
-      <div className="text-[11px] font-bold text-fg-muted uppercase tracking-widest mb-3">
+      <h3 className="mb-2 text-2xs font-semibold tracking-wider text-fg-muted uppercase">
         Description
-      </div>
+      </h3>
+
       {isEditing ? (
-        <div className="space-y-3">
+        <div className="space-y-2.5">
           <textarea
             ref={ref}
             value={value}
-            onChange={(e) => {
-              setValue(e.target.value);
-              e.target.style.height = "auto";
-              e.target.style.height = `${e.target.scrollHeight}px`;
+            placeholder="Add a description…"
+            aria-label="Card description"
+            onChange={(event) => {
+              setValue(event.target.value);
+              autosize(event.target);
             }}
-            placeholder="Add a description..."
-            className="w-full min-h-30 bg-surface border border-accent/50 focus:ring-1 focus:ring-accent/30 rounded-xl p-4 text-[14px] text-fg placeholder:text-fg-muted outline-none resize-none leading-relaxed"
+            onKeyDown={(event) => {
+              if (event.key === "Escape") handleCancel();
+              if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
+                handleSave();
+              }
+            }}
+            className="custom-scrollbar min-h-28 w-full resize-none rounded-xl border border-accent bg-surface p-3.5 text-body leading-relaxed text-fg transition-colors outline-none placeholder:text-fg-muted"
           />
-          <div className="flex gap-2">
-            <button
-              onClick={handleSave}
-              className="px-4 py-2 bg-accent-solid hover:bg-accent-solid/90 text-on-accent text-[13px] font-semibold rounded-lg transition-colors"
-            >
+
+          <div className="flex items-center gap-2">
+            <Button size="sm" onClick={handleSave}>
               Save
-            </button>
-            <button
-              onClick={handleCancel}
-              className="px-4 py-2 text-fg-muted hover:text-fg hover:bg-fill-2 text-[13px] font-semibold rounded-lg transition-colors"
-            >
+            </Button>
+            <Button size="sm" variant="ghost" onClick={handleCancel}>
               Cancel
-            </button>
+            </Button>
           </div>
         </div>
       ) : (
-        <div
+        <button
+          type="button"
           onClick={() => setIsEditing(true)}
-          className="w-full min-h-25 bg-surface hover:bg-surface border border-border hover:border-border-md rounded-xl p-5 text-[14px] text-fg-secondary cursor-text transition-all whitespace-pre-wrap leading-relaxed"
+          className="min-h-24 w-full rounded-xl border border-border bg-surface p-3.5 text-left text-body leading-relaxed whitespace-pre-wrap text-fg-secondary transition-colors hover:border-border-md hover:bg-fill-1 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
         >
-          {value || <span className="text-fg-muted">Add a description...</span>}
-        </div>
+          {value || <span className="text-fg-muted">Add a description…</span>}
+        </button>
       )}
     </section>
   );

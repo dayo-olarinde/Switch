@@ -111,7 +111,7 @@ export function useMoveColumnCards() {
       useBoardStore.getState().moveAllCards(columnId, targetColumnId);
     },
 
-    onError: (err: any) => {
+    onError: (err) => {
       toast.error(getErrorMessage(err) || "Failed to move cards");
     },
   });

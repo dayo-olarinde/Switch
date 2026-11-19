@@ -1,0 +1,188 @@
+"use client";
+
+import { AvatarGroup } from "@/components/ui/avatar";
+import { cn, formatDateShort, getLabelClasses } from "@/lib/utils";
+import { BoardCard } from "@/types/board.types";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { Clock, MessageSquare, Paperclip } from "lucide-react";
+import { KeyboardEvent, memo, useRef } from "react";
+import { PRIORITY_META, dueDateClass } from "./board-utils";
+
+interface CardTileProps {
+  card: BoardCard;
+  done?: boolean;
+  preview?: boolean;
+}
+
+export const CardTile = memo(function CardTile({
+  card,
+  done = false,
+  preview = false,
+}: CardTileProps) {
+  const priority = PRIORITY_META[card.priority] ?? PRIORITY_META.none;
+  const labels = card.labels ?? [];
+  const assignees = card.assignees ?? [];
+  const comments = card.commentCount ?? 0;
+  const attachments = card.attachments?.length ?? 0;
+
+  return (
+    <div
+      className={cn(
+        "relative flex flex-col gap-2.5 rounded-xl border bg-card p-3 transition-[border-color,box-shadow,background-color]",
+        preview
+          ? "border-accent/50 shadow-accent"
+          : "border-border hover:border-border-md hover:shadow-sm",
+        done && !preview && "bg-fill-1",
+      )}
+    >
+      {card.priority !== "none" && (
+        <span
+          aria-hidden
+          className={cn(
+            "absolute inset-y-3 left-0 rounded-full",
+            card.priority === "urgent" ? "w-1" : "w-0.5",
+            priority.bar,
+          )}
+        />
+      )}
+
+      <div className="flex items-start gap-2">
+        <p
+          className={cn(
+            "min-w-0 flex-1 pl-1 text-body leading-snug font-medium",
+            done ? "text-fg-secondary line-through" : "text-fg",
+          )}
+        >
+          {card.title}
+        </p>
+
+        {card.priority !== "none" && (
+          <span
+            className={cn(
+              "shrink-0 rounded-md border px-1.5 py-px text-2xs font-semibold tracking-wide uppercase",
+              priority.chip,
+            )}
+          >
+            {priority.label}
+          </span>
+        )}
+      </div>
+
+      {labels.length > 0 && (
+        <div className="flex flex-wrap items-center gap-1 pl-1">
+          {labels.map((label) => (
+            <span
+              key={label.id}
+              className={cn(
+                "rounded-md border px-1.5 py-0.5 text-2xs font-semibold",
+                getLabelClasses(label.colour),
+              )}
+            >
+              {label.name}
+            </span>
+          ))}
+        </div>
+      )}
+
+      <div className="flex items-center justify-between gap-2 pl-1">
+        <div className="flex min-w-0 items-center gap-2">
+          {card.dueDate && (
+            <span
+              className={cn(
+                "flex items-center gap-1 rounded-md border px-1.5 py-0.5 text-2xs font-medium",
+                dueDateClass(card.dueDate),
+              )}
+            >
+              <Clock size={11} aria-hidden />
+              {formatDateShort(card.dueDate)}
+            </span>
+          )}
+
+          {comments > 0 && (
+            <span className="flex items-center gap-1 text-2xs font-medium text-fg-muted">
+              <MessageSquare size={11} aria-hidden />
+              {comments}
+            </span>
+          )}
+
+          {attachments > 0 && (
+            <span className="flex items-center gap-1 text-2xs font-medium text-fg-muted">
+              <Paperclip size={11} aria-hidden />
+              {attachments}
+            </span>
+          )}
+        </div>
+
+        {assignees.length > 0 && <AvatarGroup users={assignees} max={3} />}
+      </div>
+    </div>
+  );
+});
+
+interface SortableCardProps {
+  card: BoardCard;
+  done: boolean;
+  onOpen: () => void;
+}
+
+export const SortableCard = memo(function SortableCard({
+  card,
+  done,
+  onOpen,
+}: SortableCardProps) {
+  const {
+    setNodeRef,
+    attributes,
+    listeners,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: card.id, data: { type: "Card", card } });
+
+  const pressRef = useRef<{ x: number; y: number } | null>(null);
+  const draggedRef = useRef(false);
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      onOpen();
+    }
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={{
+        transform: CSS.Translate.toString(transform),
+        transition,
+        opacity: isDragging ? 0.35 : 1,
+      }}
+      {...attributes}
+      {...listeners}
+      onPointerDown={(event) => {
+        pressRef.current = { x: event.clientX, y: event.clientY };
+        draggedRef.current = false;
+      }}
+      onPointerMove={(event) => {
+        const press = pressRef.current;
+        if (!press) return;
+        if (Math.hypot(event.clientX - press.x, event.clientY - press.y) > 4) {
+          draggedRef.current = true;
+        }
+      }}
+      onClick={() => {
+        const wasDrag = draggedRef.current;
+        pressRef.current = null;
+        draggedRef.current = false;
+        if (wasDrag) return;
+        onOpen();
+      }}
+      onKeyDown={handleKeyDown}
+      aria-label={`Open card ${card.title}`}
+      className="cursor-grab rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface active:cursor-grabbing"
+    >
+      <CardTile card={card} done={done} />
+    </div>
+  );
+});

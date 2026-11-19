@@ -1,9 +1,11 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { DialogShell } from "@/components/ui/dialog-shell";
 import { CreateCard } from "@/hooks/useCards";
 import { WorkspaceMembers } from "@/hooks/useWorkspace";
-import { ChevronDown, Loader2, Plus } from "lucide-react";
+import { PRIORITY_META } from "@/components/board/board-utils";
+import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { CardAssigneePicker } from "./card-assignee-picker";
 
@@ -11,6 +13,8 @@ export type AddCardFormData = Omit<CreateCard, "status" | "dueDate"> & {
   dueDate: string;
   column: string;
 };
+
+const PRIORITIES = ["none", "low", "medium", "high", "urgent"] as const;
 
 export default function AddCardModal({
   isOpen,
@@ -66,31 +70,16 @@ export default function AddCardModal({
       description={`Adding to ${columnName} in ${projectName}`}
       footer={
         <>
-          <button
-            type="button"
-            onClick={onClose}
-            className="h-10 rounded-lg border border-border-md px-4 text-sm font-medium text-fg transition-colors hover:bg-fill-2 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
-          >
+          <Button variant="secondary" onClick={onClose}>
             Cancel
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
             onClick={handleSubmit}
-            disabled={!formData.title.trim() || isSubmitting}
-            className="flex h-10 min-w-30 items-center justify-center gap-2 rounded-lg bg-accent-solid px-4 text-sm font-semibold text-on-accent transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            loading={isSubmitting}
+            disabled={!formData.title.trim()}
           >
-            {isSubmitting ? (
-              <>
-                <Loader2 size={14} className="animate-spin" />
-                Adding...
-              </>
-            ) : (
-              <>
-                <Plus size={14} />
-                Add card
-              </>
-            )}
-          </button>
+            Add card
+          </Button>
         </>
       }
     >
@@ -98,9 +87,9 @@ export default function AddCardModal({
         <div className="space-y-1.5">
           <label
             htmlFor="card-title"
-            className="flex gap-1 text-xs font-semibold text-fg-muted uppercase"
+            className="text-2xs font-semibold tracking-wider text-fg-muted uppercase"
           >
-            Title <span className="text-danger">*</span>
+            Title
           </label>
           <input
             id="card-title"
@@ -110,14 +99,14 @@ export default function AddCardModal({
             onChange={(event) =>
               setFormData({ ...formData, title: event.target.value })
             }
-            className="h-10 w-full rounded-lg border border-border-md bg-fill-1 px-3 text-sm text-fg transition-colors outline-none placeholder:text-fg-muted focus:border-accent"
+            className="h-10 w-full rounded-lg border border-border-md bg-fill-1 px-3 text-body text-fg transition-colors outline-none placeholder:text-fg-muted focus:border-accent"
           />
         </div>
 
         <div className="space-y-1.5">
           <label
             htmlFor="card-description"
-            className="text-xs font-semibold text-fg-muted uppercase"
+            className="text-2xs font-semibold tracking-wider text-fg-muted uppercase"
           >
             Description
           </label>
@@ -129,15 +118,15 @@ export default function AddCardModal({
             onChange={(event) =>
               setFormData({ ...formData, description: event.target.value })
             }
-            className="w-full resize-none rounded-lg border border-border-md bg-fill-1 p-3 text-sm text-fg transition-colors outline-none placeholder:text-fg-muted focus:border-accent"
+            className="w-full resize-none rounded-lg border border-border-md bg-fill-1 p-3 text-body text-fg transition-colors outline-none placeholder:text-fg-muted focus:border-accent"
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3">
           <div className="space-y-1.5">
             <label
               htmlFor="card-priority"
-              className="text-xs font-semibold text-fg-muted uppercase"
+              className="text-2xs font-semibold tracking-wider text-fg-muted uppercase"
             >
               Priority
             </label>
@@ -152,16 +141,17 @@ export default function AddCardModal({
                       .value as AddCardFormData["priority"],
                   })
                 }
-                className="h-10 w-full cursor-pointer appearance-none rounded-lg border border-border-md bg-fill-1 pr-8 pl-3 text-sm text-fg outline-none focus:border-accent"
+                className="h-10 w-full cursor-pointer appearance-none rounded-lg border border-border-md bg-fill-1 pr-8 pl-3 text-body text-fg outline-none focus:border-accent"
               >
-                <option value="none">None</option>
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
-                <option value="urgent">Urgent</option>
+                {PRIORITIES.map((value) => (
+                  <option key={value} value={value}>
+                    {PRIORITY_META[value].label}
+                  </option>
+                ))}
               </select>
               <ChevronDown
                 size={14}
+                aria-hidden
                 className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-fg-muted"
               />
             </div>
@@ -170,7 +160,7 @@ export default function AddCardModal({
           <div className="space-y-1.5">
             <label
               htmlFor="card-due-date"
-              className="text-xs font-semibold text-fg-muted uppercase"
+              className="text-2xs font-semibold tracking-wider text-fg-muted uppercase"
             >
               Due date
             </label>
@@ -181,7 +171,7 @@ export default function AddCardModal({
               onChange={(event) =>
                 setFormData({ ...formData, dueDate: event.target.value })
               }
-              className="h-10 w-full rounded-lg border border-border-md bg-fill-1 px-3 text-sm text-fg outline-none focus:border-accent"
+              className="h-10 w-full rounded-lg border border-border-md bg-fill-1 px-3 text-body text-fg outline-none focus:border-accent"
             />
           </div>
         </div>
