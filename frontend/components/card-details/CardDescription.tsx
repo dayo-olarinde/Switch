@@ -70,7 +70,7 @@ export function CardDescription({
                 handleSave();
               }
             }}
-            className="custom-scrollbar min-h-28 w-full resize-none rounded-xl border border-accent bg-surface p-3.5 text-body leading-relaxed text-fg transition-colors outline-none placeholder:text-fg-muted"
+            className="custom-scrollbar min-h-28 w-full resize-none rounded-xl border border-accent bg-surface p-3.5 text-body leading-relaxed text-fg transition-colors outline-none placeholder:text-fg-muted focus:ring-2 focus:ring-accent/20"
           />
 
           <div className="flex items-center gap-2">
@@ -86,7 +86,7 @@ export function CardDescription({
         <button
           type="button"
           onClick={() => setIsEditing(true)}
-          className="min-h-24 w-full rounded-xl border border-border bg-surface p-3.5 text-left text-body leading-relaxed whitespace-pre-wrap text-fg-secondary transition-colors hover:border-border-md hover:bg-fill-1 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+          className="min-h-24 w-full rounded-xl border border-border bg-surface p-3.5 text-left text-body leading-relaxed whitespace-pre-wrap text-fg-secondary transition-colors hover:border-border-md hover:bg-fill-1 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none card-elevated"
         >
           {value || <span className="text-fg-muted">Add a description…</span>}
         </button>

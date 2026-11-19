@@ -13,29 +13,29 @@
 @layer base {
   :root {
     /* ---- surfaces ---- */
-    --base: #0f0f14;
-    --sidebar: #121218;
-    --surface: #15151c;
+    --base: #0d0d12;
+    --sidebar: #101017;
+    --surface: #14141b;
     --card: #1a1a23;
     --overlay: #21212c;
     /* recessed wells (kanban lanes, inset panels) */
-    --well: rgba(255, 255, 255, 0.022);
+    --well: rgba(255, 255, 255, 0.028);
 
     /* translucent fills for ghost/hover states */
-    --fill-1: rgba(255, 255, 255, 0.04);
-    --fill-2: rgba(255, 255, 255, 0.07);
-    --fill-3: rgba(255, 255, 255, 0.12);
-    --scrim: rgba(0, 0, 0, 0.62);
+    --fill-1: rgba(255, 255, 255, 0.045);
+    --fill-2: rgba(255, 255, 255, 0.075);
+    --fill-3: rgba(255, 255, 255, 0.125);
+    --scrim: rgba(0, 0, 0, 0.66);
 
     /* borders */
-    --border: rgba(255, 255, 255, 0.07);
-    --border-md: rgba(255, 255, 255, 0.11);
-    --border-lg: rgba(255, 255, 255, 0.18);
+    --border: rgba(255, 255, 255, 0.085);
+    --border-md: rgba(255, 255, 255, 0.13);
+    --border-lg: rgba(255, 255, 255, 0.2);
 
     /* text */
-    --text-primary: #eeeef5;
-    --text-secondary: #a0a0b2;
-    --text-muted: #82829a;
+    --text-primary: #f0f0f7;
+    --text-secondary: #a8a8bb;
+    --text-muted: #8b8ba2;
 
     /* accent: --accent for text/icons, --accent-solid for filled buttons */
     --accent: #a99efb;
@@ -65,6 +65,15 @@
       0 10px 24px -10px rgba(0, 0, 0, 0.65);
     --elevation-lift:
       0 18px 42px -14px rgba(0, 0, 0, 0.75), 0 2px 8px rgba(0, 0, 0, 0.45);
+    /* popovers, menus, dropdown panels */
+    --elevation-pop:
+      inset 0 1px 0 rgba(255, 255, 255, 0.05),
+      0 14px 32px -12px rgba(0, 0, 0, 0.72), 0 1px 3px rgba(0, 0, 0, 0.5);
+    /* the right-hand card panel and other full-height overlays */
+    --elevation-panel: -28px 0 64px -34px rgba(0, 0, 0, 0.8);
+
+    /* landing page grid lines */
+    --l-grid: rgba(255, 255, 255, 0.055);
 
     color-scheme: dark;
 
@@ -111,56 +120,64 @@
   }
 
   [data-theme="light"] {
-    --base: #f4f4f7;
-    --sidebar: #ffffff;
+    /* Light needs a real ramp: page canvas is grey so white cards, panels and
+       popovers separate from it without relying on shadow alone. */
+    --base: #edeef2;
+    --sidebar: #fbfbfd;
     --surface: #ffffff;
     --card: #ffffff;
-    --overlay: #f8f8fb;
-    --well: rgba(17, 17, 28, 0.025);
+    --overlay: #ffffff;
+    --well: rgba(19, 19, 32, 0.042);
 
-    --fill-1: rgba(17, 17, 28, 0.03);
-    --fill-2: rgba(17, 17, 28, 0.055);
-    --fill-3: rgba(17, 17, 28, 0.09);
-    --scrim: rgba(17, 17, 28, 0.45);
+    --fill-1: rgba(19, 19, 32, 0.04);
+    --fill-2: rgba(19, 19, 32, 0.07);
+    --fill-3: rgba(19, 19, 32, 0.11);
+    --scrim: rgba(19, 19, 32, 0.5);
 
-    --border: rgba(17, 17, 28, 0.09);
-    --border-md: rgba(17, 17, 28, 0.14);
-    --border-lg: rgba(17, 17, 28, 0.22);
+    --border: rgba(19, 19, 32, 0.11);
+    --border-md: rgba(19, 19, 32, 0.17);
+    --border-lg: rgba(19, 19, 32, 0.26);
 
-    --text-primary: #16161d;
-    --text-secondary: #56566b;
-    --text-muted: #6b6b7d;
+    --text-primary: #131320;
+    --text-secondary: #4c4c62;
+    --text-muted: #63637a;
 
-    --accent: #5546e0;
-    --accent-solid: #5b4ee9;
+    --accent: #4f3fd6;
+    --accent-solid: #5546e0;
     --on-accent: #ffffff;
-    --accent-dim: rgba(91, 78, 233, 0.1);
+    --accent-dim: rgba(85, 70, 224, 0.09);
 
-    --success: #18744c;
-    --success-dim: rgba(24, 116, 76, 0.12);
-    --warning: #8a5a09;
-    --warning-dim: rgba(138, 90, 9, 0.12);
-    --danger: #b4232a;
-    --danger-dim: rgba(180, 35, 42, 0.1);
-    --info: #2a66c4;
-    --info-dim: rgba(42, 102, 196, 0.1);
+    --success: #146b46;
+    --success-dim: rgba(20, 107, 70, 0.11);
+    --warning: #7d5108;
+    --warning-dim: rgba(125, 81, 8, 0.11);
+    --danger: #a81d24;
+    --danger-dim: rgba(168, 29, 36, 0.09);
+    --info: #23599f;
+    --info-dim: rgba(35, 89, 159, 0.09);
 
     color-scheme: light;
 
     --elevation-card:
-      inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 1px 2px rgba(17, 17, 28, 0.05),
-      0 4px 12px -5px rgba(17, 17, 28, 0.1);
+      inset 0 1px 0 rgba(255, 255, 255, 1), 0 1px 1px rgba(19, 19, 32, 0.04),
+      0 4px 10px -4px rgba(19, 19, 32, 0.12);
     --elevation-card-hover:
-      inset 0 1px 0 rgba(255, 255, 255, 0.95), 0 1px 2px rgba(17, 17, 28, 0.07),
-      0 8px 20px -8px rgba(17, 17, 28, 0.16);
+      inset 0 1px 0 rgba(255, 255, 255, 1), 0 1px 2px rgba(19, 19, 32, 0.06),
+      0 10px 22px -8px rgba(19, 19, 32, 0.2);
     --elevation-lift:
-      0 18px 40px -14px rgba(17, 17, 28, 0.28), 0 2px 8px rgba(17, 17, 28, 0.08);
+      0 20px 44px -16px rgba(19, 19, 32, 0.34), 0 2px 8px rgba(19, 19, 32, 0.1);
+    --elevation-pop:
+      inset 0 1px 0 rgba(255, 255, 255, 1), 0 16px 32px -12px rgba(19, 19, 32, 0.3),
+      0 1px 3px rgba(19, 19, 32, 0.1);
+    --elevation-panel: -32px 0 72px -36px rgba(19, 19, 32, 0.35);
 
-    --chart-1: #5b4ee9;
-    --chart-2: #18744c;
-    --chart-3: #8a5a09;
-    --chart-4: #2a66c4;
-    --chart-5: #b4232a;
+    --l-grid: rgba(19, 19, 32, 0.062);
+
+    --chart-1: #5546e0;
+    --chart-2: #146b46;
+    --chart-3: #7d5108;
+    --chart-4: #23599f;
+    --chart-5: #a81d24;
   }
 
   * {
@@ -196,194 +213,8 @@
 }
 
 /* ==========================================================
-   COMPONENT UTILITIES
+   ELEVATION UTILITIES
 ========================================================== */
-
-@layer components {
-  .font-display {
-    font-family: "Syne", sans-serif;
-  }
-
-  .focus-ring {
-    @apply outline-none ring-0;
-    @apply focus-visible:ring-2 focus-visible:ring-[--accent]
-           focus-visible:ring-offset-1
-           focus-visible:ring-offset-[--base];
-  }
-
-  /* headings */
-
-  .heading-xl {
-    font-family: "Syne", sans-serif;
-    font-size: 2rem;
-    font-weight: 700;
-    letter-spacing: -0.04em;
-    line-height: 1.1;
-  }
-
-  .heading-lg {
-    font-family: "Syne", sans-serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-  }
-
-  .heading-md {
-    font-family: "Syne", sans-serif;
-    font-size: 1.25rem;
-    font-weight: 700;
-  }
-
-  .heading-sm {
-    font-family: "Syne", sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-  }
-
-  .label-upper {
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
-
-  /* cards */
-
-  .card-premium {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    transition: all 0.18s ease;
-  }
-
-  .card-premium:hover {
-    border-color: var(--border-md);
-    background: var(--overlay);
-    transform: translateY(-1px);
-  }
-
-  /* buttons */
-
-  .btn-primary {
-    background: var(--accent-solid);
-    color: var(--on-accent);
-    border-radius: calc(var(--radius) - 4px);
-    transition:
-      background-color 0.15s ease,
-      opacity 0.15s ease;
-  }
-
-  .btn-primary:hover {
-    opacity: 0.9;
-  }
-
-  .btn-ghost {
-    background: var(--card);
-    border: 1px solid var(--border-md);
-    color: var(--text-primary);
-    border-radius: calc(var(--radius) - 4px);
-  }
-
-  .btn-ghost:hover {
-    border-color: var(--border-lg);
-    background: var(--overlay);
-  }
-
-  /* inputs */
-
-  .input-premium {
-    background: var(--card);
-    border: 1px solid var(--border-md);
-    color: var(--text-primary);
-    border-radius: calc(var(--radius) - 4px);
-    transition:
-      border-color 0.15s ease,
-      box-shadow 0.15s ease;
-  }
-
-  .input-premium::placeholder {
-    color: var(--text-muted);
-  }
-
-  .input-premium:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-dim);
-  }
-
-  /* badge */
-
-  .badge-accent {
-    background: var(--accent-dim);
-    color: var(--accent);
-    border-radius: 999px;
-    padding: 2px 8px;
-    font-size: 11px;
-    font-weight: 700;
-  }
-}
-
-/* ==========================================================
-   TAILWIND UTILITIES
-========================================================== */
-
-@layer utilities {
-  .bg-base {
-    background: var(--base);
-  }
-
-  .bg-surface {
-    background: var(--surface);
-  }
-
-  .bg-card {
-    background: var(--card);
-  }
-
-  .bg-overlay {
-    background: var(--overlay);
-  }
-
-  .text-primary {
-    color: var(--text-primary);
-  }
-
-  .text-secondary {
-    color: var(--text-secondary);
-  }
-
-  .text-muted {
-    color: var(--text-muted);
-  }
-
-  .text-accent {
-    color: var(--accent);
-  }
-
-  .bg-accent-dim {
-    background: var(--accent-dim);
-  }
-
-  .border-base {
-    border-color: var(--border);
-  }
-
-  .border-md {
-    border-color: var(--border-md);
-  }
-
-  .border-lg {
-    border-color: var(--border-lg);
-  }
-
-  .shadow-soft {
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
-  }
-
-  .shadow-accent {
-    box-shadow: 0 8px 28px rgba(124, 110, 245, 0.22);
-  }
-}
 
 /* card elevation: the inset highlight keeps dark cards from reading flat.
    Declared as utilities so hover:/group-hover: variants actually compile. */
@@ -397,6 +228,46 @@
 
 @utility card-lifted {
   box-shadow: var(--elevation-lift);
+}
+
+@utility pop-elevated {
+  box-shadow: var(--elevation-pop);
+}
+
+@utility panel-elevated {
+  box-shadow: var(--elevation-panel);
+}
+
+/* keeps a dialog shorter than the viewport so tall bodies scroll internally */
+@utility max-h-dialog {
+  max-height: calc(100dvh - 4rem);
+}
+
+/* ==========================================================
+   SCROLLBAR
+========================================================== */
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--border-lg);
+  border-radius: 999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-lg) transparent;
 }
 
 /* ==========================================================
@@ -495,35 +366,8 @@
 }
 
 /* ==========================================================
-   SCROLLBAR
-========================================================== */
-
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: var(--border-lg);
-  border-radius: 999px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: var(--accent);
-}
-
-.custom-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: var(--border-lg) transparent;
-}
-
-/* ==========================================================
    LANDING UTILITIES
-========================================================= */
+========================================================== */
 
 @layer base {
   .landing ::selection {
@@ -532,23 +376,21 @@
   }
 }
 
-@layer utilities {
-  .landing-grid {
-    background-image:
-      linear-gradient(to right, var(--l-grid) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--l-grid) 1px, transparent 1px);
-    background-size: 56px 56px;
-  }
+@utility landing-grid {
+  background-image:
+    linear-gradient(to right, var(--l-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--l-grid) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
 
-  .landing-fade-bottom {
-    mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
-  }
+@utility landing-fade-bottom {
+  mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+}
 
-  .landing-text-balance {
-    text-wrap: balance;
-  }
+@utility landing-text-balance {
+  text-wrap: balance;
+}
 
-  .landing-text-pretty {
-    text-wrap: pretty;
-  }
+@utility landing-text-pretty {
+  text-wrap: pretty;
 }

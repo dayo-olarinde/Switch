@@ -72,12 +72,12 @@ export default function LoginEmailPage() {
 
         <div>
           <div className="mb-1.5 flex items-center justify-between">
-            <span className="text-[13px] font-medium text-fg-secondary">
+            <span className="text-body font-medium text-fg-secondary">
               Password
             </span>
             <Link
               href="/forgot-password"
-              className="text-[12px] font-medium text-accent transition-opacity hover:opacity-85"
+              className="text-2xs font-medium text-accent transition-opacity hover:opacity-85"
             >
               Forgot password?
             </Link>

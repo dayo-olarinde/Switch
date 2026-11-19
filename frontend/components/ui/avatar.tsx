@@ -3,8 +3,8 @@ import { initials, cn } from "@/lib/utils";
 
 const sizes = {
   sm: "size-6 text-2xs",
-  md: "size-8 text-xs",
-  lg: "size-10 text-sm",
+  md: "size-8 text-2xs",
+  lg: "size-10 text-body",
 };
 
 const TONES = {

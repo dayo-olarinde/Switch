@@ -7,18 +7,18 @@ export type ButtonSize = "sm" | "md";
 
 const VARIANTS: Record<ButtonVariant, string> = {
   primary:
-    "bg-accent-solid text-on-accent hover:opacity-90 border border-transparent",
+    "border border-transparent bg-accent-solid text-on-accent hover:bg-accent-solid/90 active:bg-accent-solid/80",
   secondary:
-    "border border-border-md bg-fill-1 text-fg hover:border-border-lg hover:bg-fill-2",
+    "border border-border-md bg-fill-1 text-fg hover:border-border-lg hover:bg-fill-2 active:bg-fill-3",
   ghost:
-    "border border-transparent text-fg-secondary hover:bg-fill-2 hover:text-fg",
+    "border border-transparent text-fg-secondary hover:bg-fill-2 hover:text-fg active:bg-fill-3",
   danger:
-    "border border-danger/40 bg-danger-dim text-danger hover:border-danger/60 hover:bg-danger-dim/80",
+    "border border-danger/40 bg-danger-dim text-danger hover:border-danger/60 hover:bg-danger-dim/80 active:bg-danger-dim",
 };
 
 const SIZES: Record<ButtonSize, string> = {
   sm: "h-8 gap-1.5 px-2.5 text-body",
-  md: "h-10 gap-2 px-4 text-sm",
+  md: "h-10 gap-2 px-4 text-body",
 };
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {

@@ -9,17 +9,17 @@ const TONES: Record<
   { wrapper: string; icon: string; Icon: typeof Info }
 > = {
   danger: {
-    wrapper: "border-danger bg-danger-dim text-danger",
+    wrapper: "border-danger/35 bg-danger-dim text-danger",
     icon: "text-danger",
     Icon: CircleAlert,
   },
   warning: {
-    wrapper: "border-warning bg-warning-dim text-warning",
+    wrapper: "border-warning/35 bg-warning-dim text-warning",
     icon: "text-warning",
     Icon: AlertTriangle,
   },
   info: {
-    wrapper: "border-accent bg-accent-dim text-accent",
+    wrapper: "border-accent/35 bg-accent-dim text-accent",
     icon: "text-accent",
     Icon: Info,
   },
@@ -48,7 +48,7 @@ export function FormAlert({
       )}
     >
       <Icon size={15} className={cn("mt-0.5 shrink-0", icon)} />
-      <p className="text-[13px] leading-relaxed">{children}</p>
+      <p className="text-body leading-relaxed">{children}</p>
     </div>
   );
 }
@@ -75,7 +75,7 @@ export function InlineNotice({
       )}
     >
       <Icon size={18} className={cn("shrink-0", icon)} />
-      <div className="text-[13px] leading-relaxed">{children}</div>
+      <div className="text-body leading-relaxed">{children}</div>
     </div>
   );
 }

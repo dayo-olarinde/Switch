@@ -83,9 +83,9 @@ export function SidePanel({
         if (event.target === ref.current) onClose();
       }}
       className={cn(
-        "m-0 max-h-none border-border bg-surface p-0 text-fg",
+        "m-0 max-h-none border-border-md bg-surface p-0 text-fg panel-elevated",
         "backdrop:bg-scrim backdrop:backdrop-blur-sm",
-        "open:animate-in open:duration-200",
+        "open:animate-in open:duration-200 open:ease-out",
         side === "right" ? "open:slide-in-from-right" : "open:slide-in-from-left",
         SIDES[side],
         WIDTHS[width],
@@ -100,7 +100,7 @@ export function SidePanel({
                 {title && (
                   <h2
                     id={titleId}
-                    className="truncate text-sm font-semibold text-fg"
+                    className="truncate text-headline font-semibold text-fg"
                   >
                     {title}
                   </h2>
@@ -109,7 +109,7 @@ export function SidePanel({
                   <p
                     id={descriptionId}
                     className={cn(
-                      "text-sm leading-relaxed text-fg-secondary",
+                      "text-body leading-relaxed text-fg-secondary",
                       title && "mt-1",
                     )}
                   >

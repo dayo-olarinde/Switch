@@ -14,9 +14,16 @@ export function AuthShell({ children }: { children: ReactNode }) {
         <ThemeToggle />
       </div>
 
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+      >
+        <div className="absolute top-0 left-1/2 size-150 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent-dim blur-3xl" />
+      </div>
+
       <Link
         href="/"
-        className="mb-8 flex items-center gap-3 transition-opacity hover:opacity-85"
+        className="relative mb-8 flex items-center gap-3 transition-opacity hover:opacity-85"
       >
         <span className="flex size-10 items-center justify-center overflow-hidden rounded-xl bg-accent-solid">
           <Image
@@ -33,7 +40,7 @@ export function AuthShell({ children }: { children: ReactNode }) {
         </span>
       </Link>
 
-      <div className="w-full max-w-105 rounded-xl border border-border bg-card p-8">
+      <div className="relative w-full max-w-105 rounded-xl border border-border bg-surface p-8 pop-elevated">
         {children}
       </div>
     </div>
@@ -56,7 +63,7 @@ export function AuthHeader({
       {backHref && backLabel && (
         <Link
           href={backHref}
-          className="mb-5 inline-flex items-center gap-1 text-[13px] font-medium text-fg-muted transition-colors hover:text-fg"
+          className="mb-5 inline-flex items-center gap-1 text-body font-medium text-fg-muted transition-colors hover:text-fg"
         >
           <svg
             width="16"
@@ -77,7 +84,7 @@ export function AuthHeader({
 
       <h1 className="text-xl font-semibold tracking-tight text-fg">{title}</h1>
       {description && (
-        <p className="mt-1.5 text-[13px] leading-relaxed text-fg-muted">
+        <p className="mt-1.5 text-body leading-relaxed text-fg-muted">
           {description}
         </p>
       )}
@@ -95,7 +102,7 @@ export function AuthFooterLink({
   label: string;
 }) {
   return (
-    <p className="mt-6 text-center text-[13px] text-fg-muted">
+    <p className="mt-6 text-center text-body text-fg-muted">
       {prompt}{" "}
       <Link
         href={href}
@@ -111,7 +118,7 @@ export function AuthDivider({ label = "or" }: { label?: string }) {
   return (
     <div className="my-5 flex items-center gap-3">
       <div className="h-px flex-1 bg-border" />
-      <span className="text-[11px] font-medium tracking-wide text-fg-muted uppercase">
+      <span className="text-2xs font-medium tracking-wide text-fg-muted uppercase">
         {label}
       </span>
       <div className="h-px flex-1 bg-border" />
@@ -135,7 +142,7 @@ export function AuthSteps({ current }: { current: 1 | 2 | 3 }) {
               <span
                 aria-current={isCurrent ? "step" : undefined}
                 className={cn(
-                  "flex size-6 items-center justify-center rounded-full text-[11px] font-semibold",
+                  "flex size-6 items-center justify-center rounded-full text-2xs font-semibold",
                   isDone && "bg-success text-on-accent",
                   isCurrent && "bg-accent-solid text-on-accent",
                   !isDone && !isCurrent && "border border-border-lg text-fg-muted",
@@ -145,7 +152,7 @@ export function AuthSteps({ current }: { current: 1 | 2 | 3 }) {
               </span>
               <span
                 className={cn(
-                  "text-[12px]",
+                  "text-2xs",
                   isDone && "font-semibold text-success",
                   isCurrent && "font-semibold text-fg",
                   !isDone && !isCurrent && "text-fg-muted",
@@ -201,7 +208,7 @@ export function AuthStatus({
         {icon}
       </div>
       <h1 className="text-xl font-semibold tracking-tight text-fg">{title}</h1>
-      <p className="mt-1.5 text-[13px] leading-relaxed text-fg-muted">
+      <p className="mt-1.5 text-body leading-relaxed text-fg-muted">
         {description}
       </p>
       {children && <div className="mt-6 w-full">{children}</div>}

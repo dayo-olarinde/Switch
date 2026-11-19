@@ -2,7 +2,7 @@
 
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { PresenceUser } from "@/types/board.types";
-import { cn, initials } from "@/lib/utils";
+import { initials } from "@/lib/utils";
 import { Bell, ChevronRight, Search } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -69,12 +69,12 @@ export function AppHeader({
   onOpenSearch,
 }: AppHeaderProps) {
   return (
-    <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center gap-3 border-b border-border bg-base/85 px-6 backdrop-blur-md">
+    <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center gap-3 border-b border-border bg-base/80 px-6 backdrop-blur-md">
       {workspaceName && (
-        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-body">
-          <span className="text-fg-muted">{workspaceName}</span>
-          <ChevronRight size={13} className="text-fg-muted" />
-          <span className="font-medium text-fg">{pageLabel}</span>
+        <nav aria-label="Breadcrumb" className="flex min-w-0 items-center gap-1.5 text-body">
+          <span className="truncate text-fg-muted">{workspaceName}</span>
+          <ChevronRight size={13} className="shrink-0 text-fg-muted" />
+          <span className="truncate font-medium text-fg">{pageLabel}</span>
         </nav>
       )}
 
@@ -84,24 +84,24 @@ export function AppHeader({
         <button
           type="button"
           onClick={onOpenSearch}
-          className="flex h-8 items-center gap-2 rounded-lg px-2 text-fg-muted transition-colors hover:bg-fill-2 hover:text-fg"
+          aria-label="Search"
+          className="group flex h-8 items-center gap-2 rounded-lg border border-border bg-fill-1 pr-1.5 pl-2.5 text-fg-muted transition-colors hover:border-border-md hover:bg-fill-2 hover:text-fg focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
         >
-          <Search size={15} />
-          <kbd className="hidden items-center rounded border border-border bg-fill-1 px-1.5 py-0.5 font-sans text-2xs font-medium text-fg-muted sm:inline-flex">
+          <Search size={14} />
+          <span className="hidden text-body font-medium sm:inline">Search</span>
+          <kbd className="ml-1 hidden items-center rounded border border-border bg-base px-1.5 py-0.5 font-sans text-2xs font-semibold text-fg-muted sm:inline-flex">
             ⌘K
           </kbd>
         </button>
 
-        <ThemeToggle />
+        <ThemeToggle className="flex size-8 items-center justify-center rounded-lg text-fg-muted transition-colors duration-150 hover:bg-fill-2 hover:text-fg focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none" />
 
         <Link
           href="/notifications"
           aria-label={
             unreadCount > 0 ? `Notifications, ${unreadCount} unread` : "Notifications"
           }
-          className={cn(
-            "relative flex size-8 items-center justify-center rounded-lg text-fg-muted transition-colors hover:bg-fill-2 hover:text-fg",
-          )}
+          className="relative flex size-8 items-center justify-center rounded-lg text-fg-muted transition-colors hover:bg-fill-2 hover:text-fg focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
         >
           <Bell size={15} />
           {unreadCount > 0 && (

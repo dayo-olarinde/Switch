@@ -61,7 +61,7 @@ export function PropertyMenu({ children }: { children: ReactNode }) {
   return (
     <div
       role="menu"
-      className="absolute top-full z-30 mt-1.5 w-full overflow-hidden rounded-lg border border-border bg-overlay py-1 shadow-soft animate-in fade-in zoom-in-95 duration-100"
+      className="absolute top-full z-30 mt-1.5 w-full overflow-hidden rounded-lg border border-border-md bg-overlay py-1 pop-elevated animate-in fade-in zoom-in-95 duration-100"
     >
       {children}
     </div>

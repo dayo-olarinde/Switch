@@ -68,7 +68,7 @@ function WorkspaceContent() {
       <header className="mb-6 flex flex-wrap items-center gap-3">
         <span
           style={{ backgroundColor: activeWorkspace.colour }}
-          className="flex size-10 shrink-0 items-center justify-center rounded-lg text-sm font-bold text-on-accent"
+          className="flex size-10 shrink-0 items-center justify-center rounded-lg text-body font-bold text-on-accent"
         >
           {getInitials(activeWorkspace.name)}
         </span>

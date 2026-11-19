@@ -29,7 +29,7 @@ export default function LoginPage() {
         <h1 className="text-xl font-semibold tracking-tight text-fg">
           Welcome back
         </h1>
-        <p className="mt-1.5 text-[13px] text-fg-muted">
+        <p className="mt-1.5 text-body text-fg-muted">
           Choose a sign-in method to continue.
         </p>
       </div>

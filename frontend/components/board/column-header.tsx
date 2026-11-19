@@ -101,7 +101,7 @@ export function ColumnHeader({
           <div
             role="menu"
             onPointerDown={(event) => event.stopPropagation()}
-            className="absolute top-full right-0 z-30 mt-1 w-52 overflow-hidden rounded-lg border border-border bg-overlay py-1 shadow-soft animate-in fade-in zoom-in-95 duration-100"
+            className="absolute top-full right-0 z-30 mt-1 w-52 overflow-hidden rounded-lg border border-border-md bg-overlay py-1 pop-elevated animate-in fade-in zoom-in-95 duration-100"
           >
             <button
               type="button"

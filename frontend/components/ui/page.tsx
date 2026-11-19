@@ -66,7 +66,7 @@ export function Card({ children, className, as: Tag = "div" }: CardProps) {
   return (
     <Tag
       className={cn(
-        "rounded-xl border border-border bg-surface p-5",
+        "rounded-xl border border-border bg-surface p-5 card-elevated",
         className,
       )}
     >
@@ -97,10 +97,10 @@ export function EmptyState({
         className,
       )}
     >
-      <div className="mb-4 flex size-11 items-center justify-center rounded-xl border border-border bg-surface text-fg-muted">
+      <div className="mb-4 flex size-11 items-center justify-center rounded-xl border border-border-md bg-fill-2 text-fg-muted">
         {icon}
       </div>
-      <h3 className="text-sm font-semibold text-fg">{title}</h3>
+      <h3 className="text-body font-semibold text-fg">{title}</h3>
       <p className="mt-1 max-w-sm text-body leading-relaxed text-fg-muted">
         {description}
       </p>
@@ -118,7 +118,7 @@ interface StatProps {
 
 export function Stat({ label, value, icon, hint }: StatProps) {
   return (
-    <div className="rounded-xl border border-border bg-surface p-4 transition-colors hover:border-border-md">
+    <div className="rounded-xl border border-border bg-surface p-4 transition-colors hover:border-border-md hover:bg-overlay">
       <div className="flex items-center gap-2 text-fg-muted">
         <span className="flex size-6 items-center justify-center rounded-md bg-fill-2">
           {icon}

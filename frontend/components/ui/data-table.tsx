@@ -52,7 +52,7 @@ export function DataTable<T>({
                   key={column.key}
                   scope="col"
                   className={cn(
-                    "px-4 py-2.5 text-[11px] font-semibold tracking-wide text-fg-muted uppercase",
+                    "px-4 py-2.5 text-2xs font-semibold tracking-wide text-fg-muted uppercase",
                     ALIGN[column.align ?? "left"],
                     column.className,
                   )}
@@ -69,14 +69,14 @@ export function DataTable<T>({
                 onClick={onRowClick ? () => onRowClick(row) : undefined}
                 className={cn(
                   "group/row border-b border-border last:border-0 transition-colors",
-                  onRowClick && "cursor-pointer hover:bg-fill-1",
+                  onRowClick && "cursor-pointer hover:bg-fill-2",
                 )}
               >
                 {columns.map((column) => (
                   <td
                     key={column.key}
                     className={cn(
-                      "px-4 py-3 text-[13px] text-fg-secondary",
+                      "px-4 py-3 text-body text-fg-secondary",
                       ALIGN[column.align ?? "left"],
                       column.className,
                     )}

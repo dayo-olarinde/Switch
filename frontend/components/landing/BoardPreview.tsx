@@ -168,7 +168,7 @@ function Card({
 
 export function BoardPreview() {
   return (
-    <div className="overflow-hidden rounded-lg border border-border bg-surface shadow-lg">
+    <div className="overflow-hidden rounded-lg border border-border bg-surface card-lifted">
       <div className="flex items-center gap-2 border-b border-border bg-card px-4 py-2.5">
         <span className="size-2.5 rounded-full bg-border-md" />
         <span className="size-2.5 rounded-full bg-border-md" />

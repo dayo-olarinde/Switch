@@ -39,7 +39,11 @@ export const LayoutSkeleton = () => {
           <div className="h-3 w-20 animate-pulse rounded bg-fill-2" />
           <div className="size-2.5 animate-pulse rounded bg-fill-1" />
           <div className="h-3 w-16 animate-pulse rounded bg-fill-2" />
-          <div className="ml-auto size-8 animate-pulse rounded-lg bg-fill-1" />
+          <div className="ml-auto flex items-center gap-1.5">
+            <div className="h-8 w-28 animate-pulse rounded-lg border border-border bg-fill-1" />
+            <div className="size-8 animate-pulse rounded-lg bg-fill-1" />
+            <div className="size-8 animate-pulse rounded-lg bg-fill-1" />
+          </div>
         </header>
         <main className="flex-1 bg-base" />
       </div>

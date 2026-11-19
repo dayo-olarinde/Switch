@@ -33,13 +33,13 @@ export function Features() {
         </h2>
       </div>
 
-      <div className="mt-12 grid gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-3">
+      <div className="mt-12 grid gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-3">
         {FEATURES.map(({ icon: Icon, title, body }) => (
           <div
             key={title}
-            className="bg-surface p-6 transition-colors duration-200 hover:bg-card"
+            className="bg-surface p-6 transition-colors duration-200 hover:bg-overlay"
           >
-            <span className="flex size-9 items-center justify-center rounded-sm bg-accent-dim text-accent">
+            <span className="flex size-9 items-center justify-center rounded-lg bg-accent-dim text-accent">
               <Icon size={17} />
             </span>
             <h3 className="mt-4 text-base font-semibold text-fg">

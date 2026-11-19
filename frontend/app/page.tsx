@@ -53,11 +53,11 @@ export default function MarketingPage() {
             <ThemeToggle />
 
             {isLoading ? (
-              <div className="h-10 w-28 animate-pulse rounded-sm bg-card" />
+              <div className="h-10 w-28 animate-pulse rounded-sm bg-fill-2" />
             ) : user ? (
               <Link
                 href="/dashboard"
-                className={`inline-flex h-10 items-center gap-1.5 rounded-sm bg-accent-solid px-4 text-sm font-semibold text-on-accent transition-opacity duration-150 hover:opacity-90 ${FOCUS_RING}`}
+                className={`inline-flex h-10 items-center gap-1.5 rounded-sm bg-accent-solid px-4 text-sm font-semibold text-on-accent transition-colors duration-150 hover:bg-accent-solid/90 ${FOCUS_RING}`}
               >
                 Dashboard
                 <ArrowRight size={14} />
@@ -72,7 +72,7 @@ export default function MarketingPage() {
                 </Link>
                 <Link
                   href="/register"
-                  className={`inline-flex h-10 items-center gap-1.5 rounded-sm bg-accent-solid px-4 text-sm font-semibold text-on-accent transition-opacity duration-150 hover:opacity-90 ${FOCUS_RING}`}
+                  className={`inline-flex h-10 items-center gap-1.5 rounded-sm bg-accent-solid px-4 text-sm font-semibold text-on-accent transition-colors duration-150 hover:bg-accent-solid/90 ${FOCUS_RING}`}
                 >
                   Get started
                   <ArrowRight size={14} />
@@ -89,7 +89,7 @@ export default function MarketingPage() {
 
           <div className="relative mx-auto w-full max-w-6xl px-6 pt-20 pb-16 sm:pt-28">
             <div className="mx-auto max-w-2xl text-center">
-              <h1 className="landing-text-balance text-4xl font-semibold tracking-tight text-fg sm:text-5xl lg:text-6xl lg:leading-[1.05]">
+              <h1 className="landing-text-balance text-4xl font-semibold tracking-tight text-fg sm:text-5xl lg:text-6xl">
                 Kanban, without the clutter.
               </h1>
 
@@ -102,7 +102,7 @@ export default function MarketingPage() {
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <Link
                   href={primaryHref}
-                  className={`group inline-flex h-11 w-full items-center justify-center gap-2 rounded-sm bg-accent-solid px-6 text-sm font-semibold text-on-accent transition-opacity duration-150 hover:opacity-90 sm:w-auto ${FOCUS_RING}`}
+                  className={`group inline-flex h-11 w-full items-center justify-center gap-2 rounded-sm bg-accent-solid px-6 text-sm font-semibold text-on-accent transition-colors duration-150 hover:bg-accent-solid/90 sm:w-auto ${FOCUS_RING}`}
                 >
                   {primaryLabel}
                   <ArrowRight
@@ -114,7 +114,7 @@ export default function MarketingPage() {
                 {!user && !isLoading && (
                   <Link
                     href="/login"
-                    className={`inline-flex h-11 w-full items-center justify-center rounded-sm border border-border bg-card px-6 text-sm font-semibold text-fg transition-colors duration-150 hover:border-border-md sm:w-auto ${FOCUS_RING}`}
+                    className={`inline-flex h-11 w-full items-center justify-center rounded-sm border border-border-md bg-fill-1 px-6 text-sm font-semibold text-fg transition-colors duration-150 hover:border-border-lg hover:bg-fill-2 sm:w-auto ${FOCUS_RING}`}
                   >
                     Sign in to workspace
                   </Link>

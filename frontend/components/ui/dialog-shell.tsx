@@ -83,7 +83,7 @@ export function DialogShell({
         if (event.target === ref.current) onClose();
       }}
       className={cn(
-        "m-auto w-11/12 rounded-xl border border-border bg-surface p-0 text-fg",
+        "m-auto w-11/12 rounded-xl border border-border-md bg-surface p-0 text-fg panel-elevated",
         "backdrop:bg-scrim backdrop:backdrop-blur-sm",
         "open:animate-in open:fade-in-0 open:zoom-in-95 open:duration-150",
         SIZES[size],
@@ -91,12 +91,12 @@ export function DialogShell({
       )}
     >
       {open && (
-        <div className="flex max-h-[calc(100dvh-4rem)] flex-col">
+        <div className="flex max-h-dialog flex-col">
           {!headerless && (
             <header className="flex items-start justify-between gap-4 border-b border-border px-5 py-4">
               <div className="min-w-0">
                 {title && (
-                  <h2 id={titleId} className="text-sm font-semibold text-fg">
+                  <h2 id={titleId} className="text-body font-semibold text-fg">
                     {title}
                   </h2>
                 )}
@@ -104,7 +104,7 @@ export function DialogShell({
                   <p
                     id={descriptionId}
                     className={cn(
-                      "text-sm leading-relaxed text-fg-secondary",
+                      "text-body leading-relaxed text-fg-secondary",
                       title && "mt-1",
                     )}
                   >

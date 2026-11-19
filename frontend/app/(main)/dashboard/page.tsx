@@ -152,7 +152,7 @@ export default function DashboardPage() {
             <button
               type="button"
               onClick={() => setIsAddWorkspaceOpen(true)}
-              className="group flex min-h-38 flex-col items-center justify-center rounded-xl border border-dashed border-border-md bg-fill-1 p-4 transition-colors hover:border-border-lg hover:bg-fill-2 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+              className="group flex min-h-38 flex-col items-center justify-center rounded-xl border border-dashed border-border-md bg-fill-1 p-4 transition-colors hover:border-accent/50 hover:bg-fill-2 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
             >
               <span className="mb-2 flex size-8 items-center justify-center rounded-lg bg-fill-2 text-fg-muted transition-colors group-hover:text-accent">
                 <Plus size={16} />

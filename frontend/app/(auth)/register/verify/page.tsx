@@ -100,7 +100,7 @@ function VerifyContent() {
         <Mail size={20} className="shrink-0 text-accent" />
         <div className="flex min-w-0 flex-col">
           <span className="truncate text-sm font-medium text-fg">{email}</span>
-          <span className="text-[12px] text-fg-muted">
+          <span className="text-2xs text-fg-muted">
             6-digit code sent · expires in 10 min
           </span>
         </div>
@@ -126,7 +126,7 @@ function VerifyContent() {
         </AuthSubmit>
       </form>
 
-      <div className="mt-6 flex flex-col items-center gap-3 text-[13px]">
+      <div className="mt-6 flex flex-col items-center gap-3 text-body">
         <p className="text-fg-muted">
           Didn&apos;t get it?{" "}
           {timer > 0 ? (

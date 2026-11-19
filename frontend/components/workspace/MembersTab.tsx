@@ -4,6 +4,7 @@ import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
+import { Select, TextInput } from "@/components/ui/field";
 import { EmptyState } from "@/components/ui/page";
 import { useGetPendingInvites } from "@/hooks/useInvitations";
 import {
@@ -83,38 +84,29 @@ export const MembersTab = ({
     <div className="pb-10">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2">
-          <div className="relative">
-            <Search
-              size={14}
-              className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-fg-muted"
-            />
-            <input
-              type="text"
-              placeholder="Search members"
-              value={searchQuery}
-              onChange={(event) => setSearchQuery(event.target.value)}
-              className="h-10 w-56 rounded-lg border border-border bg-fill-1 pr-3 pl-9 text-body text-fg transition-colors outline-none placeholder:text-fg-muted focus:border-accent sm:w-64"
-            />
-          </div>
+          <TextInput
+            type="text"
+            placeholder="Search members"
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
+            aria-label="Search members"
+            leading={<Search size={14} />}
+            wrapperClassName="w-56 sm:w-64"
+          />
 
-          <div className="relative">
-            <select
-              value={roleFilter}
-              onChange={(event) => setRoleFilter(event.target.value)}
-              aria-label="Filter by role"
-              className="h-10 appearance-none rounded-lg border border-border bg-fill-1 pr-8 pl-3 text-body font-medium text-fg-secondary transition-colors outline-none hover:text-fg focus:border-accent"
-            >
-              {["All", "Owner", "Admin", "Member"].map((role) => (
-                <option key={role} value={role} className="bg-surface text-fg">
-                  {role === "All" ? "All roles" : role}
-                </option>
-              ))}
-            </select>
-            <ChevronDown
-              size={14}
-              className="pointer-events-none absolute top-1/2 right-2.5 -translate-y-1/2 text-fg-muted"
-            />
-          </div>
+          <Select
+            value={roleFilter}
+            onChange={(event) => setRoleFilter(event.target.value)}
+            aria-label="Filter by role"
+            className="font-medium text-fg-secondary hover:text-fg"
+            wrapperClassName="w-36"
+          >
+            {["All", "Owner", "Admin", "Member"].map((role) => (
+              <option key={role} value={role} className="bg-surface text-fg">
+                {role === "All" ? "All roles" : role}
+              </option>
+            ))}
+          </Select>
         </div>
 
         <div className="flex items-center gap-2">
@@ -209,12 +201,12 @@ export const MembersTab = ({
                         handleRoleChange(event, member.userId)
                       }
                       aria-label={`Role for ${member.firstName}`}
-                      className="h-8 w-full appearance-none rounded-md border border-transparent bg-transparent pr-7 pl-2 text-body font-medium text-fg-secondary transition-colors outline-none hover:border-border-md hover:bg-fill-2 hover:text-fg focus:border-accent"
+                      className="h-8 w-full appearance-none rounded-md border border-transparent bg-transparent pr-7 pl-2 text-body font-medium text-fg-secondary transition-colors outline-none hover:border-border-md hover:bg-fill-2 hover:text-fg focus-visible:border-accent focus-visible:ring-2 focus-visible:ring-accent"
                     >
-                      <option value="Admin" className="bg-surface text-fg">
+                      <option value="Admin" className="bg-overlay text-fg">
                         Admin
                       </option>
-                      <option value="Member" className="bg-surface text-fg">
+                      <option value="Member" className="bg-overlay text-fg">
                         Member
                       </option>
                     </select>

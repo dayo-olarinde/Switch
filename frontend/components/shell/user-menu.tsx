@@ -42,7 +42,7 @@ export function UserMenu({ user, workspaceSlug, onLogout }: UserMenuProps) {
       {open && (
         <div
           role="menu"
-          className="absolute bottom-[calc(100%+6px)] left-0 right-0 overflow-hidden rounded-lg border border-border-md bg-overlay p-1 shadow-xl"
+          className="absolute inset-x-0 bottom-full mb-1.5 overflow-hidden rounded-lg border border-border-md bg-overlay p-1 pop-elevated"
         >
           {workspaceSlug && (
             <>

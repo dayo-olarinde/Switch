@@ -2,14 +2,14 @@ import Image from "next/image";
 
 export const FullScreenLoader = () => (
   <div className="flex h-screen w-full items-center justify-center bg-base">
-    <div className="w-18 h-18 rounded-xl flex items-center justify-center shrink-0 overflow-hidden animate-pulse">
+    <div className="size-18 shrink-0 animate-pulse overflow-hidden rounded-xl">
       <Image
         src="/logo.svg"
         alt="Loading Switch..."
-        width={64}
-        height={64}
+        width={72}
+        height={72}
         priority
-        className="w-full h-full object-cover"
+        className="size-full object-cover"
       />
     </div>
   </div>

@@ -1,8 +1,7 @@
+import { AvatarGroup } from "@/components/ui/avatar";
 import { Workspace } from "@/hooks/useWorkspace";
 import { cn, getInitials } from "@/lib/utils";
-import { BoardAssignee } from "@/types/board.types";
 import { Folder } from "lucide-react";
-import Image from "next/image";
 
 export const WorkspaceCard = ({
   ws,
@@ -15,7 +14,7 @@ export const WorkspaceCard = ({
     <button
       type="button"
       onClick={handleRedirectWorkspace}
-      className="group flex h-full flex-col rounded-xl border border-border bg-surface p-4 text-left transition-colors hover:border-border-md focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+      className="group flex h-full flex-col rounded-xl border border-border bg-surface p-4 text-left transition-all hover:border-border-md focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none card-elevated hover:card-elevated-hover"
     >
       <div className="mb-3 flex items-start justify-between gap-2">
         <span
@@ -38,7 +37,7 @@ export const WorkspaceCard = ({
         </span>
       </div>
 
-      <h3 className="truncate text-sm font-semibold text-fg transition-colors group-hover:text-accent">
+      <h3 className="truncate text-body font-semibold text-fg transition-colors group-hover:text-accent">
         {ws.name}
       </h3>
       <p className="mt-0.5 truncate text-2xs text-fg-muted">/{ws.slug}</p>
@@ -48,46 +47,16 @@ export const WorkspaceCard = ({
           <Folder size={13} className="text-fg-muted" />
           {ws.projectsCount} {ws.projectsCount === 1 ? "project" : "projects"}
         </span>
-        {formatAvatarUrls(ws.members)}
+        <AvatarGroup
+          size="sm"
+          users={(ws.members ?? []).map((member) => ({
+            id: member.userId ?? member.id,
+            firstName: member.firstName || "?",
+            lastName: member.lastName,
+            avatarUrl: member.avatarUrl,
+          }))}
+        />
       </div>
     </button>
-  );
-};
-
-export const formatAvatarUrls = (users: BoardAssignee[]) => {
-  if (!users?.length) return null;
-
-  return (
-    <div className="flex items-center -space-x-1.5">
-      {users.slice(0, 3).map((user, idx) => (
-        <span
-          key={idx}
-          className="flex size-5 shrink-0 items-center justify-center overflow-hidden rounded-full border border-surface bg-overlay text-2xs font-semibold text-fg"
-        >
-          {user.avatarUrl ? (
-            <Image
-              src={user.avatarUrl}
-              alt={user.firstName || "Member"}
-              width={20}
-              height={20}
-              className="size-full object-cover"
-              unoptimized
-              referrerPolicy="no-referrer"
-            />
-          ) : (
-            <>
-              {user.firstName?.charAt(0).toUpperCase() ?? ""}
-              {user.lastName?.charAt(0).toUpperCase() ?? ""}
-            </>
-          )}
-        </span>
-      ))}
-
-      {users.length > 3 && (
-        <span className="flex size-5 items-center justify-center rounded-full border border-surface bg-overlay text-2xs font-semibold text-fg-muted">
-          +{users.length - 3}
-        </span>
-      )}
-    </div>
   );
 };

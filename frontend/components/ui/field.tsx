@@ -131,10 +131,14 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   label?: ReactNode;
   hint?: ReactNode;
   error?: string;
+  wrapperClassName?: string;
 }
 
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  function Select({ label, hint, error, className, id, children, ...props }, ref) {
+  function Select(
+    { label, hint, error, className, wrapperClassName, id, children, ...props },
+    ref,
+  ) {
     const generatedId = useId();
     const fieldId = id ?? generatedId;
 
@@ -145,6 +149,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
         required={props.required}
         hint={hint}
         error={error}
+        className={wrapperClassName}
       >
         <div className="relative">
           <select

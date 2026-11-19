@@ -159,7 +159,7 @@ function RegisterContent() {
         </AuthSubmit>
       </form>
 
-      <p className="mt-6 text-center text-[12px] leading-relaxed text-fg-muted">
+      <p className="mt-6 text-center text-2xs leading-relaxed text-fg-muted">
         By creating an account you agree to our{" "}
         <Link href="/terms" className="text-accent hover:opacity-85">
           Terms of Service

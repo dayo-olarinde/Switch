@@ -11,6 +11,21 @@ export interface NavEntry {
   count?: number;
 }
 
+const ROW =
+  "group relative flex h-9 items-center gap-2.5 rounded-lg px-2.5 text-body font-medium transition-colors focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none";
+
+const ROW_ACTIVE = "bg-fill-2 text-fg";
+const ROW_IDLE = "text-fg-secondary hover:bg-fill-1 hover:text-fg";
+
+function ActiveRail() {
+  return (
+    <span
+      aria-hidden
+      className="absolute top-1/2 left-0 h-4 w-0.5 -translate-y-1/2 rounded-full bg-accent"
+    />
+  );
+}
+
 export function NavItem({
   entry,
   active,
@@ -24,13 +39,9 @@ export function NavItem({
     <Link
       href={entry.href}
       aria-current={active ? "page" : undefined}
-      className={cn(
-        "group flex h-9 items-center gap-2.5 rounded-lg px-2.5 text-body font-medium transition-colors",
-        active
-          ? "bg-fill-2 text-fg"
-          : "text-fg-secondary hover:bg-fill-1 hover:text-fg",
-      )}
+      className={cn(ROW, active ? ROW_ACTIVE : ROW_IDLE)}
     >
+      {active && <ActiveRail />}
       <Icon
         size={16}
         className={cn(
@@ -42,7 +53,7 @@ export function NavItem({
       {entry.count !== undefined && (
         <span
           className={cn(
-            "ml-auto min-w-5 rounded-md px-1.5 text-center text-2xs font-semibold",
+            "ml-auto min-w-5 rounded-md px-1.5 text-center text-2xs font-semibold tabular-nums",
             active
               ? "bg-accent-dim text-accent"
               : "bg-fill-2 text-fg-muted group-hover:text-fg-secondary",
@@ -75,13 +86,9 @@ export function ProjectLink({ id, name, href, active }: ProjectLinkProps) {
     <Link
       href={href}
       aria-current={active ? "page" : undefined}
-      className={cn(
-        "group flex h-9 items-center gap-2.5 rounded-lg px-2.5 text-body font-medium transition-colors",
-        active
-          ? "bg-fill-2 text-fg"
-          : "text-fg-secondary hover:bg-fill-1 hover:text-fg",
-      )}
+      className={cn(ROW, active ? ROW_ACTIVE : ROW_IDLE)}
     >
+      {active && <ActiveRail />}
       <span
         className="size-1.5 shrink-0 rounded-full"
         style={{ backgroundColor: getConsistentColor(id) }}
@@ -96,7 +103,10 @@ export function NewProjectButton({ onClick }: { onClick: () => void }) {
     <button
       type="button"
       onClick={onClick}
-      className="group flex h-9 w-full items-center gap-2.5 rounded-lg px-2.5 text-body font-medium text-fg-muted transition-colors hover:bg-fill-1 hover:text-fg"
+      className={cn(
+        ROW,
+        "w-full text-fg-muted hover:bg-fill-1 hover:text-fg",
+      )}
     >
       <Plus
         size={14}

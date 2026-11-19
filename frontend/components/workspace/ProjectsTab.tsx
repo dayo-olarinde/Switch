@@ -1,11 +1,11 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { AvatarGroup } from "@/components/ui/avatar";
 import { Project, useDeleteProject } from "@/hooks/useProjects";
 import { useWorkspaceRole, Workspace } from "@/hooks/useWorkspace";
 import { getConsistentColor } from "@/lib/utils";
 import { Edit2, Layout, Palette, Plus, Trash2 } from "lucide-react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import CreateProjectModal, {
@@ -58,7 +58,7 @@ export const ProjectsTab = ({
         <button
           type="button"
           onClick={onOpenProjectModal}
-          className="group flex min-h-46 flex-col items-center justify-center rounded-xl border border-dashed border-border-md bg-fill-1 p-4 transition-colors hover:border-border-lg hover:bg-fill-2 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+          className="group flex min-h-46 flex-col items-center justify-center rounded-xl border border-dashed border-border-md bg-fill-1 p-4 transition-colors hover:border-accent/50 hover:bg-fill-2 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
         >
           <span className="mb-2 flex size-8 items-center justify-center rounded-lg bg-fill-2 text-fg-muted transition-colors group-hover:text-accent">
             <Plus size={16} />
@@ -109,7 +109,7 @@ export const ProjectCard = ({
   return (
     <div
       onClick={() => router.push(`/${activeWorkspaceSlug}/${project.slug}`)}
-      className="group/card flex min-h-46 cursor-pointer flex-col rounded-xl border border-border bg-surface p-4 transition-colors hover:border-border-md"
+      className="group/card flex min-h-46 cursor-pointer flex-col rounded-xl border border-border bg-surface p-4 transition-all hover:border-border-md card-elevated hover:card-elevated-hover"
     >
       <div className="mb-3 flex items-start justify-between gap-2">
         <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-accent-dim text-accent">
@@ -153,7 +153,7 @@ export const ProjectCard = ({
         </div>
       </div>
 
-      <h3 className="truncate text-sm font-semibold text-fg">
+      <h3 className="truncate text-body font-semibold text-fg">
         {project.name}
       </h3>
       <p className="mt-1 line-clamp-2 text-body leading-relaxed text-fg-muted">
@@ -182,34 +182,15 @@ export const ProjectCard = ({
               {project.cardsCount}
             </span>
 
-            <div className="flex -space-x-1.5">
-              {project.assignees?.slice(0, 3).map((assignee, index) => (
-                <span
-                  key={index}
-                  className="flex size-5 items-center justify-center overflow-hidden rounded-full border border-surface bg-overlay text-2xs font-semibold text-fg"
-                >
-                  {assignee.avatarUrl ? (
-                    <Image
-                      src={assignee.avatarUrl}
-                      alt={assignee.firstName || "Assignee"}
-                      width={20}
-                      height={20}
-                      className="size-full object-cover"
-                      unoptimized
-                      referrerPolicy="no-referrer"
-                    />
-                  ) : (
-                    assignee.firstName?.charAt(0).toUpperCase() || "U"
-                  )}
-                </span>
-              ))}
-
-              {project.assignees?.length > 3 && (
-                <span className="flex size-5 items-center justify-center rounded-full border border-surface bg-overlay text-2xs font-semibold text-fg-muted">
-                  +{project.assignees.length - 3}
-                </span>
-              )}
-            </div>
+            <AvatarGroup
+              size="sm"
+              users={(project.assignees ?? []).map((assignee, index) => ({
+                id: `${project.id}-${index}`,
+                firstName: assignee.firstName || "U",
+                lastName: null,
+                avatarUrl: assignee.avatarUrl,
+              }))}
+            />
           </div>
         </div>
       </div>

@@ -137,7 +137,7 @@ export default function KanbanBoardPage() {
               ) : null}
 
               {activeColumn ? (
-                <div className="flex h-12 w-80 items-center gap-2 rounded-xl border border-accent/50 bg-surface px-3 shadow-accent">
+                <div className="flex h-12 w-80 items-center gap-2 rounded-xl border border-accent/50 bg-surface px-3 card-lifted">
                   <span
                     aria-hidden
                     className={cn(

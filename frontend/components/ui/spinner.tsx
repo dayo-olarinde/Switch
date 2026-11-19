@@ -1,9 +1,9 @@
 import { cn } from "@/lib/utils";
 
 const sizes = {
-  sm: "w-3 h-3 border",
-  md: "w-5 h-5 border-2",
-  lg: "w-8 h-8 border-2",
+  sm: "size-3 border",
+  md: "size-5 border-2",
+  lg: "size-8 border-2",
 };
 
 interface SpinnerProps {
@@ -15,7 +15,7 @@ export function Spinner({ size = "md", className }: SpinnerProps) {
   return (
     <div
       className={cn(
-        "rounded-full border-surface border-t-accent animate-spin",
+        "animate-spin rounded-full border-fill-3 border-t-accent",
         sizes[size],
         className,
       )}
@@ -25,7 +25,7 @@ export function Spinner({ size = "md", className }: SpinnerProps) {
 
 export function PageLoader() {
   return (
-    <div className="flex items-center justify-center flex-1 h-full min-h-50">
+    <div className="flex h-full min-h-50 flex-1 items-center justify-center">
       <Spinner size="md" />
     </div>
   );

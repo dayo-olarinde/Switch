@@ -45,7 +45,7 @@ export const AuthField = forwardRef<HTMLInputElement, AuthFieldProps>(
           <label
             htmlFor={fieldId}
             className={cn(
-              "flex items-center gap-1 text-[13px] font-medium text-fg-secondary",
+              "flex items-center gap-1 text-body font-medium text-fg-secondary",
               hideLabel && "sr-only",
             )}
           >
@@ -77,11 +77,11 @@ export const AuthField = forwardRef<HTMLInputElement, AuthFieldProps>(
         </div>
 
         {error ? (
-          <p id={`${fieldId}-error`} className="text-[11px] text-danger">
+          <p id={`${fieldId}-error`} className="text-2xs text-danger">
             {error}
           </p>
         ) : hint ? (
-          <p id={`${fieldId}-hint`} className="text-[11px] text-fg-muted">
+          <p id={`${fieldId}-hint`} className="text-2xs text-fg-muted">
             {hint}
           </p>
         ) : null}

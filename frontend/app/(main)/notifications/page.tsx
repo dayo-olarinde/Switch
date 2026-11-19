@@ -172,12 +172,18 @@ export default function NotificationsPage() {
                     <li
                       key={notification.id}
                       className={cn(
-                        "group flex items-start gap-3 rounded-lg border p-3 transition-colors",
+                        "group relative flex items-start gap-3 rounded-xl border p-3 transition-colors",
                         notification.isRead
                           ? "border-transparent hover:bg-fill-1"
-                          : "border-border bg-surface",
+                          : "border-border bg-surface card-elevated",
                       )}
                     >
+                      {!notification.isRead && (
+                        <span
+                          aria-hidden
+                          className="absolute top-3 bottom-3 left-0 w-0.5 rounded-full bg-accent"
+                        />
+                      )}
                       <span
                         className={cn(
                           "mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg",
@@ -211,17 +217,14 @@ export default function NotificationsPage() {
 
                       <div className="flex items-center gap-1">
                         {!notification.isRead && (
-                          <>
-                            <button
-                              type="button"
-                              onClick={() => markRead(notification.id)}
-                              aria-label="Mark as read"
-                              className="rounded-md p-1.5 text-fg-muted opacity-0 transition-all group-hover:opacity-100 hover:bg-fill-2 hover:text-fg focus-visible:opacity-100"
-                            >
-                              <Check size={14} />
-                            </button>
-                            <span className="size-1.5 rounded-full bg-accent-solid" />
-                          </>
+                          <button
+                            type="button"
+                            onClick={() => markRead(notification.id)}
+                            aria-label="Mark as read"
+                            className="rounded-md p-1.5 text-fg-muted opacity-0 transition-all group-hover:opacity-100 hover:bg-fill-2 hover:text-fg focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+                          >
+                            <Check size={14} />
+                          </button>
                         )}
                       </div>
                     </li>
