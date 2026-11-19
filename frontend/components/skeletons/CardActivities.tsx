@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 
 export const ActivitySkeleton = () => {
   return (
-    <div className="relative space-y-6 pb-4 pt-2 animate-in fade-in duration-500">
+    <div className="relative animate-in space-y-6 pt-2 pb-4 fade-in duration-500">
       <div className="absolute top-4 bottom-4 left-3.75 w-px bg-fill-2 pointer-events-none" />
 
       {[1, 2, 3, 4].map((i) => (

@@ -83,7 +83,7 @@ export default function GettingStartedPage() {
             return (
               <div
                 key={item.title}
-                className="flex items-start gap-3 rounded-xl border border-border bg-surface p-4"
+                className="flex items-start gap-3 rounded-xl border border-border bg-surface p-4 card-elevated"
               >
                 <span
                   className={`flex size-8 shrink-0 items-center justify-center rounded-lg ${item.tone}`}

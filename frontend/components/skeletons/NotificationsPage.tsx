@@ -30,7 +30,7 @@ export function NotificationsSkeleton() {
               {[1, 2, 3].map((item) => (
                 <div
                   key={item}
-                  className="flex items-start gap-3 rounded-lg border border-border bg-surface p-3"
+                  className="flex items-start gap-3 rounded-xl border border-border bg-surface p-3"
                 >
                   <div className="size-8 shrink-0 rounded-lg bg-fill-2" />
                   <div className="flex-1 space-y-2">

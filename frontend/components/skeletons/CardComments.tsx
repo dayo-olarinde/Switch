@@ -2,7 +2,7 @@ export const CommentsSkeleton = () => {
   return (
     <div className="space-y-6 py-2">
       {[1, 2, 3].map((i) => (
-        <div key={i} className="flex gap-4 animate-in fade-in duration-500">
+        <div key={i} className="flex animate-in gap-4 fade-in duration-500">
           <div className="shrink-0 mt-0.5">
             <div className="w-8 h-8 rounded-full bg-fill-2 animate-pulse" />
           </div>

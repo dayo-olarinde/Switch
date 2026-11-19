@@ -109,7 +109,7 @@ export function CardAttachments({ card }: { card: BoardCard }) {
             return (
               <li
                 key={file.id}
-                className="group/file flex items-center gap-3 rounded-lg border border-border bg-surface p-2.5 transition-colors hover:border-border-md"
+                className="group/file flex items-center gap-3 rounded-lg border border-border bg-surface p-2.5 transition-colors hover:border-border-md hover:bg-fill-1"
               >
                 <span className="flex size-8 shrink-0 items-center justify-center rounded-md border border-border bg-fill-1">
                   <FileIcon mimeType={file.mimeType} />

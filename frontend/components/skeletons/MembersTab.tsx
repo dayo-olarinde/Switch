@@ -1,6 +1,6 @@
 export const MembersSkeleton = () => {
   return (
-    <div className="animate-pulse overflow-hidden rounded-xl border border-border bg-card">
+    <div className="animate-pulse overflow-hidden rounded-xl border border-border bg-surface">
       <div className="grid grid-cols-[2.5fr_1fr_1fr_auto] gap-4 border-b border-border bg-fill-1 px-4 py-2.5">
         <div className="h-2.5 w-14 rounded bg-fill-3" />
         <div className="h-2.5 w-12 rounded bg-fill-3" />

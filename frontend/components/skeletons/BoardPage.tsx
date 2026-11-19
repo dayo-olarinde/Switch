@@ -18,7 +18,7 @@ export function KanbanBoardSkeleton() {
             {Array.from({ length: column.cards }).map((_, cardIndex) => (
               <div
                 key={cardIndex}
-                className="flex flex-col gap-2.5 rounded-xl border border-border bg-card px-3 py-2.5"
+                className="flex flex-col gap-2.5 rounded-xl border border-border bg-card px-3 py-2.5 card-elevated"
               >
                 <div className="flex gap-2">
                   <div className="h-2 w-10 animate-pulse rounded-full bg-fill-2" />

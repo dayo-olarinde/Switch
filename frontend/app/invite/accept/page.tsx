@@ -1,7 +1,6 @@
 "use client";
 
 import { AuthShell, AuthStatus } from "@/components/auth/auth-shell";
-import { FullScreenLoader } from "@/components/ui/FullScreenLoader";
 import { useAcceptInvite, useVerifyInvite } from "@/hooks/useInvitations";
 import { getErrorMessage } from "@/lib/utils";
 import { AlertCircle, Loader2 } from "lucide-react";
@@ -59,7 +58,7 @@ function AcceptInviteContent() {
         <button
           type="button"
           onClick={() => router.push("/login")}
-          className="text-sm font-medium text-accent transition-opacity hover:opacity-85"
+          className="text-body font-medium text-accent transition-opacity hover:opacity-85"
         >
           Return to login
         </button>
@@ -69,9 +68,9 @@ function AcceptInviteContent() {
 
   if (isVerifying || !inviteDetails) {
     return (
-      <div className="flex flex-col items-center py-4">
-        <Loader2 size={28} className="mb-4 animate-spin text-accent" />
-        <p className="text-sm font-medium text-fg-secondary">
+      <div className="flex flex-col items-center py-6">
+        <Loader2 size={24} className="mb-4 animate-spin text-accent" />
+        <p className="text-body font-medium text-fg-secondary">
           Verifying invitation...
         </p>
       </div>
@@ -81,7 +80,7 @@ function AcceptInviteContent() {
   return (
     <div className="flex flex-col items-center py-4 text-center">
       <Loader2 size={20} className="mb-3 animate-spin text-accent" />
-      <p className="text-sm text-fg-secondary">
+      <p className="text-body text-fg-secondary">
         {isAccepting
           ? `Joining ${inviteDetails.workspaceName}...`
           : "Preparing your invitation..."}
@@ -90,7 +89,7 @@ function AcceptInviteContent() {
         type="button"
         disabled={isAccepting}
         onClick={() => router.push("/dashboard")}
-        className="mt-6 text-sm font-medium text-fg-muted transition-colors hover:text-fg-secondary disabled:opacity-50"
+        className="mt-6 text-body font-medium text-fg-muted transition-colors hover:text-fg-secondary disabled:opacity-50"
       >
         Decline and return to dashboard
       </button>
@@ -101,7 +100,14 @@ function AcceptInviteContent() {
 export default function AcceptInvitePage() {
   return (
     <AuthShell>
-      <Suspense fallback={<FullScreenLoader />}>
+      <Suspense
+        fallback={
+          <div className="flex flex-col items-center py-6">
+            <Loader2 size={24} className="mb-4 animate-spin text-accent" />
+            <p className="text-body font-medium text-fg-secondary">Loading...</p>
+          </div>
+        }
+      >
         <AcceptInviteContent />
       </Suspense>
     </AuthShell>

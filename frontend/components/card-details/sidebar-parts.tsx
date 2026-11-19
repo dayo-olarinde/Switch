@@ -147,7 +147,8 @@ export function SidebarSearch({
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
-        className="h-8 w-full rounded-md border border-transparent bg-fill-1 px-2.5 text-body text-fg transition-colors outline-none placeholder:text-fg-muted hover:border-border focus:border-accent focus:bg-surface"
+        aria-label={placeholder}
+        className="h-8 w-full rounded-md border border-transparent bg-fill-1 px-2.5 text-body text-fg transition-colors outline-none placeholder:text-fg-muted hover:border-border-md focus:border-accent focus:bg-surface"
       />
     </div>
   );
