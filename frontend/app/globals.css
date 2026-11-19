@@ -53,6 +53,13 @@
     --info: #6cb6e0;
     --info-dim: rgba(108, 182, 224, 0.14);
 
+    /* priority tints for board tiles: the card surface nudged toward the
+       priority hue, so the tile reads as coloured without hurting text */
+    --tint-low: color-mix(in oklab, var(--card) 88%, var(--success) 12%);
+    --tint-medium: color-mix(in oklab, var(--card) 88%, var(--warning) 12%);
+    --tint-high: color-mix(in oklab, var(--card) 88%, var(--danger) 12%);
+    --tint-urgent: color-mix(in oklab, var(--card) 82%, var(--danger) 18%);
+
     /* radius */
     --radius: 12px;
 
@@ -155,6 +162,12 @@
     --danger-dim: rgba(168, 29, 36, 0.09);
     --info: #23599f;
     --info-dim: rgba(35, 89, 159, 0.09);
+
+    /* lighter tints on white cards; light hues need less pigment to read */
+    --tint-low: color-mix(in oklab, var(--card) 92%, var(--success) 8%);
+    --tint-medium: color-mix(in oklab, var(--card) 92%, var(--warning) 8%);
+    --tint-high: color-mix(in oklab, var(--card) 92%, var(--danger) 8%);
+    --tint-urgent: color-mix(in oklab, var(--card) 88%, var(--danger) 12%);
 
     color-scheme: light;
 
@@ -359,6 +372,11 @@
   --color-danger-dim: var(--danger-dim);
   --color-info: var(--info);
   --color-info-dim: var(--info-dim);
+
+  --color-tint-low: var(--tint-low);
+  --color-tint-medium: var(--tint-medium);
+  --color-tint-high: var(--tint-high);
+  --color-tint-urgent: var(--tint-urgent);
 
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);

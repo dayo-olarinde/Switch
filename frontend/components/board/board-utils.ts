@@ -57,32 +57,37 @@ export function isDoneColumn(
 
 export const PRIORITY_META: Record<
   BoardCard["priority"],
-  { label: string; chip: string; bar: string }
+  { label: string; chip: string; bar: string; tint: string }
 > = {
   none: {
     label: "No priority",
     chip: "border-border bg-fill-2 text-fg-muted",
     bar: "bg-transparent",
+    tint: "bg-card",
   },
   low: {
     label: "Low",
     chip: "border-success/30 bg-success-dim text-success",
     bar: "bg-success",
+    tint: "bg-tint-low",
   },
   medium: {
     label: "Medium",
     chip: "border-warning/30 bg-warning-dim text-warning",
     bar: "bg-warning",
+    tint: "bg-tint-medium",
   },
   high: {
     label: "High",
     chip: "border-danger/30 bg-danger-dim text-danger",
     bar: "bg-danger",
+    tint: "bg-tint-high",
   },
   urgent: {
     label: "Urgent",
     chip: "border-danger/40 bg-danger-dim text-danger",
     bar: "bg-danger",
+    tint: "bg-tint-urgent",
   },
 };
 

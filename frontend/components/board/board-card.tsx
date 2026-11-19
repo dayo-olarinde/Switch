@@ -28,8 +28,8 @@ export const CardTile = memo(function CardTile({
   const comments = card.commentCount ?? 0;
   const attachments = card.attachments?.length ?? 0;
 
-  // Only loud priorities earn a chip; the rest stay as the edge bar so the
-  // tile reads as content first, metadata second.
+  // Every priority owns the tile's surface tint; the chip is kept for the two
+  // loudest so the colour still has a label next to it.
   const showPriorityChip =
     card.priority === "urgent" || card.priority === "high";
 
@@ -41,25 +41,14 @@ export const CardTile = memo(function CardTile({
   return (
     <div
       className={cn(
-        "group/card relative overflow-hidden rounded-xl border bg-card",
+        "group/card relative overflow-hidden rounded-xl border",
         "transition-[border-color,box-shadow] duration-150",
+        priority.tint,
         preview
           ? "card-lifted border-accent/45"
           : "card-elevated border-border hover:border-border-lg hover:card-elevated-hover",
-        done && !preview && "bg-well",
       )}
     >
-      {card.priority !== "none" && (
-        <span
-          aria-hidden
-          className={cn(
-            "absolute inset-x-0 top-0",
-            card.priority === "urgent" ? "h-1" : "h-0.5",
-            priority.bar,
-          )}
-        />
-      )}
-
       <div className="flex flex-col gap-2.5 px-3 py-2.5">
         {visibleLabels.length > 0 && (
           <div className="flex flex-wrap items-center gap-1">
