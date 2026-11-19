@@ -57,6 +57,22 @@ interface BoardStore {
   setPresence: (users: PresenceUser[]) => void;
 }
 
+/**
+ * The board endpoint returns assignees as bare users (`id` is the user id),
+ * while the socket sends `{ userId }` with no `id`. Normalise both so every
+ * consumer can key off `userId`.
+ */
+function normalizeCard(card: BoardCard): BoardCard {
+  return {
+    ...card,
+    assignees: (card.assignees ?? []).map((assignee) => ({
+      ...assignee,
+      id: assignee.id ?? assignee.userId,
+      userId: assignee.userId ?? assignee.id,
+    })),
+  };
+}
+
 export const useBoardStore = create<BoardStore>((set) => ({
   board: null,
   workspaceLabels: [],
@@ -66,9 +82,12 @@ export const useBoardStore = create<BoardStore>((set) => ({
     set({
       board: {
         ...board,
-        columns: [...board.columns].sort((a, b) =>
-          a.order < b.order ? -1 : a.order > b.order ? 1 : 0,
-        ),
+        columns: [...board.columns]
+          .sort((a, b) => (a.order < b.order ? -1 : a.order > b.order ? 1 : 0))
+          .map((column) => ({
+            ...column,
+            cards: column.cards.map(normalizeCard),
+          })),
       },
     }),
 

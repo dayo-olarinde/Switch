@@ -36,7 +36,9 @@ export function AssigneePicker({
     );
   }, [members, search]);
 
-  const assignedIds = new Set((card.assignees ?? []).map((a) => a.userId));
+  const assignedIds = new Set(
+    (card.assignees ?? []).map((a) => a.userId ?? a.id),
+  );
 
   return (
     <SidebarListShell>
