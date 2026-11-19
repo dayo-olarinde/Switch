@@ -1,6 +1,8 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { DialogShell } from "@/components/ui/dialog-shell";
+import { TextInput } from "@/components/ui/field";
 import { Workspace } from "@/hooks/useWorkspace";
 import { cn } from "@/lib/utils";
 import { Check, Plus, Search } from "lucide-react";
@@ -38,32 +40,27 @@ export default function WorkspaceSwitcherModal({
       bodyClassName="px-0 py-0"
     >
       <div className="border-b border-border p-4">
-        <div className="relative">
-          <Search
-            size={16}
-            className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-fg-muted"
-          />
-          <input
-            type="text"
-            autoFocus
-            placeholder="Search workspaces..."
-            value={searchQuery}
-            onChange={(event) => setSearchQuery(event.target.value)}
-            className="h-10 w-full rounded-lg border border-border-md bg-fill-1 pr-3 pl-9 text-sm text-fg transition-colors outline-none placeholder:text-fg-muted focus:border-accent"
-          />
-        </div>
+        <TextInput
+          type="search"
+          autoFocus
+          placeholder="Search workspaces..."
+          aria-label="Search workspaces"
+          leading={<Search size={15} aria-hidden />}
+          value={searchQuery}
+          onChange={(event) => setSearchQuery(event.target.value)}
+        />
       </div>
 
-      <div className="max-h-[50vh] overflow-y-auto p-2">
-        <div className="px-3 py-2 text-[10px] font-semibold tracking-widest text-fg-muted uppercase">
+      <div className="max-h-96 overflow-y-auto p-2">
+        <div className="px-3 py-2 text-2xs font-semibold tracking-wider text-fg-muted uppercase">
           Your workspaces
         </div>
 
-        <div className="mt-1 space-y-1">
+        <div className="mt-1 space-y-0.5">
           {filteredWorkspaces.length === 0 ? (
-            <div className="py-6 text-center text-sm text-fg-muted">
+            <p className="py-6 text-center text-body text-fg-muted">
               No workspaces found for &quot;{searchQuery}&quot;
-            </div>
+            </p>
           ) : (
             filteredWorkspaces.map((ws) => {
               const isActive = activeWorkspace?.id === ws.id;
@@ -83,24 +80,28 @@ export default function WorkspaceSwitcherModal({
                       : "border-transparent hover:bg-fill-2",
                   )}
                 >
-                  <div
-                    className="flex size-10 shrink-0 items-center justify-center rounded-lg text-sm font-bold text-on-accent"
+                  <span
+                    className="flex size-9 shrink-0 items-center justify-center rounded-lg text-2xs font-semibold text-on-accent"
                     style={{ backgroundColor: ws.colour || "#7C6EF5" }}
                   >
                     {ws.name.substring(0, 2).toUpperCase()}
-                  </div>
+                  </span>
 
-                  <div className="flex flex-1 flex-col overflow-hidden">
-                    <span className="truncate text-sm font-semibold text-fg">
+                  <span className="flex flex-1 flex-col overflow-hidden">
+                    <span className="truncate text-body font-medium text-fg">
                       {ws.name}
                     </span>
-                    <span className="mt-0.5 truncate text-[12px] text-fg-muted">
+                    <span className="mt-0.5 truncate text-2xs text-fg-muted">
                       {ws.role || "Member"} · {ws.projectsCount || 0} projects
                     </span>
-                  </div>
+                  </span>
 
                   {isActive && (
-                    <Check size={18} className="mr-1 shrink-0 text-accent" />
+                    <Check
+                      size={16}
+                      aria-hidden
+                      className="mr-1 shrink-0 text-accent"
+                    />
                   )}
                 </button>
               );
@@ -110,21 +111,21 @@ export default function WorkspaceSwitcherModal({
       </div>
 
       <div className="border-t border-border p-2">
-        <button
-          type="button"
+        <Button
+          variant="ghost"
           onClick={() => {
             onClose();
             onCreateWorkspace();
           }}
-          className="flex w-full items-center gap-3 rounded-lg p-3 text-left transition-colors hover:bg-fill-2 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+          icon={
+            <span className="flex size-7 items-center justify-center rounded-md border border-dashed border-border-lg">
+              <Plus size={14} aria-hidden className="text-fg-muted" />
+            </span>
+          }
+          className="h-auto w-full justify-start gap-3 rounded-lg px-3 py-2 text-left font-medium"
         >
-          <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-dashed border-border-lg">
-            <Plus size={18} className="text-fg-muted" />
-          </div>
-          <span className="text-sm font-semibold text-fg-secondary">
-            Create workspace
-          </span>
-        </button>
+          Create workspace
+        </Button>
       </div>
     </DialogShell>
   );

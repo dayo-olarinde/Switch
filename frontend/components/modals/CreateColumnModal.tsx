@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { DialogShell } from "@/components/ui/dialog-shell";
+import { TextInput } from "@/components/ui/field";
 import { useCreateColumn } from "@/hooks/useColumns";
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
@@ -93,36 +94,27 @@ export default function CreateColumnModal({
       }
     >
       <div className="space-y-5">
-        <div className="flex flex-col gap-1.5">
-          <label
-            htmlFor="column-name"
-            className="text-2xs font-semibold tracking-wider text-fg-muted uppercase"
-          >
-            Column name
-          </label>
-          <input
-            id="column-name"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-            placeholder="e.g. In Progress"
-            autoFocus
-            className="h-10 w-full rounded-lg border border-border-md bg-fill-1 px-3 text-body text-fg transition-colors outline-none placeholder:text-fg-muted focus:border-accent"
-          />
-          <span className="text-2xs text-fg-muted">
-            Shown as the column header on your board.
-          </span>
-        </div>
+        <TextInput
+          id="column-name"
+          label="Column name"
+          required
+          placeholder="e.g. In Progress"
+          autoFocus
+          hint="Shown as the column header on your board."
+          value={name}
+          onChange={(event) => setName(event.target.value)}
+        />
 
-        <div className="flex flex-col gap-1.5">
-          <span className="text-2xs font-semibold tracking-wider text-fg-muted uppercase">
+        <fieldset className="flex flex-col gap-1.5">
+          <legend className="text-2xs font-semibold tracking-wider text-fg-muted uppercase">
             Status
-          </span>
-          <span className="mb-1 text-2xs text-fg-muted">
+          </legend>
+          <p className="mb-1 text-2xs text-fg-muted">
             Maps this column to a standard workflow stage used across reports and
             filters.
-          </span>
+          </p>
 
-          <div role="radiogroup" className="grid grid-cols-2 gap-2">
+          <div role="radiogroup" aria-label="Mapped status" className="grid grid-cols-2 gap-2">
             {STATUS_OPTIONS.map((option) => {
               const isActive = mappedStatus === option.value;
 
@@ -175,7 +167,7 @@ export default function CreateColumnModal({
               );
             })}
           </div>
-        </div>
+        </fieldset>
       </div>
     </DialogShell>
   );

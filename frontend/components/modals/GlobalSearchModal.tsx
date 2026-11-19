@@ -1,13 +1,7 @@
 "use client";
 
 import { DialogShell } from "@/components/ui/dialog-shell";
-import {
-  LogOut,
-  Package,
-  PlusCircle,
-  Settings2Icon,
-  Users,
-} from "lucide-react";
+import { LogOut, Package, PlusCircle, Settings2Icon, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
@@ -192,7 +186,7 @@ export default function GlobalSearchModal({
     ? [projectSection, memberSection, actionSection].filter(
         (section) => section.items.length > 0,
       )
-    : [];
+    : [links];
 
   return (
     <DialogShell
@@ -204,24 +198,8 @@ export default function GlobalSearchModal({
     >
       <SearchInput value={query} onChange={setQuery} />
 
-      <div className="max-h-[60vh] overflow-y-auto p-2">
-        {hasQuery ? (
-          <SearchResults sections={sections} hasQuery={hasQuery} />
-        ) : (
-          <div className="py-2">
-            {links.items.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                onClick={item.onSelect}
-                className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-[13px] font-medium text-fg-secondary transition-colors hover:bg-fill-2 hover:text-fg focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
-              >
-                {item.icon}
-                {item.label}
-              </button>
-            ))}
-          </div>
-        )}
+      <div className="p-2">
+        <SearchResults sections={sections} hasQuery />
       </div>
     </DialogShell>
   );

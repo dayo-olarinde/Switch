@@ -1,6 +1,7 @@
 "use client";
 
 import { PROJECT_ICONS } from "@/components/modals/project-icons";
+import { FieldLabel } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
 
@@ -22,8 +23,8 @@ export function ProjectIconPicker({
 
   return (
     <div className="relative">
-      <div className="mb-1.5 flex gap-1 text-sm font-semibold text-fg">
-        Icon
+      <div className="mb-1.5">
+        <FieldLabel>Icon</FieldLabel>
       </div>
 
       <button
@@ -37,7 +38,7 @@ export function ProjectIconPicker({
       </button>
 
       {open && (
-        <div className="absolute top-16 left-0 z-50 w-56 rounded-xl border border-border-md bg-surface p-2 shadow-lg animate-in fade-in zoom-in-95 duration-150">
+        <div className="absolute top-16 left-0 z-50 w-56 rounded-xl border border-border-md bg-surface p-2 card-lifted animate-in fade-in zoom-in-95 duration-150">
           <div className="grid grid-cols-4 gap-2">
             {PROJECT_ICONS.map((item) => {
               const Icon = item.Icon;

@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { DialogShell } from "@/components/ui/dialog-shell";
+import { Select } from "@/components/ui/field";
 import {
   useClearColumncards,
   useDeleteColumn,
@@ -11,7 +12,6 @@ import {
 import { cn } from "@/lib/utils";
 import { useBoardStore } from "@/store/board.store";
 import { BoardColumn } from "@/types/board.types";
-import { ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -194,37 +194,18 @@ export default function DeleteColumnModal({
       </fieldset>
 
       {action === "move" && availableColumns.length > 0 && (
-        <div className="space-y-2">
-          <label
-            htmlFor="delete-column-target"
-            className="text-2xs font-semibold tracking-wider text-fg-muted uppercase"
-          >
-            Move to
-          </label>
-          <div className="relative">
-            <select
-              id="delete-column-target"
-              value={resolvedTargetId}
-              onChange={(event) => setTargetColumnId(event.target.value)}
-              className="h-10 w-full cursor-pointer appearance-none rounded-lg border border-border-md bg-fill-1 pr-10 pl-3 text-body font-medium text-fg transition-colors outline-none focus:border-accent"
-            >
-              {availableColumns.map((columnOption) => (
-                <option
-                  key={columnOption.id}
-                  value={columnOption.id}
-                  className="bg-surface"
-                >
-                  {columnOption.name}
-                </option>
-              ))}
-            </select>
-            <ChevronDown
-              size={16}
-              aria-hidden
-              className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-fg-muted"
-            />
-          </div>
-        </div>
+        <Select
+          id="delete-column-target"
+          label="Move to"
+          value={resolvedTargetId}
+          onChange={(event) => setTargetColumnId(event.target.value)}
+        >
+          {availableColumns.map((columnOption) => (
+            <option key={columnOption.id} value={columnOption.id}>
+              {columnOption.name}
+            </option>
+          ))}
+        </Select>
       )}
 
       {action === "move" && availableColumns.length === 0 && (

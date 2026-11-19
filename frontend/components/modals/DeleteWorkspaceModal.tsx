@@ -1,8 +1,10 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { DialogShell } from "@/components/ui/dialog-shell";
+import { FormAlert } from "@/components/ui/feedback";
+import { TextInput } from "@/components/ui/field";
 import { useDeleteWorkspace, Workspace } from "@/hooks/useWorkspace";
-import { AlertTriangle, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -53,80 +55,62 @@ export default function DeleteWorkspaceModal({
       description="Permanently deletes the workspace, all projects, boards, cards, and member access."
       footer={
         <>
-          <button
-            type="button"
-            onClick={onClose}
-            disabled={isPending}
-            className="h-10 rounded-lg border border-border-md px-4 text-sm font-medium text-fg transition-colors hover:bg-fill-2 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none disabled:opacity-50"
-          >
+          <Button variant="secondary" onClick={onClose} disabled={isPending}>
             Cancel
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
+            variant="danger"
             onClick={handleDeleteWorkspace}
-            disabled={isPending || !isMatch}
-            className="flex h-10 items-center gap-2 rounded-lg border border-danger bg-danger-dim px-4 text-sm font-semibold text-danger transition-colors hover:bg-danger/25 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={!isMatch}
+            loading={isPending}
           >
-            {isPending ? (
-              <>
-                <Loader2 size={14} className="animate-spin" />
-                Deleting...
-              </>
-            ) : (
-              "Delete workspace forever"
-            )}
-          </button>
+            Delete workspace forever
+          </Button>
         </>
       }
     >
       <div className="flex items-center gap-3 rounded-xl border border-border bg-fill-1 p-4">
-        <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-accent-solid text-sm font-bold text-on-accent">
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-accent-solid text-body font-semibold text-on-accent">
           {workspace.name.substring(0, 2).toUpperCase()}
-        </div>
-        <div className="flex min-w-0 flex-col">
-          <span className="truncate text-sm font-semibold text-fg">
+        </span>
+        <span className="flex min-w-0 flex-col">
+          <span className="truncate text-body font-semibold text-fg">
             {workspace.name}
           </span>
-          <span className="mt-0.5 truncate text-[13px] text-fg-secondary">
+          <span className="mt-0.5 truncate text-2xs text-fg-secondary">
             {projectCount} projects · {memberCount} members
           </span>
-        </div>
+        </span>
       </div>
 
-      <div className="mt-4 flex items-start gap-3 rounded-xl border border-danger bg-danger-dim p-4">
-        <AlertTriangle size={16} className="mt-0.5 shrink-0 text-danger" />
-        <div className="flex flex-col">
-          <span className="mb-1 text-[13px] font-semibold text-danger">
-            This is irreversible
-          </span>
-          <p className="text-[13px] leading-relaxed text-fg-secondary">
-            All {projectCount} projects, attachments, comments, and member
-            access will be permanently deleted. Billing will stop immediately.
-            There is no way to recover this workspace.
-          </p>
-        </div>
-      </div>
+      <FormAlert tone="danger" className="mt-4">
+        <span className="block font-semibold">This is irreversible</span>
+        <span className="mt-1 block">
+          All {projectCount} projects, attachments, comments, and member access
+          will be permanently deleted. Billing will stop immediately. There is no
+          way to recover this workspace.
+        </span>
+      </FormAlert>
 
       <div className="mt-4">
-        <label
-          htmlFor="delete-workspace-confirm"
-          className="mb-3 block text-[13px] leading-relaxed text-fg-secondary"
-        >
-          Type{" "}
-          <span className="rounded bg-danger-dim px-1.5 py-0.5 font-mono text-xs text-danger">
-            {workspace.slug}
-          </span>{" "}
-          to confirm. This will immediately revoke access for all {memberCount}{" "}
-          members.
-        </label>
-        <input
+        <TextInput
           id="delete-workspace-confirm"
-          type="text"
+          labelPlain
+          label={
+            <>
+              Type{" "}
+              <span className="rounded bg-danger-dim px-1.5 py-0.5 font-mono text-2xs font-semibold text-danger">
+                {workspace.slug}
+              </span>{" "}
+              to confirm. This immediately revokes access for all {memberCount}{" "}
+              members.
+            </>
+          }
           value={confirmInput}
           onChange={(event) => setConfirmInput(event.target.value)}
           placeholder={workspace.slug}
           autoComplete="off"
-          className="h-10 w-full rounded-lg border border-border-md bg-fill-1 px-3 text-sm text-fg transition-colors outline-none placeholder:text-fg-muted focus:border-danger"
+          invalid={confirmInput.length > 0 && !isMatch}
         />
       </div>
     </DialogShell>

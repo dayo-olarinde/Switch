@@ -1,10 +1,15 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { DialogShell } from "@/components/ui/dialog-shell";
+import { TextArea, TextInput } from "@/components/ui/field";
 import { Project, useCreateProject, useUpdateProject } from "@/hooks/useProjects";
+import { projectSchema, ProjectValues } from "@/lib/schemas/project";
 import { useWorkspaceStore } from "@/store/workspace.store";
-import { Check, Loader2, Plus } from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Check, Plus } from "lucide-react";
 import { useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
 import { ProjectIconPicker } from "./project-icon-picker";
 
 export { PROJECT_ICON_MAP, PROJECT_ICONS } from "./project-icons";
@@ -18,24 +23,9 @@ export default function CreateProjectModal({
   onClose: () => void;
   project?: Project;
 }) {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [icon, setIcon] = useState("Palette");
   const [showIconPicker, setShowIconPicker] = useState(false);
 
-  const [prevProjectId, setPrevProjectId] = useState(project?.id);
-  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
-
-  if (project?.id !== prevProjectId || isOpen !== prevIsOpen) {
-    setPrevProjectId(project?.id);
-    setPrevIsOpen(isOpen);
-
-    if (isOpen) {
-      setName(project?.name || "");
-      setDescription(project?.description || "");
-      setIcon(project?.icon || "Palette");
-    }
-  }
+  const activeWorkspace = useWorkspaceStore((s) => s.activeWorkspace);
 
   const { mutate: createProject, isPending: creatingProject } =
     useCreateProject();
@@ -44,24 +34,37 @@ export default function CreateProjectModal({
 
   const isPending = creatingProject || updatingProject;
 
-  const activeWorkspace = useWorkspaceStore((s) => s.activeWorkspace);
+  const form = useForm<ProjectValues>({
+    resolver: zodResolver(projectSchema),
+    defaultValues: {
+      name: project?.name ?? "",
+      description: project?.description ?? "",
+      icon: project?.icon ?? "Palette",
+    },
+    values: {
+      name: project?.name ?? "",
+      description: project?.description ?? "",
+      icon: project?.icon ?? "Palette",
+    },
+  });
+
+  const name = useWatch({ control: form.control, name: "name" });
+  const icon = useWatch({ control: form.control, name: "icon" });
 
   const handleCloseModal = () => {
     onClose();
     setShowIconPicker(false);
   };
 
-  const handleSubmit = () => {
-    if (!name || !activeWorkspace || !icon) return;
-
-    const payload = { name, description, icon };
+  const onSubmit = form.handleSubmit((values) => {
+    if (!activeWorkspace) return;
 
     if (project) {
       updateProject(
         {
           projectSlug: project.slug,
           data: {
-            ...payload,
+            ...values,
             projectId: project.id,
             workspaceId: activeWorkspace.id,
             workspaceSlug: activeWorkspace.slug,
@@ -72,14 +75,14 @@ export default function CreateProjectModal({
     } else {
       createProject(
         {
-          ...payload,
+          ...values,
           workspaceId: activeWorkspace.id,
           workspaceSlug: activeWorkspace.slug,
         },
         { onSuccess: () => handleCloseModal() },
       );
     }
-  };
+  });
 
   return (
     <DialogShell
@@ -93,86 +96,61 @@ export default function CreateProjectModal({
       }
       footer={
         <>
-          <button
-            type="button"
-            onClick={handleCloseModal}
-            className="h-10 rounded-lg border border-border-md px-4 text-sm font-medium text-fg transition-colors hover:bg-fill-2 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
-          >
+          <Button variant="secondary" onClick={handleCloseModal}>
             Cancel
-          </button>
-          <button
-            type="button"
-            onClick={handleSubmit}
-            disabled={!name.trim() || isPending}
-            className="flex h-10 min-w-36 items-center justify-center gap-2 rounded-lg bg-accent-solid px-4 text-sm font-semibold text-on-accent transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+          </Button>
+          <Button
+            type="submit"
+            form="project-form"
+            loading={isPending}
+            disabled={!name.trim()}
+            icon={
+              project ? (
+                <Check size={14} aria-hidden />
+              ) : (
+                <Plus size={14} aria-hidden />
+              )
+            }
+            className="min-w-36"
           >
-            {isPending ? (
-              <>
-                <Loader2 size={14} className="animate-spin" />
-                {project ? "Saving..." : "Creating..."}
-              </>
-            ) : project ? (
-              <>
-                <Check size={14} />
-                Save changes
-              </>
-            ) : (
-              <>
-                <Plus size={14} />
-                Create project
-              </>
-            )}
-          </button>
+            {project ? "Save changes" : "Create project"}
+          </Button>
         </>
       }
     >
-      <div className="space-y-5">
+      <form id="project-form" onSubmit={onSubmit} className="space-y-4">
         <div className="flex items-start gap-4">
           <ProjectIconPicker
             value={icon}
             onChange={(next) => {
-              setIcon(next);
+              form.setValue("icon", next, { shouldValidate: true });
               setShowIconPicker(false);
             }}
             open={showIconPicker}
             onToggle={() => setShowIconPicker((prev) => !prev)}
           />
 
-          <div className="flex-1">
-            <label
-              htmlFor="project-name"
-              className="mb-1.5 flex gap-1 text-sm font-semibold text-fg"
-            >
-              Project name <span className="text-danger">*</span>
-            </label>
-            <input
-              id="project-name"
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              placeholder="e.g. Design System"
-              autoFocus
-              className="h-10 w-full rounded-lg border border-border-md bg-fill-1 px-3 text-sm text-fg transition-colors outline-none placeholder:text-fg-muted focus:border-accent"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label
-            htmlFor="project-description"
-            className="mb-1.5 flex text-sm font-semibold text-fg"
-          >
-            Description
-          </label>
-          <textarea
-            id="project-description"
-            value={description}
-            onChange={(event) => setDescription(event.target.value)}
-            rows={3}
-            placeholder="What is this project about?"
-            className="w-full resize-none rounded-lg border border-border-md bg-fill-1 p-3 text-sm text-fg transition-colors outline-none placeholder:text-fg-muted focus:border-accent"
+          <TextInput
+            id="project-name"
+            label="Project name"
+            required
+            placeholder="e.g. Design System"
+            autoFocus
+            wrapperClassName="flex-1"
+            error={form.formState.errors.name?.message}
+            {...form.register("name")}
           />
         </div>
-      </div>
+
+        <TextArea
+          id="project-description"
+          label="Description"
+          rows={3}
+          placeholder="What is this project about?"
+          error={form.formState.errors.description?.message}
+          {...form.register("description")}
+        />
+      </form>
     </DialogShell>
   );
 }

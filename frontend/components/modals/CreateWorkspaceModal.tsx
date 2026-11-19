@@ -1,10 +1,15 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { DialogShell } from "@/components/ui/dialog-shell";
+import { controlClasses, FieldLabel, TextInput } from "@/components/ui/field";
 import { useCreateWorkspace } from "@/hooks/useWorkspace";
+import { workspaceSchema, WorkspaceValues } from "@/lib/schemas/workspace";
 import { cn, getInitials, slugify } from "@/lib/utils";
-import { Loader2, Plus } from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Plus } from "lucide-react";
 import { useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
 
 const AVATAR_COLORS = [
   "#F472B6",
@@ -24,31 +29,28 @@ export default function CreateWorkspaceModal({
   isOpen: boolean;
   onClose: () => void;
 }) {
-  const [name, setName] = useState("");
-  const [manualSlug, setManualSlug] = useState<string | null>(null);
-  const [selectedColor, setSelectedColor] = useState(AVATAR_COLORS[0]);
+  const [slugLocked, setSlugLocked] = useState(false);
 
   const { mutate: createWorkspace, isPending } = useCreateWorkspace();
-  const displayedSlug = manualSlug !== null ? manualSlug : slugify(name);
 
-  const handleCreate = () => {
-    if (!name) return;
-    createWorkspace(
-      { name, slug: displayedSlug, colour: selectedColor },
-      {
-        onSuccess: () => {
-          onClose();
-        },
-      },
-    );
-  };
+  const form = useForm<WorkspaceValues>({
+    resolver: zodResolver(workspaceSchema),
+    defaultValues: { name: "", slug: "", colour: AVATAR_COLORS[0] },
+  });
+
+  const name = useWatch({ control: form.control, name: "name" });
+  const slug = useWatch({ control: form.control, name: "slug" });
+  const selectedColor = useWatch({ control: form.control, name: "colour" });
 
   const handleClose = () => {
     onClose();
-    setName("");
-    setManualSlug(null);
-    setSelectedColor(AVATAR_COLORS[0]);
+    form.reset();
+    setSlugLocked(false);
   };
+
+  const onSubmit = form.handleSubmit((values) => {
+    createWorkspace(values, { onSuccess: () => handleClose() });
+  });
 
   return (
     <DialogShell
@@ -58,107 +60,116 @@ export default function CreateWorkspaceModal({
       description="A workspace holds all your projects and brings your team together."
       footer={
         <>
-          <button
-            type="button"
-            onClick={handleClose}
-            className="h-10 rounded-lg border border-border-md px-4 text-sm font-medium text-fg transition-colors hover:bg-fill-2 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
-          >
+          <Button variant="secondary" onClick={handleClose}>
             Cancel
-          </button>
-          <button
-            type="button"
-            onClick={handleCreate}
-            disabled={!name.trim() || isPending}
-            className="flex h-10 min-w-40 items-center justify-center gap-2 rounded-lg bg-accent-solid px-4 text-sm font-semibold text-on-accent transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+          </Button>
+          <Button
+            type="submit"
+            form="create-workspace-form"
+            loading={isPending}
+            disabled={!name.trim() || slug.length === 0}
+            icon={<Plus size={15} aria-hidden />}
+            className="min-w-40"
           >
-            {isPending ? (
-              <>
-                <Loader2 size={16} className="animate-spin" />
-                Creating...
-              </>
-            ) : (
-              <>
-                <Plus size={16} /> Create workspace
-              </>
-            )}
-          </button>
+            Create workspace
+          </Button>
         </>
       }
     >
-      <div className="space-y-4">
-        <div className="space-y-1.5">
-          <label
-            htmlFor="workspace-name"
-            className="flex gap-1 text-[12px] font-semibold text-fg"
-          >
-            Workspace name <span className="text-accent">*</span>
-          </label>
-          <input
-            id="workspace-name"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-            placeholder="e.g. Acme Corp"
-            autoFocus
-            className="h-10 w-full rounded-lg border border-border-md bg-fill-1 px-3 text-sm text-fg transition-colors outline-none placeholder:text-fg-muted focus:border-accent"
-          />
-        </div>
+      <form id="create-workspace-form" onSubmit={onSubmit} className="space-y-4">
+        <TextInput
+          id="workspace-name"
+          label="Workspace name"
+          required
+          placeholder="e.g. Acme Corp"
+          autoFocus
+          error={form.formState.errors.name?.message}
+          {...form.register("name", {
+            onChange: (event) => {
+              if (!slugLocked) {
+                form.setValue("slug", slugify(event.target.value), {
+                  shouldValidate: true,
+                });
+              }
+            },
+          })}
+        />
 
-        <div className="space-y-1.5">
-          <label
-            htmlFor="workspace-slug"
-            className="flex gap-1 text-[12px] font-semibold text-fg"
+        <div className="flex flex-col gap-1.5">
+          <FieldLabel htmlFor="workspace-slug" required>
+            URL slug
+          </FieldLabel>
+          <div
+            className={cn(
+              "flex h-10 items-center overflow-hidden focus-within:border-accent",
+              controlClasses,
+            )}
           >
-            URL slug <span className="text-accent">*</span>
-          </label>
-          <div className="flex h-10 w-full overflow-hidden rounded-lg border border-border-md bg-fill-1 transition-colors focus-within:border-accent">
-            <div className="flex select-none items-center border-r border-border-md px-3 text-sm text-fg-muted">
+            <span className="flex h-full select-none items-center border-r border-border-md px-3 text-fg-muted">
               switch.app/
-            </div>
+            </span>
             <input
               id="workspace-slug"
-              value={displayedSlug}
-              onChange={(event) => setManualSlug(event.target.value)}
               placeholder="your-workspace"
-              className="flex-1 bg-transparent px-3 text-sm text-fg outline-none placeholder:text-fg-muted"
+              className="h-full flex-1 bg-transparent px-3 outline-none placeholder:text-fg-muted"
+              {...form.register("slug", {
+                onChange: () => setSlugLocked(true),
+              })}
             />
           </div>
-          <p className="text-[11px] text-fg-muted">
-            Only lowercase letters, numbers, and hyphens.
-          </p>
+          {form.formState.errors.slug ? (
+            <p role="alert" className="text-2xs text-danger">
+              {form.formState.errors.slug.message}
+            </p>
+          ) : (
+            <p className="text-2xs text-fg-muted">
+              Only lowercase letters, numbers, and hyphens.
+            </p>
+          )}
         </div>
 
-        <div className="space-y-2 pt-1">
-          <span className="text-[12px] font-semibold text-fg">
-            Avatar color
-          </span>
+        <div className="flex flex-col gap-2 pt-1">
+          <FieldLabel>Avatar color</FieldLabel>
           <div className="flex items-center gap-3">
             <div
-              className="flex size-12 items-center justify-center rounded-xl text-xl font-bold tracking-tighter text-on-accent transition-colors"
+              className="flex size-12 items-center justify-center rounded-xl text-lg font-semibold text-on-accent"
               style={{ backgroundColor: selectedColor }}
             >
               {getInitials(name)}
             </div>
 
-            <div className="ml-1 flex gap-2">
-              {AVATAR_COLORS.map((color) => (
-                <button
-                  key={color}
-                  type="button"
-                  onClick={() => setSelectedColor(color)}
-                  style={{ backgroundColor: color }}
-                  className={cn(
-                    "size-6 rounded-md transition-transform focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface focus-visible:outline-none",
-                    selectedColor === color
-                      ? "scale-110 ring-2 ring-fg ring-offset-2 ring-offset-surface"
-                      : "opacity-80 hover:scale-105 hover:opacity-100",
-                  )}
-                  aria-label={`Use color ${color}`}
-                />
-              ))}
+            <div
+              role="radiogroup"
+              aria-label="Avatar color"
+              className="flex gap-2"
+            >
+              {AVATAR_COLORS.map((color) => {
+                const active = selectedColor === color;
+
+                return (
+                  <button
+                    key={color}
+                    type="button"
+                    role="radio"
+                    aria-checked={active}
+                    aria-label={`Use color ${color}`}
+                    onClick={() =>
+                      form.setValue("colour", color, { shouldValidate: true })
+                    }
+                    style={{ backgroundColor: color }}
+                    className={cn(
+                      "size-6 rounded-md transition-transform focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface focus-visible:outline-none",
+                      active
+                        ? "scale-110 ring-2 ring-fg ring-offset-2 ring-offset-surface"
+                        : "opacity-80 hover:scale-105 hover:opacity-100",
+                    )}
+                  />
+                );
+              })}
             </div>
           </div>
         </div>
-      </div>
+      </form>
     </DialogShell>
   );
 }

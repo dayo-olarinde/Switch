@@ -2,10 +2,10 @@
 
 import { Button } from "@/components/ui/button";
 import { DialogShell } from "@/components/ui/dialog-shell";
+import { Select, TextArea, TextInput } from "@/components/ui/field";
 import { CreateCard } from "@/hooks/useCards";
 import { WorkspaceMembers } from "@/hooks/useWorkspace";
 import { PRIORITY_META } from "@/components/board/board-utils";
-import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { CardAssigneePicker } from "./card-assignee-picker";
 
@@ -84,96 +84,57 @@ export default function AddCardModal({
       }
     >
       <div className="space-y-4">
-        <div className="space-y-1.5">
-          <label
-            htmlFor="card-title"
-            className="text-2xs font-semibold tracking-wider text-fg-muted uppercase"
-          >
-            Title
-          </label>
-          <input
-            id="card-title"
-            autoFocus
-            placeholder="What needs to be done?"
-            value={formData.title}
-            onChange={(event) =>
-              setFormData({ ...formData, title: event.target.value })
-            }
-            className="h-10 w-full rounded-lg border border-border-md bg-fill-1 px-3 text-body text-fg transition-colors outline-none placeholder:text-fg-muted focus:border-accent"
-          />
-        </div>
+        <TextInput
+          id="card-title"
+          label="Title"
+          required
+          autoFocus
+          placeholder="What needs to be done?"
+          value={formData.title}
+          onChange={(event) =>
+            setFormData({ ...formData, title: event.target.value })
+          }
+        />
 
-        <div className="space-y-1.5">
-          <label
-            htmlFor="card-description"
-            className="text-2xs font-semibold tracking-wider text-fg-muted uppercase"
-          >
-            Description
-          </label>
-          <textarea
-            id="card-description"
-            placeholder="Add more context (optional)"
-            rows={2}
-            value={formData.description}
-            onChange={(event) =>
-              setFormData({ ...formData, description: event.target.value })
-            }
-            className="w-full resize-none rounded-lg border border-border-md bg-fill-1 p-3 text-body text-fg transition-colors outline-none placeholder:text-fg-muted focus:border-accent"
-          />
-        </div>
+        <TextArea
+          id="card-description"
+          label="Description"
+          rows={2}
+          placeholder="Add more context (optional)"
+          value={formData.description}
+          onChange={(event) =>
+            setFormData({ ...formData, description: event.target.value })
+          }
+        />
 
         <div className="grid grid-cols-2 gap-3">
-          <div className="space-y-1.5">
-            <label
-              htmlFor="card-priority"
-              className="text-2xs font-semibold tracking-wider text-fg-muted uppercase"
-            >
-              Priority
-            </label>
-            <div className="relative">
-              <select
-                id="card-priority"
-                value={formData.priority}
-                onChange={(event) =>
-                  setFormData({
-                    ...formData,
-                    priority: event.target
-                      .value as AddCardFormData["priority"],
-                  })
-                }
-                className="h-10 w-full cursor-pointer appearance-none rounded-lg border border-border-md bg-fill-1 pr-8 pl-3 text-body text-fg outline-none focus:border-accent"
-              >
-                {PRIORITIES.map((value) => (
-                  <option key={value} value={value}>
-                    {PRIORITY_META[value].label}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown
-                size={14}
-                aria-hidden
-                className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-fg-muted"
-              />
-            </div>
-          </div>
+          <Select
+            id="card-priority"
+            label="Priority"
+            value={formData.priority}
+            onChange={(event) =>
+              setFormData({
+                ...formData,
+                priority: event.target.value as AddCardFormData["priority"],
+              })
+            }
+          >
+            {PRIORITIES.map((value) => (
+              <option key={value} value={value}>
+                {PRIORITY_META[value].label}
+              </option>
+            ))}
+          </Select>
 
-          <div className="space-y-1.5">
-            <label
-              htmlFor="card-due-date"
-              className="text-2xs font-semibold tracking-wider text-fg-muted uppercase"
-            >
-              Due date
-            </label>
-            <input
-              id="card-due-date"
-              type="date"
-              value={formData.dueDate}
-              onChange={(event) =>
-                setFormData({ ...formData, dueDate: event.target.value })
-              }
-              className="h-10 w-full rounded-lg border border-border-md bg-fill-1 px-3 text-body text-fg outline-none focus:border-accent"
-            />
-          </div>
+          <TextInput
+            id="card-due-date"
+            label="Due date"
+            type="date"
+            value={formData.dueDate}
+            onChange={(event) =>
+              setFormData({ ...formData, dueDate: event.target.value })
+            }
+          />
         </div>
 
         <CardAssigneePicker

@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
 import { ReactNode, useEffect, useId, useRef } from "react";
+import { Button } from "./button";
 
 const SIZES = {
   sm: "max-w-md",
@@ -177,32 +178,21 @@ export function ConfirmDialog({
       size="sm"
       footer={
         <>
-          <button
-            type="button"
-            onClick={onClose}
-            disabled={isPending}
-            className="h-10 rounded-lg border border-border-md px-4 text-sm font-medium text-fg transition-colors hover:bg-fill-2 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none disabled:opacity-50"
-          >
+          <Button variant="secondary" onClick={onClose} disabled={isPending}>
             {cancelLabel}
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
+            variant={tone === "danger" ? "danger" : "primary"}
             onClick={onConfirm}
-            disabled={isPending}
-            className={cn(
-              "h-10 rounded-lg border px-4 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none disabled:opacity-50",
-              tone === "danger"
-                ? "border-danger bg-danger-dim text-danger hover:bg-danger/25"
-                : "border-accent bg-accent-dim text-accent hover:bg-accent/25",
-            )}
+            loading={isPending}
           >
             {confirmLabel}
-          </button>
+          </Button>
         </>
       }
     >
       {children ?? (
-        <p className="text-sm leading-relaxed text-fg-secondary">
+        <p className="text-body leading-relaxed text-fg-secondary">
           {description ??
             "This action cannot be undone. Are you sure you want to continue?"}
         </p>

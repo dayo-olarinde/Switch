@@ -34,7 +34,7 @@ export default function LeaveWorkspaceModal({
       confirmLabel={confirmLabel}
       tone={isDangerous ? "danger" : "accent"}
     >
-      <p className="text-sm leading-relaxed text-fg-secondary">{description}</p>
+      <p className="text-body leading-relaxed text-fg-secondary">{description}</p>
     </ConfirmDialog>
   );
 }

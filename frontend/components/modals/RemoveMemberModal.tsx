@@ -1,10 +1,10 @@
 "use client";
 
+import { Avatar } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { DialogShell } from "@/components/ui/dialog-shell";
+import { FormAlert } from "@/components/ui/feedback";
 import { useRemoveMember, WorkspaceMembers } from "@/hooks/useWorkspace";
-import { getConsistentColor } from "@/lib/utils";
-import { AlertTriangle, Loader2 } from "lucide-react";
-import Image from "next/image";
 
 interface RemoveMemberModalProps {
   isOpen: boolean;
@@ -45,73 +45,43 @@ export default function RemoveMemberModal({
       description="Are you sure you want to remove this member from the workspace?"
       footer={
         <>
-          <button
-            type="button"
-            onClick={onClose}
-            disabled={isPending}
-            className="h-10 rounded-lg border border-border-md px-4 text-sm font-medium text-fg transition-colors hover:bg-fill-2 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none disabled:opacity-50"
-          >
+          <Button variant="secondary" onClick={onClose} disabled={isPending}>
             Cancel
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
+            variant="danger"
             onClick={() => handleRemove(member.userId)}
-            disabled={isPending}
-            className="flex h-10 items-center gap-2 rounded-lg border border-danger bg-danger-dim px-4 text-sm font-semibold text-danger transition-colors hover:bg-danger/25 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none disabled:opacity-50"
+            loading={isPending}
           >
-            {isPending ? (
-              <>
-                <Loader2 size={14} className="animate-spin" />
-                Removing...
-              </>
-            ) : (
-              "Remove member"
-            )}
-          </button>
+            Remove member
+          </Button>
         </>
       }
     >
       <div className="flex items-center gap-3 rounded-xl border border-border bg-fill-1 p-4">
-        {member.avatarUrl ? (
-          <div className="size-10 shrink-0 overflow-hidden rounded-full border border-border">
-            <Image
-              src={member.avatarUrl}
-              alt={name}
-              width={40}
-              height={40}
-              className="size-full object-cover"
-              unoptimized
-              referrerPolicy="no-referrer"
-            />
-          </div>
-        ) : (
-          <div
-            className="flex size-10 shrink-0 items-center justify-center rounded-full text-sm font-semibold text-on-accent"
-            style={{ backgroundColor: getConsistentColor(member.id || name) }}
-          >
-            {name.substring(0, 2).toUpperCase()}
-          </div>
-        )}
-        <div className="flex min-w-0 flex-col">
-          <span className="truncate text-sm font-semibold text-fg">{name}</span>
-          <span className="mt-0.5 truncate text-[13px] text-fg-secondary">
+        <Avatar
+          firstName={member.firstName || name}
+          lastName={member.lastName}
+          avatarUrl={member.avatarUrl}
+          size="lg"
+        />
+        <span className="flex min-w-0 flex-col">
+          <span className="truncate text-body font-semibold text-fg">
+            {name}
+          </span>
+          <span className="mt-0.5 truncate text-2xs text-fg-secondary">
             {email} · {role} · {workspaceName}
           </span>
-        </div>
+        </span>
       </div>
 
-      <div className="mt-4 flex items-start gap-3 rounded-xl border border-danger bg-danger-dim p-4">
-        <AlertTriangle size={16} className="mt-0.5 shrink-0 text-danger" />
-        <div className="flex flex-col">
-          <span className="mb-1 text-[13px] font-semibold text-danger">
-            This can&apos;t be undone
-          </span>
-          <p className="text-[13px] leading-relaxed text-fg-secondary">
-            {firstName} will lose access to all projects in {workspaceName}{" "}
-            immediately. Their assigned cards will remain but become unassigned.
-          </p>
-        </div>
-      </div>
+      <FormAlert tone="danger" className="mt-4">
+        <span className="block font-semibold">This can&apos;t be undone</span>
+        <span className="mt-1 block">
+          {firstName} will lose access to all projects in {workspaceName}{" "}
+          immediately. Their assigned cards will remain but become unassigned.
+        </span>
+      </FormAlert>
     </DialogShell>
   );
 }
