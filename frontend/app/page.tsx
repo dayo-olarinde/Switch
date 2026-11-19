@@ -122,7 +122,7 @@ export default function MarketingPage() {
               </div>
 
               <p className="mt-4 text-xs font-medium text-fg-muted">
-                Free while in beta · No credit card
+                No credit card
               </p>
             </div>
 
